@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AVM Solutions Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+</head>
+<body class="bg-gray-100 uppercase">
+
+  <!-- Header -->
+  <header class="bg-white p-4 shadow">
+    <nav class="flex justify-between items-center">
+      <img src="./assets/login.png" alt="logo" class="w-[160px]" />
+      <div class="flex items-center space-x-4">
+        <img src="./assets/avatar.jpg" alt="avatar" class="w-10 h-10 rounded-full" />
+        <button class="text-gray-600 text-lg font-semibold">Login</button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main -->
+  <main class="p-5">
+
+    
+
+    <!-- BUTTON GROUPS -->
+    <div class="flex justify-center gap-5 my-10">
+     
+      <button class="bg-[#012f66] text-white py-2 px-3 rounded">ADD NEW CASE</button>
+     
+      <button class="bg-[#012f66] text-white py-2 px-3 rounded uppercase">update case details</button>
+     
+    </div>
+
+    
+    
+  <!-- refresh button -->
+  <div class="flex justify-between my-4">
+    <button class="bg-green-600 text-white p-2 rounded uppercase">refresh</button>
+    <button class="bg-green-600 text-white p-2 rounded uppercase">refresh</button>
+   </div>
+    <!-- FILTERS -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+      <!-- Common Search -->
+      <div class="flex flex-col text-xs">
+        <label class="text-gray-600 mb-1 pl-1">Search</label>
+        <div class="flex items-center bg-white border rounded shadow px-2 py-1">
+          <i class="fa fa-search text-gray-400 mr-2"></i>
+          <input type="text" placeholder="Search..." class="w-full outline-none p-2" />
+        </div>
+      </div>
+
+      <!-- Case Type -->
+      <div class="flex flex-col text-xs">
+        <label class="text-gray-600 mb-1 pl-1">Case Type</label>
+        <div class="bg-white border rounded shadow px-2 py-1">
+          <select class="w-full outline-none p-2">
+            <option value="">Select Case Type</option>
+            <option>LA</option>
+            <option>PR</option>
+            <option>MPT</option>
+            <option>SC</option>
+            <option>LA-WILL</option>
+            <option>JO</option>
+            <option>IA</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Document Search -->
+      <div class="flex flex-col text-xs">
+        <label class="text-gray-600 mb-1 pl-1">Document Search</label>
+        <div class="flex items-center bg-white border rounded shadow px-2 py-1">
+          <i class="fa fa-search text-gray-400 mr-2"></i>
+          <input type="text" placeholder="Search Documents..." class="p-2 w-full outline-none" />
+        </div>
+      </div>
+
+      <!-- Excel Download -->
+      <div class="flex flex-col text-xs">
+        <div>
+         <label for="">Document Count</label>
+         <div class="bg-white p-2 mt-1.5 shadow flex justify-around text-sm">
+          <h4 class="text-[#012f66]">No. of Document :</h4>
+          <h4 class="font-bold">23</h4>
+         </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- TABLES SIDE BY SIDE -->
+    <div class="grid grid-cols-1 lg:grid-cols-8 gap-6">
+
+      <!-- LEFT TABLE – Wider (3/5 of width) -->
+      <div class="lg:col-span-6 bg-white rounded shadow overflow-x-auto max-h-[400px] overflow-y-auto">
+        <table class="min-w-full text-sm text-left border border-gray-300">
+          <thead class="bg-[#012f66] text-white sticky top-0 z-10">
+            <tr>
+              <th class="px-4 py-2 border border-gray-300">File No.</th>
+              <th class="px-4 py-2 border border-gray-300">Adv. Name</th>
+              <th class="px-4 py-2 border border-gray-300">Party Name</th>
+              <th class="px-4 py-2 border border-gray-300">Case Type</th>
+              <th class="px-4 py-2 border border-gray-300">Edit Case</th>
+              <th class="px-4 py-2 border border-gray-300">Status</th>
+              <th class="px-4 py-2 border border-gray-300">Delete Case</th>
+              <th class="px-4 py-2 border border-gray-300">Share Link for editing</th>
+              <th class="px-4 py-2 border border-gray-300">Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Row 1 -->
+            <tr class="border border-gray-300">
+              <td class="px-4 py-2 border border-gray-300">R001</td>
+              <td class="px-4 py-2 border border-gray-300">A. Sharma</td>
+              <td class="px-4 py-2 border border-gray-300">Kumar</td>
+              <td class="px-4 py-2 border border-gray-300">LA</td>
+              <td class="px-4 py-2 border border-gray-300">-</td>
+              <td class="px-4 py-2 border border-gray-300">
+                <select class="border rounded px-2 py-1 text-xs bg-white">
+                  <option>Incomplete Info</option>
+                  <option>Draft Done</option>
+                  <option>Revised Done</option>
+                  <option>Final Done</option>
+                </select>
+              </td>
+              <td class="px-4 py-2 border border-gray-300">-</td>
+              <td class="px-4 py-2 border border-gray-300">Edit Link</td>
+              <td class="px-4 py-2 border border-gray-300">2024-06-01</td>
+            </tr>
+        
+            <!-- Row 2 -->
+            <tr class="border border-gray-300">
+              <td class="px-4 py-2 border border-gray-300">R002</td>
+              <td class="px-4 py-2 border border-gray-300">S. Mehta</td>
+              <td class="px-4 py-2 border border-gray-300">Singh</td>
+              <td class="px-4 py-2 border border-gray-300">Civil</td>
+              <td class="px-4 py-2 border border-gray-300">Edit</td>
+              <td class="px-4 py-2 border border-gray-300">
+                <select class="border rounded px-2 py-1 text-xs bg-white">
+                  <option>Draft Done</option>
+                  <option selected>Revised Done</option>
+                  <option>Final Done</option>
+                </select>
+              </td>
+              <td class="px-4 py-2 border border-gray-300">Delete</td>
+              <td class="px-4 py-2 border border-gray-300">Share</td>
+              <td class="px-4 py-2 border border-gray-300">2024-06-10</td>
+            </tr>
+        
+            <!-- Row 3 -->
+            <tr class="border border-gray-300">
+              <td class="px-4 py-2 border border-gray-300">R003</td>
+              <td class="px-4 py-2 border border-gray-300">P. Verma</td>
+              <td class="px-4 py-2 border border-gray-300">Gupta</td>
+              <td class="px-4 py-2 border border-gray-300">Criminal</td>
+              <td class="px-4 py-2 border border-gray-300">Edit</td>
+              <td class="px-4 py-2 border border-gray-300">
+                <select class="border rounded px-2 py-1 text-xs bg-white">
+                  <option selected>Incomplete Info</option>
+                  <option>Draft Done</option>
+                  <option>Revised Done</option>
+                  <option>Final Done</option>
+                </select>
+              </td>
+              <td class="px-4 py-2 border border-gray-300">Delete</td>
+              <td class="px-4 py-2 border border-gray-300">Edit Link</td>
+              <td class="px-4 py-2 border border-gray-300">2024-06-12</td>
+            </tr>
+        
+            <!-- Row 4 -->
+            <tr class="border border-gray-300">
+              <td class="px-4 py-2 border border-gray-300">R004</td>
+              <td class="px-4 py-2 border border-gray-300">R. Iyer</td>
+              <td class="px-4 py-2 border border-gray-300">Nair</td>
+              <td class="px-4 py-2 border border-gray-300">Family</td>
+              <td class="px-4 py-2 border border-gray-300">Edit</td>
+              <td class="px-4 py-2 border border-gray-300">
+                <select class="border rounded px-2 py-1 text-xs bg-white">
+                  <option>Incomplete Info</option>
+                  <option selected>Draft Done</option>
+                  <option>Revised Done</option>
+                  <option>Final Done</option>
+                </select>
+              </td>
+              <td class="px-4 py-2 border border-gray-300">Delete</td>
+              <td class="px-4 py-2 border border-gray-300">Share</td>
+              <td class="px-4 py-2 border border-gray-300">2024-06-18</td>
+            </tr>
+        
+            <!-- Row 5 -->
+            <tr class="border border-gray-300">
+              <td class="px-4 py-2 border border-gray-300">R005</td>
+              <td class="px-4 py-2 border border-gray-300">N. Khan</td>
+              <td class="px-4 py-2 border border-gray-300">Sheikh</td>
+              <td class="px-4 py-2 border border-gray-300">Labour</td>
+              <td class="px-4 py-2 border border-gray-300">Edit</td>
+              <td class="px-4 py-2 border border-gray-300">
+                <select class="border rounded px-2 py-1 text-xs bg-white">
+                  <option>Incomplete Info</option>
+                  <option>Draft Done</option>
+                  <option>Revised Done</option>
+                  <option selected>Final Done</option>
+                </select>
+              </td>
+              <td class="px-4 py-2 border border-gray-300">Delete</td>
+              <td class="px-4 py-2 border border-gray-300">Edit Link</td>
+              <td class="px-4 py-2 border border-gray-300">2024-06-20</td>
+            </tr>
+          </tbody>
+        </table>
+        
+      </div>
+      
+    
+      <!-- RIGHT TABLE – Narrower (2/5 of width) -->
+      <div class="lg:col-span-2 bg-white rounded shadow overflow-x-auto max-h-[400px] overflow-y-auto">
+        <table class="min-w-full text-sm text-left">
+          <thead class="bg-[#012f66] text-white sticky top-0 z-10">
+            <tr>
+              <th class="px-4 py-2">Sr. No.</th>
+              <th class="px-4 py-2">✔</th>
+              <th class="px-4 py-2">Document List</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b"><td class="px-4 py-2">1</td><td class="px-4 py-2"><input type="checkbox" checked></td><td class="px-4 py-2">Index</td></tr>
+            <tr class="border-b">
+              <td class="px-4 py-2">2</td>
+              <td class="px-4 py-2">
+                <input type="checkbox"></td>
+                <td class="px-4 py-2 ">Proforma</td>
+              </tr>
+            <tr class="border-b">
+              <td class="px-4 py-2">3</td>
+              <td class="px-4 py-2">
+                <input type="checkbox" checked></td>
+                <td class="px-4 py-2">Petition</td>
+              </tr>
+            <tr class="border-b">
+              <td class="px-4 py-2">4</td>
+              <td class="px-4 py-2">
+                <input type="checkbox" checked></td>
+                <td class="px-4 py-2 capitalize">DOCKET OF PETITION</td>
+              </tr>
+            <tr class="border-b">
+              <td class="px-4 py-2">5</td>
+              <td class="px-4 py-2">
+                <input type="checkbox" checked></td>
+                <td class="px-4 py-2 capitalize">OATH</td>
+              </tr>
+            <tr class="border-b">
+              <td class="px-4 py-2">6</td>
+              <td class="px-4 py-2">
+                <input type="checkbox" checked></td>
+                <td class="px-4 py-2 capitalize">DOCKET OF OATH</td>
+              </tr>
+            <tr class="border-b">
+              <td class="px-4 py-2">7</td>
+              <td class="px-4 py-2">
+                <input type="checkbox" ></td>
+                <td class="px-4 py-2 capitalize">CONSENT AFFIDAVIT</td>
+              </tr>
+            <tr class="border-b">
+              <td class="px-4 py-2">8</td>
+              <td class="px-4 py-2">
+                <input type="checkbox" ></td>
+                <td class="px-4 py-2 capitalize">DOCKET OF CONSENT AFF</td>
+              </tr>
+            <tr class="border-b">
+              <td class="px-4 py-2">9</td>
+              <td class="px-4 py-2">
+                <input type="checkbox" checked></td>
+                <td class="px-4 py-2 capitalize">SCHEDULE</td>
+              </tr>
+            <tr class="border-b">
+              <td class="px-4 py-2">10</td>
+              <td class="px-4 py-2">
+                <input type="checkbox" checked></td>
+                <td class="px-4 py-2 capitalize">DOCKET OF SCHEDULE</td>
+              </tr>
+            <tr class="border-b">
+              <td class="px-4 py-2">11</td>
+              <td class="px-4 py-2">
+                <input type="checkbox" checked></td>
+                <td class="px-4 py-2 capitalize">VAKALATNAMA</td>
+              </tr>
+            <tr class="border-b">
+              <td class="px-4 py-2">12</td>
+              <td class="px-4 py-2">
+                <input type="checkbox" checked></td>
+                <td class="px-4 py-2 capitalize">DOCKET OF VAKALATNAMA</td>
+              </tr>
+            <tr class="border-b">
+              <td class="px-4 py-2">13</td>
+              <td class="px-4 py-2">
+                <input type="checkbox" ></td>
+                <td class="px-4 py-2 capitalize">BOND</td>
+              </tr>
+            <tr class="border-b">
+              <td class="px-4 py-2">14</td>
+              <td class="px-4 py-2">
+                <input type="checkbox" checked></td>
+                <td class="px-4 py-2 capitalize">DOCKET OF BOND</td>
+              </tr>
+            <tr class="border-b">
+              <td class="px-4 py-2">15</td>
+              <td class="px-4 py-2">
+                <input type="checkbox" checked></td>
+                <td class="px-4 py-2 capitalize">CITATION</td>
+              </tr>
+            <tr class="border-b">
+              <td class="px-4 py-2">16</td>
+              <td class="px-4 py-2">
+                <input type="checkbox" checked></td>
+                <td class="px-4 py-2 capitalize">DOCKET OF CITATION</td>
+              </tr>
+            <tr class="border-b">
+              <td class="px-4 py-2">17</td>
+              <td class="px-4 py-2">
+                <input type="checkbox" checked></td>
+                <td class="px-4 py-2 capitalize">AOS</td>
+              </tr>
+            <tr class="border-b">
+              <td class="px-4 py-2">18</td>
+              <td class="px-4 py-2">
+                <input type="checkbox" checked></td>
+                <td class="px-4 py-2 capitalize">DOCKET OF AOS</td>
+              </tr>
+            <tr class="border-b">
+              <td class="px-4 py-2">19</td>
+              <td class="px-4 py-2">
+                <input type="checkbox" checked></td>
+                <td class="px-4 py-2 capitalize">NTOC SCHEDULE</td>
+              </tr>
+            <tr class="border-b">
+              <td class="px-4 py-2">20</td>
+              <td class="px-4 py-2">
+                <input type="checkbox" checked></td>
+                <td class="px-4 py-2 capitalize">DOCKET OF NTOC</td>
+              </tr>
+            <tr class="border-b">
+              <td class="px-4 py-2">21</td>
+              <td class="px-4 py-2">
+                <input type="checkbox"></td>
+                <td class="px-4 py-2 capitalize">SHERIFF AOS.</td>
+              </tr>
+            <tr class="border-b">
+              <td class="px-4 py-2">22</td>
+              <td class="px-4 py-2">
+                <input type="checkbox"></td>
+                <td class="px-4 py-2 capitalize">SHERIFF AFF.DOCKET</td>
+              </tr>
+            <tr class="border-b">
+              <td class="px-4 py-2"></td>
+              <td class="px-4 py-2">
+               </td>
+                <td class="px-4 py-2 capitalize font-bold">LETTERS</td>
+              </tr>
+              <tr class="border-b">
+                <td class="px-4 py-2">23</td>
+                <td class="px-4 py-2">
+                  <input type="checkbox" checked></td>
+                  <td class="px-4 py-2 capitalize">DC SUBMIT</td>
+                </tr>
+              <tr class="border-b">
+                <td class="px-4 py-2">24</td>
+                <td class="px-4 py-2">
+                  <input type="checkbox" checked></td>
+                  <td class="px-4 py-2 capitalize">CITATION ISSUE</td>
+                </tr>
+              <tr class="border-b">
+                <td class="px-4 py-2">25</td>
+                <td class="px-4 py-2">
+                  <input type="checkbox"></td>
+                  <td class="px-4 py-2 capitalize">BOND FILE</td>
+                </tr>
+              <tr class="border-b">
+                <td class="px-4 py-2">26</td>
+                <td class="px-4 py-2">
+                  <input type="checkbox" checked></td>
+                  <td class="px-4 py-2 capitalize">NTOC FILE</td>
+                </tr>
+              <tr class="border-b">
+                <td class="px-4 py-2">27</td>
+                <td class="px-4 py-2">
+                  <input type="checkbox" ></td>
+                  <td class="px-4 py-2 capitalize">SHERIFF AOS FILE</td>
+                </tr>
+              <tr class="border-b">
+                <td class="px-4 py-2">28</td>
+                <td class="px-4 py-2">
+                  <input type="checkbox" ></td>
+                  <td class="px-4 py-2 capitalize">SHERIFF SERVICE</td>
+                </tr>
+              <tr class="border-b">
+                <td class="px-4 py-2">29</td>
+                <td class="px-4 py-2">
+                  <input type="checkbox" checked></td>
+                  <td class="px-4 py-2 capitalize">GRANT AUTHORITY</td>
+                </tr>
+              <tr class="border-b">
+                <td class="px-4 py-2">30</td>
+                <td class="px-4 py-2">
+                  <input type="checkbox" checked></td>
+                  <td class="px-4 py-2 capitalize">GRANT CC</td>
+                </tr>
+              <tr class="border-b">
+                <td class="px-4 py-2">31</td>
+                <td class="px-4 py-2">
+                  <input type="checkbox" checked></td>
+                  <td class="px-4 py-2 capitalize">QUERY COMPLIANCE</td>
+                </tr>
+          </tbody>
+        </table>
+      </div>
+    
+    </div>
+    
+
+    <!-- FOOTER ACTIONS -->
+    <div class="flex items-start gap-10 text-sm font-semibold text-black mt-5">
+
+      <!-- LEFT SIDE BUTTONS -->
+      <div class="flex  gap-3">
+        <button class="bg-green-600 text-white px-4 py-2 rounded font-bold">ADD NEW CASE</button>
+        <button class="bg-red-600 text-white px-4 py-2 rounded font-bold">DELETE CASE</button>
+        <button class="bg-red-500 text-white px-4 py-2 rounded font-bold">DISPOSED CASES</button>
+        <button class="bg-purple-400 text-white px-4 py-2 rounded font-bold">REMOVE</button>
+        <button class="bg-blue-600 text-white px-4 py-2 rounded font-bold">RESTORE</button>
+        <button class="bg-green-700 text-white px-4 py-2 rounded font-bold">WHATSAPP DOCUMENTS</button>
+      </div>
+    
+      <!-- RIGHT SIDE BUTTONS -->
+      <div class="flex flex-col gap-3 items-end w-full max-w-xl">
+        <div class="grid grid-cols-3 gap-2 w-full">
+          <div></div>
+          <button class="bg-yellow-500 text-white px-3 py-2 rounded font-bold w-full text-center">
+            DOWNLOAD AS WORD<br />DRAFT (IN SINGLE FILE)
+          </button>
+          <button class="bg-yellow-500 text-white px-4 py-2 rounded font-bold w-full text-center">
+            DOWNLOAD AS PDF<br />DRAFT (IN SINGLE FILE)
+          </button>
+        </div>
+    
+        <div class="grid grid-cols-3 gap-3 w-full">
+          <div></div>
+          <button class="bg-yellow-500 text-white px-4 py-2 rounded font-bold w-full text-center">
+            DOWNLOAD AS WORD<br />(IN SINGLE FILE)
+          </button>
+          <button class="bg-yellow-500 text-white px-4 py-2 rounded font-bold w-full text-center">
+            DOWNLOAD AS PDF<br />(IN SINGLE FILE)
+          </button>
+        </div>
+    
+        <div class="grid grid-cols-3 gap-3 w-full">
+          <div></div>
+          <button class="bg-yellow-500 text-white px-4 py-2 rounded font-bold w-full text-center">
+            DOWNLOAD AS WORD<br />(IN ZIP SEPARATE FILE)
+          </button>
+          <button class="bg-yellow-500 text-white px-4 py-2 rounded font-bold w-full text-center">
+            DOWNLOAD AS PDF<br />(IN ZIP SEPARATE FILE)
+          </button>
+        </div>
+    
+        <div class="grid grid-cols-3 gap-3 w-full">
+          <div></div>
+          <button class="bg-yellow-500 text-white px-4 py-2 rounded font-bold w-full text-center">
+            DOWNLOAD FINAL DOC<br />AS PDF
+          </button>
+          <button class="bg-yellow-500 text-white px-4 py-2 rounded font-bold w-full text-center">
+            EMAIL DOCUMENT
+          </button>
+        </div>
+      </div>
+    
+    </div>
+    
+    
+    
+
+    <!-- CASE TYPE COUNTERS -->
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-9 gap-3 text-sm text-white text-center px-4 mt-6">
+      <div class="bg-[#012f66] p-2 rounded"><div>LA</div><div class="text-xs font-bold">23 Cases</div></div>
+      <div class="bg-[#012f66] p-2 rounded"><div>PR</div><div class="text-xs font-bold">12 Cases</div></div>
+      <div class="bg-[#012f66] p-2 rounded"><div>MPT</div><div class="text-xs font-bold">9 Cases</div></div>
+      <div class="bg-[#012f66] p-2 rounded"><div>SC</div><div class="text-xs font-bold">4 Cases</div></div>
+      <div class="bg-[#012f66] p-2 rounded"><div>LA-WILL</div><div class="text-xs font-bold">5 Cases</div></div>
+      <div class="bg-[#012f66] p-2 rounded"><div>JO</div><div class="text-xs font-bold">7 Cases</div></div>
+      <div class="bg-[#012f66] p-2 rounded"><div>IA</div><div class="text-xs font-bold">11 Cases</div></div>
+      <div class="bg-[#012f66] p-2 rounded"><div>CO</div><div class="text-xs font-bold">6 Cases</div></div>
+      <div class="bg-[#012f66] p-2 rounded"><div>TOTAL CASE </div><div class="text-xs font-bold">32 Cases</div></div>
+    </div>
+
+
+    <div class="mt-10">
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        
+        <button class="bg-[#012f66] text-white py-2 px-4 rounded text-sm">
+          CLIENT DETAIL SHEET – EXCEL
+        </button>
+    
+        <button class="bg-[#012f66] text-white py-2 px-4 rounded text-sm">
+          INCOMPLETE DOC & INFO SHEET
+        </button>
+    
+        <button class="bg-[#012f66] text-white py-2 px-4 rounded text-sm">
+          REST REQUIREMENT SHEET
+        </button>
+    
+        <button class="bg-[#012f66] text-white py-2 px-4 rounded text-sm">
+          SAVE DRAFTS
+        </button>
+    
+        <button class="bg-[#012f66] text-white py-2 px-4 rounded text-sm text-left">
+          DEMO PETITIONS – UPLOAD / DOWNLOAD
+        </button>
+    
+        <button class="bg-[#012f66] text-white py-2 px-4 rounded text-sm text-left">
+          FORMAT FILE & FOLDER – UPLOAD / DOWNLOAD
+        </button>
+    
+        <button class="bg-[#012f66] text-white py-2 px-4 rounded text-sm">
+          CLIENT DATA
+        </button>
+    
+        <button class="bg-[#012f66] text-white py-2 px-4 rounded text-sm text-left">
+          JUDGMENTS & ORDERS – UPLOAD / DOWNLOAD
+        </button>
+    
+      </div>
+    </div>
+    
+<!-- importent Links -->
+<div class="mt-5">
+  <h1 class="font-bold text-xl">IMPORTAN LINKS</h1>
+  <div class="flex justify-around mt-5">
+    <a href="#" class="text-blue-600">CRM CASE DATA SOFT</a>
+    <a href="#" class="text-blue-600">OFFICE ADMIN SOFT</a>
+    <a href="#" class="text-blue-600">WEBSITE OF AVM</a>
+    <a href="#" class="text-blue-600">WEBSITE OF SEEMA HUNNURKAR & ASS.</a>
+  </div>
+</div>
+
+  </main>
+</body>
+</html>
