@@ -20,11 +20,11 @@
       </div>
       <div class="flex gap-10">
         <div class="flex justify-center gap-5">
-     
-          <button class="bg-[#012f66]  text-white py-2 px-3 rounded">HOME</button>
+          <a href="/">
+          <button class="bg-[#012f66]  text-white py-2 px-3 font-bold rounded">HOME</button></a>
          
-          <button class="bg-[#012f66] text-white py-2 px-3 rounded uppercase">Edit Case</button>
-          <button class="bg-[#012f66] text-white py-2 px-3 rounded uppercase">refresh</button>
+          <button class="bg-[#012f66] text-white py-2 px-3 font-bold rounded uppercase">Edit Case</button>
+          <button class="bg-[#012f66] text-white py-2 px-3 font-bold rounded uppercase">refresh</button>
          
         </div>
         <div class="flex items-center space-x-4">
@@ -116,8 +116,9 @@
             <option>Advocate B</option>
           </select>
         </div>
-        <button class="bg-green-600 text-white px-4 py-2 rounded">+ Search</button>
-        <button class="bg-blue-600 text-white px-4 py-2 rounded">+ Add Joint Adv. Name</button>
+        <button class="bg-green-600 text-white px-4 py-2 rounded uppercase">+ Search</button>
+        <button class="bg-blue-600 text-white px-4 py-2 rounded uppercase">+ Add Joint Adv. Name</button>
+        <button class="bg-purple-600 text-white px-4 py-2 rounded uppercase">+ Add Seema Joint Adv. Name</button>
       </div>
 
       <!-- Add New Advocate Fields -->
@@ -136,16 +137,20 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
       <div>
         <label class="block mb-1 font-medium">Note Pending Documents From Client (If any)</label>
-        <select class="w-full border p-2 rounded">
-          <option>Yes</option>
+        <textarea class="w-full border p-2 rounded hidden" rows="4" id="pending" placeholder="Pending Documents From Client"></textarea>
+        <select class="w-full border p-2 rounded" id="pendingSelect">
           <option>No</option>
+          <option>Yes</option>
+         
         </select>
       </div>
       <div>
         <label class="block mb-1 font-medium">Remark (If any)</label>
-        <select class="w-full border p-2 rounded">
-          <option>Yes</option>
+        <textarea class="w-full border p-2 rounded hidden" rows="4" id="remark" placeholder="Remark"></textarea>
+        <select class="w-full border p-2 rounded" id="remarkSelect">
           <option>No</option>
+          <option>Yes</option>
+         
         </select>
       </div>
     </div>
@@ -161,7 +166,28 @@
     document.addEventListener('DOMContentLoaded', () => {
       const dateWrapper = document.querySelector('[data-date-wrapper]');
       const dateInput = dateWrapper.querySelector('input');
-  
+      const pendingDocument = document.getElementById('pending')
+      const pendingSelectDocument = document.getElementById('pendingSelect')
+      const remarkDocument = document.getElementById('remark')
+      const remarkSelectDocument = document.getElementById('remarkSelect')
+      pendingSelectDocument.addEventListener("change" , changeon)
+      remarkSelectDocument.addEventListener("change",changeont)
+      function changeon(){
+        if(pendingSelectDocument.value == "Yes"){
+          pendingDocument.classList.remove("hidden")
+        }
+        else{
+          pendingDocument.classList.add("hidden")
+        }
+      }
+      function changeont(){
+        if(remarkSelectDocument.value == "Yes"){
+          remarkDocument.classList.remove("hidden")
+        }
+        else{
+          remarkDocument.classList.add("hidden")
+        }
+      }
       dateWrapper.addEventListener('click', () => {
         dateInput.showPicker?.(); // Only works in modern browsers
         dateInput.focus();
