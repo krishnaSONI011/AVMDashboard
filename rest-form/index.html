@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>REST FORM - ANCILLARY DOCUMENTS</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+</head>
+<body class="bg-gray-100 text-gray-800 uppercase">
+
+  <!-- Header -->
+  <header class="bg-white p-4 shadow">
+    <nav class="flex justify-between items-center">
+      <div class="flex items-center gap-10">
+        <img src="../assets/login.png" alt="logo" class="w-[160px]" />
+        <h1 class="text-4xl text-[#012f66]">
+          Drafting - <span class="text-[#b31f29]">CRM</span>
+        </h1>
+      </div>
+      <div class="flex gap-10">
+        <div class="flex justify-center gap-5">
+          <a href="/">
+            <button class="bg-[#012f66] text-white py-2 px-3 font-bold rounded">HOME</button>
+          </a>
+          <button class="bg-[#012f66] text-white py-2 px-3 font-bold rounded">EDIT CASE</button>
+          <button class="bg-[#012f66] text-white py-2 px-3 font-bold rounded">REFRESH</button>
+        </div>
+        <div class="flex items-center space-x-4">
+          <img src="../assets/avatar.jpg" alt="avatar" class="w-10 h-10 rounded-full" />
+          <button class="text-gray-600 text-lg font-semibold">LOGIN</button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main Form -->
+  <main class="p-8 max-w-6xl mx-auto bg-white mt-6 shadow-md rounded-md">
+    <h2 class="text-2xl font-bold mb-8 text-center bg-[#012f66] text-white py-2 px-4 w-fit mx-auto rounded">
+      REST FORM - MISC. ANCILLARY DOCUMENTS DETAILS
+    </h2>
+
+    <!-- Section -->
+    <div class="grid grid-cols-1 gap-6">
+
+      <!-- ID Affidavit -->
+      <div>
+        <label class="block mb-1 font-medium">ID Affidavit</label>
+        <input type="text" class="w-full border p-2 rounded" placeholder="Document in place of ID proof">
+      </div>
+
+      <!-- Consent Affidavit -->
+      <div>
+        <h3 class="text-xl font-semibold mb-3 bg-[#012f66] text-white px-3 py-2 rounded w-fit">Consent Affidavit of Legal Heirs</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <select class="border p-2 rounded">
+            <option value="">Single / Joint</option>
+            <option>Single</option>
+            <option>Joint</option>
+          </select>
+          <select id="someJointSelect" class="w-full border p-2 rounded mb-2">
+            <option value="">Some Single & Some Joint? (Yes/No)</option>
+            <option>Yes</option>
+            <option>No</option>
+          </select>
+          
+         
+          
+        </div>
+        <!-- This textarea will be shown/hidden -->
+        <textarea id="someJointTextarea" class="w-full border p-2 rounded mt-2 hidden" rows="2" placeholder="Specify names if some single & some joint"></textarea>
+      </div>
+
+      <!-- Advocate Details -->
+      <div>
+        <h3 class="text-xl font-semibold mb-3 bg-[#012f66] text-white px-3 py-2 rounded w-fit">Advocate Details</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <select class="w-full border p-2 rounded">
+            <option>Select Advocate Name</option>
+            <option>Advocate A</option>
+            <option>Advocate B</option>
+          </select>
+          <button class="bg-green-600 text-white px-4 py-2 rounded">+ Search</button>
+        </div>
+
+        <h4 class="text-lg font-medium mb-2">Add New Advocate</h4>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input type="text" placeholder="Advocate Name" class="border p-2 rounded">
+          <input type="text" placeholder="Advocate Address" class="border p-2 rounded">
+          <input type="text" placeholder="Cell No." class="border p-2 rounded">
+          <input type="email" placeholder="Email ID" class="border p-2 rounded">
+          <input type="text" placeholder="O.S. Regd. No." class="border p-2 rounded">
+          <input type="text" placeholder="Sanad No." class="border p-2 rounded">
+        </div>
+      </div>
+
+      <!-- Bond Details -->
+      <div>
+        <h3 class="text-xl font-semibold mb-3 bg-[#012f66] text-white px-3 py-2 rounded w-fit">Bond Details</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input type="text" placeholder="Case No." class="border p-2 rounded">
+          <input type="text" placeholder="3 Dates (6 months apart)" class="border p-2 rounded">
+          <input type="text" placeholder="Witness Name" class="border p-2 rounded">
+          <input type="text" placeholder="Witness Address" class="border p-2 rounded">
+          <input type="text" placeholder="Prothonotary Name" class="border p-2 rounded">
+        </div>
+      </div>
+
+      <!-- Citation / Notice -->
+      <div>
+        <h3 class="text-xl font-semibold mb-3 bg-[#012f66] text-white px-3 py-2 rounded w-fit">Citation / Notice</h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input type="text" placeholder="Case No." class="border p-2 rounded w-full">
+          
+          <select class="border p-2 rounded w-full">
+            <option value="">Citation To:</option>
+            <option>All Concerned & Legal Heirs</option>
+            <option>All Concerned Only</option>
+            <option>Legal Heirs Only</option>
+          </select>
+          
+          <select class="border p-2 rounded w-full">
+            <option value="">SELECT names of legal heirs</option>
+            <option>All Concerned & Legal Heirs</option>
+            <option>All Concerned Only</option>
+            <option>Legal Heirs Only</option>
+          </select>
+          
+          <input type="text" placeholder="Chief Justice Name" class="border p-2 rounded w-full">
+        </div>
+      </div>
+      
+
+      <!-- Affidavit of Service -->
+      <div>
+        <h3 class="text-xl font-semibold mb-3 bg-[#012f66] text-white px-3 py-2 rounded w-fit">Affidavit of Service</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input type="text" placeholder="Clerk Name" class="border p-2 rounded">
+          <input type="date" class="border p-2 rounded">
+        </div>
+      </div>
+
+      <!-- Schedules -->
+      <div>
+        <h3 class="text-xl font-semibold mb-3 bg-[#012f66] text-white px-3 py-2 rounded w-fit">Schedules</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input type="text" placeholder="Schedule-I" class="border p-2 rounded">
+          <input type="text" placeholder="Schedule-II (Liability)" class="border p-2 rounded">
+          <input type="text" placeholder="Schedule-III (HUF)" class="border p-2 rounded">
+          <input type="text" placeholder="Index" class="border p-2 rounded">
+        </div>
+      </div>
+
+      <!-- Sheriff Affidavit -->
+      <div>
+        <h3 class="text-xl font-semibold mb-3 bg-[#012f66] text-white px-3 py-2 rounded w-fit">Sheriff Affidavit</h3>
+        <textarea class="w-full border p-2 rounded mb-2" placeholder="Legal heirs served with citation"></textarea>
+        <input type="date" class="w-full border p-2 rounded mb-2">
+        <input type="text" placeholder="Postal Receipt RM Numbers" class="w-full border p-2 rounded mb-2">
+        <textarea class="w-full border p-2 rounded" placeholder="Delivery Report Remark & Legal Heir Name"></textarea>
+      </div>
+
+      <!-- Publication Affidavit -->
+      <div>
+        <h3 class="text-xl font-semibold mb-3 bg-[#012f66] text-white px-3 py-2 rounded w-fit">Publication Affidavit</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input type="text" placeholder="Clerk or Petitioner Name" class="border p-2 rounded">
+          <input type="text" placeholder="Officer Name" class="border p-2 rounded">
+          <input type="text" placeholder="CO Number & Year" class="border p-2 rounded">
+          <input type="date" placeholder="Date of Order" class="border p-2 rounded">
+          <input type="date" placeholder="Date of Publication" class="border p-2 rounded">
+          <input type="text" placeholder="Newspaper Names" class="border p-2 rounded">
+          <input type="text" placeholder="Language of Newspapers" class="border p-2 rounded">
+        </div>
+      </div>
+
+      <!-- Misc Applications -->
+      <div>
+        <h3 class="text-xl font-semibold mb-3 bg-[#012f66] text-white px-3 py-2 rounded w-fit">Misc Applications</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <input type="text" placeholder="Judges Order (JO)" class="border p-2 rounded">
+          <input type="text" placeholder="Chamber Order (CO)" class="border p-2 rounded">
+          <input type="text" placeholder="Interim Application (IA)" class="border p-2 rounded">
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex justify-center mt-10 gap-6">
+      <button class="bg-[#012f66] text-white py-2 px-6 rounded">SUBMIT</button>
+      <button class="bg-red-600 text-white py-2 px-6 rounded">CANCEL</button>
+    </div>
+  </main>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const jointSelect = document.getElementById('someJointSelect');
+      const jointTextarea = document.getElementById('someJointTextarea');
+  
+      jointSelect.addEventListener('change', () => {
+        if (jointSelect.value === 'Yes') {
+          jointTextarea.classList.remove('hidden');
+        } else {
+          jointTextarea.classList.add('hidden');
+        }
+      });
+    });
+  </script>
+  
+</body>
+</html>
