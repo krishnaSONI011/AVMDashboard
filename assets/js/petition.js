@@ -1,18 +1,26 @@
 
     const page_1 = document.getElementById('page1');
     const page_2 = document.getElementById('page2');
-
+    const page_3 = document.getElementById('page3');
+    const page_4 = document.getElementById('page4');
     async function getThePage() {
         const res = await fetch('./page1.html');
         const res1 = await fetch('./page2.html')
+        const res2 = await fetch('./page3.html')
+        const res3 = await fetch('./page4.html')
+        
         const html = await res.text();
         const html1 = await res1.text();
+        const html2 = await res2.text();
+        const html3 = await res3.text();
         page_1.innerHTML = html;
         page_2.innerHTML = html1
-
+        page_3.innerHTML = html2
+        page_4.innerHTML = html3
         // ✅ Now that content is loaded, run your setup logic
         setupPage1Events();
         setupPage2Events();
+
     }
 
     getThePage();
@@ -163,16 +171,16 @@
             <td class="border border-black p-2 text-center">${legalHeirCounter}</td>
             <td class="border border-black p-2">
                 <div class="space-y-2">
-                    <input type="text" placeholder="Name of Legal Heir" class="w-full border p-1 border-black rounded">
-                    <input type="text" placeholder="Residing at" class="w-full border p-1 border-black rounded">
-                    <input type="text" placeholder="Address of Legal Heir" class="w-full border p-1 border-black rounded">
+                    <input type="text" placeholder="Name of Legal Heir" class="w-full border input p-1 border-black rounded">
+                    <input type="text" placeholder="Residing at" class="w-full border p-1 border-black input rounded">
+                    <input type="text" placeholder="Address of Legal Heir" class="w-full border input p-1 border-black rounded">
                 </div>
             </td>
             <td class="border border-black p-2">
-                <input type="number" placeholder="Age of Legal Heir" class="w-full border p-1 border-black rounded">
+                <input type="number" placeholder="Age of Legal Heir" class="w-full border p-1 border-black input rounded">
             </td>
             <td class="border border-black p-2">
-                <input type="text" placeholder="Relation with deceased" class="w-full border p-1 border-black rounded">
+                <input type="text" placeholder="Relation with deceased" class="w-full border p-1 border-black input rounded">
             </td>
             <td class="border border-black p-2 text-center">
                 <button type="button" class="remove-row-btn bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600">Remove</button>
@@ -203,16 +211,16 @@
             <td class="border border-black p-2 text-center">${subHeirNumber}</td>
             <td class="border border-black p-2">
                 <div class="space-y-2">
-                    <input type="text" placeholder="Name of Sub Legal Heir" class="w-full border p-1 border-black rounded">
-                    <input type="text" placeholder="Residing at" class="w-full border p-1 border-black rounded">
-                    <input type="text" placeholder="Address of Sub Legal Heir" class="w-full border p-1 border-black rounded">
+                    <input type="text" placeholder="Name of Sub Legal Heir" class="w-full input border p-1 border-black rounded">
+                    <input type="text" placeholder="Residing at" class="w-full border p-1 border-black input rounded">
+                    <input type="text" placeholder="Address of Sub Legal Heir" class="w-full border input p-1 border-black rounded">
                 </div>
             </td>
             <td class="border border-black p-2">
-                <input type="number" placeholder="Age of Sub Legal Heir" class="w-full border p-1 border-black rounded">
+                <input type="number" placeholder="Age of Sub Legal Heir" class="w-full border p-1 border-black input rounded">
             </td>
             <td class="border border-black p-2">
-                <input type="text" placeholder="Relation with deceased" class="w-full border p-1 border-black rounded">
+                <input type="text" placeholder="Relation with deceased" class="w-full border p-1 border-black input rounded">
             </td>
             <td class="border border-black p-2 text-center">
                 <button type="button" class="remove-row-btn bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600">Remove</button>
@@ -274,12 +282,12 @@
         newSonEntry.innerHTML = `
             <div class="flex items-center gap-2 mb-2">
                 <span class="son-number">${sonCounter})</span>
-                Master <input type="text" placeholder="Enter Son's Name" class="border p-1 border-black rounded w-48">
-                who was born on <input type="date" class="border p-1 border-black rounded">
-                <button type="button" class="remove-son-btn bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600">Remove</button>
+                Master <input type="text" placeholder="Enter Son's Name" class="border p-1 border-black input rounded w-48">
+                who was born on <input type="date" class="border input p-1 border-black rounded">
+                <button type="button" class="remove-son-btn input bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600">Remove</button>
             </div>
             <div class="flex items-center gap-2">
-                Hereto annexed and marked as Exhibit – "<input type="text" placeholder="${exhibitLetter}" class="border p-1 border-black rounded w-12">" is the true copy of birth certificate.
+                Hereto annexed and marked as Exhibit – "<input type="text" placeholder="${exhibitLetter}" class="border p-1 input border-black rounded w-12">" is the true copy of birth certificate.
             </div>
         `;
         
