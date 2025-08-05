@@ -1,0 +1,186 @@
+<div class="bg-[#334155] text-white mt-5">
+    <div class="p-10">
+        <!-- table start -->
+        <table class=" w-full border-2 border-white">
+            <tbody>
+                <!-- heading row -->
+                <tr class="py-5">
+                    <td colspan="4" class="py-5">
+                        <h1 class="text-center text-4xl font-bold underline mb-5">OATH</h1>
+                        <p class="text-center ">IN THE HIGH COURT OF JUDICATURE AT BOMBAY</p>
+                        <p class="text-center mt-5">TESTAMENTARY AND INTESTATE JURISDICTION</p>
+                        <p class="mt-5 text-center">
+                            PETITION NO. <input type="text" placeholder="Enter Petition Number"
+                                class="border bg-[#334155] text-white p-1 rounded" />
+                            of <input type="text" placeholder="Year" class="bg-[#334155] text-white border p-1 rounded" />
+                        </p>
+                    </td>
+                </tr>
+                <tr class="border  border-white">
+                    <td class=" border-r border-white w-1/2">
+
+                    </td>
+                    <td class="">
+                        <p class="py-5 px-2 text-justify">Petition for Letters of Administration to the
+                            property and credits of <input type="text" placeholder="Enter Deceased Name"
+                                class="border bg-[#334155] text-white p-1 mt-2 border-white rounded" /><button
+                                class="bg-blue-600 text-white p-1 rounded mx-1" id="deceased_alias">Alias
+                                Name</button> <span class="hidden" id="alias_container">Alias Name <input
+                                    type="text" placeholder="Enter Deceased Name"
+                                    class="border bg-[#334155] text-white p-1 mt-2 border-white rounded" /><button
+                                    class="bg-red-500 text-white p-1 rounded mx-1"
+                                    id="remove_deceased_alias">Remove Alias</button></span>
+                            ,Religion of Deceased<input type="text" placeholder="Enter Religion of Deceased"
+                                class="border bg-[#334155] text-white border-white p-1 w-52 mt-2 rounded" /> CITIZEN <select
+                                name="cars" id="cars" class="border bg-[#334155] text-white border-white mt-1 p-1 rounded">
+                                <option value="volvo">Select citizen</option>
+                                <option value="volvo">Indian</option>
+                                <option value="volvo">NRI</option>
+
+                            </select>, Inhabitant of <input type="text" placeholder="Enter Inhabitent"
+                                class="border bg-[#334155] text-white border-white p-1 mt-2 rounded" />, Marital Status <select
+                                name="marital_status" id="marital_status"
+                                class="border bg-[#334155] text-white border-white mt-1 p-1 rounded">
+                                <option value="">Select Marital Status</option>
+                                <option value="Married">
+                                    Married</option>
+                                <option value="Widow">
+                                    Widow</option>
+                                <option value="Widower">
+                                    Widower</option>
+                                <option value="Bachelor">
+                                    Bachelor</option>
+                                <option value="Spinster">
+                                    Spinster</option>
+                                <option value="Divorcee">
+                                    Divorcee</option>
+                            </select>
+                            , Occupation- <input type="text" placeholder="Enter Occupation"
+                                class="border bg-[#334155] text-white border-white p-1 mt-2 rounded" /> , who <span id="who_died">died at</span>
+                                
+                            <button class="bg-blue-600 mt-2 text-white p-1 rounded mx-1"
+                                id="address_des_button">PLACE OF DEATH: SAME AS RESIDENCE CITY? </button>
+                            was residing at 
+                            
+                            the time of
+                            <input type="radio" id="html" name="fav_language" class="mt-4 mb-10 bg-[#334155] text-white"
+                                value="HTML">
+                            <label for="html"> Male /</label>
+                            <input type="radio" id="css" name="fav_language" value="CSS" class="bg-[#334155] text-white">
+                            <label for="css"> Female</label> Death at
+                            <textarea id="enter_addressProof" class=" hidden border p-3 border-white rounded" rows="2" cols="60" placeholder="Enter the Address as per Address proof"></textarea>
+                            <span
+                                class="">..................................................................................Deceased</span>
+
+                        </p>
+                    </td>
+                </tr>
+                <!-- first page second body -->
+                <tr class="border border-white">
+                    <td class="border-r border-white">
+                      <!-- Container for all petitioners -->
+                     <!-- Inside your <td> -->
+<div id="petitioner_wrapper">
+<div class="petitioner_block">
+<p class="text-justify py-5 px-2">
+<span class="petitioner_number font-bold mr-1">1.</span>
+<input type="text" placeholder="Enter Petitioner Name" class="border bg-[#334155] text-white p-1 mt-2 border-white rounded" />
+<button class="bg-blue-600 text-white p-1 rounded mx-1">Alias Name</button>,
+Age-<input type="text" placeholder="Enter Petitioner Age" class="border bg-[#334155] text-white p-1 mt-2 border-white rounded" /> Years,
+Occupation-<input type="text" placeholder="Enter Petitioner Occupation"
+class="border bg-[#334155] text-white p-1 mt-2 border-white rounded" />,
+<input type="text" placeholder="Enter Religion of Petitioner" class="border p-1 mt-2 border-white bg-[#334155] text-white rounded" />,
+<select class="border bg-[#334155] text-white border-white mt-1 p-1 rounded">
+<option value="">Select citizen</option>
+<option value="Indian">Indian</option>
+<option value="NRI">NRI</option>
+</select>
+Inhabitant of
+<input type="text" placeholder="Enter Inhabitant" class="border bg-[#334155] text-white p-1 mt-2 border-white rounded" />
+residing at
+<button class="bg-red-500 mt-2 text-white p-1 rounded mx-1">Same As Deceased Address</button>
+being the
+<input type="text" placeholder="Relation to Deceased" class="border p-1 mt-2 border-white bg-[#334155] text-white rounded" />
+of the deceased above named.
+</p>
+</div>
+</div>
+
+<!-- Add Button -->
+<button type="button" id="add_petitioner_button"
+class="bg-red-500 mt-4 ml-2 text-white p-2 rounded font-semibold">+ Add Petitioner</button>
+
+                    </td>
+                  
+                    <td class="flex h-[45vh] justify-center items-end">
+                      ..................................................................................…Petitioner's
+                    </td>
+                  </tr>
+                  
+                
+                <tr>
+                    <td colspan="4" class="py-5">
+                        <h1 class="text-center text-xl font-bold underline mb-5">PETITIONER’S OATH</h1>
+                        <p>I, <input type="text" placeholder="Enter Petitioner Name" class="border bg-[#334155] text-white p-1 rounded" /> <select class="border bg-[#334155] text-white p-1 rounded">
+                            <option value="">Select Relation</option>
+                            <option value="wife of">wife of</option>
+                            <option value="husband of">husband of</option>
+                            <option value="son of">son of</option>
+                            <option value="daughter of">daughter of</option>
+                            <option value="mother of">mother of</option>
+                            <option value="father of">father of</option>
+                        </select> <input type="text" placeholder="Enter Spouse/Parent Name" class="border bg-[#334155] text-white p-1 rounded" />, Age – <input type="text" placeholder="Enter Age" class="border bg-[#334155] text-white p-1 mt-5 rounded w-16" /> Years, <input type="text" placeholder="Enter Religion" class="border bg-[#334155] text-white p-1 rounded" />, <select class="border bg-[#334155] text-white p-1 rounded">
+                            <option value="">Select citizen</option>
+                            <option value="Indian">Indian</option>
+                            <option value="NRI">NRI</option>
+                        </select>, Inhabitant of <input type="text" placeholder="Enter Inhabitant" class="border bg-[#334155] text-white p-1 rounded" />, residing at <input type="text" placeholder="Enter Address" class="border bg-[#334155] text-white p-1 mt-5 rounded w-64" />, the Petitioner abovenamed</p>
+                        
+                        <p class="mt-5">do hereby solemnly affirm and say that I believe that <input type="text" placeholder="Enter Deceased Name" class="border bg-[#334155] text-white p-1 rounded" /> died without leaving a will and that I am the <select class="border bg-[#334155] text-white p-1 rounded">
+                            <option value="">Select Relation</option>
+                            <option value="Widow">Widow</option>
+                            <option value="Widower">Widower</option>
+                            <option value="Son">Son</option>
+                            <option value="Daughter">Daughter</option>
+                            <option value="Mother">Mother</option>
+                            <option value="Father">Father</option>
+                            <option value="Brother">Brother</option>
+                            <option value="Sister">Sister</option>
+                        </select> of the deceased and that I will well and truly administer his property and credits according to law and pay his debts so far as the said asset will extend and that I will make and exhibit a full and true inventory thereof in this Hon'ble Court within six months from the date of the grant to be made to me or within such further time as the said Court may from time to time appoint and also render a true account of my administration to this Hon'ble Court within one year from the same date or within such further time as the said Court may from time to time appoint.</p>
+                        
+                        <div class="mt-10 flex justify-between">
+                            <div>
+                                <p class="mb-5">Solemnly affirmed at <input type="text" placeholder="Enter Place" class="border bg-[#334155] text-white p-1 rounded" /></p>
+                                <p class="mt-10 text-lg">Dated this <input
+                                    type="text" placeholder="Day"
+                                    class="border p-1 w-[10%]  mt-2 input border-white rounded" > day of <input
+                                    type="text" placeholder="Month"
+                                    class="border p-1 w-[10%]  mt-2 input border-white rounded" >,<input
+                                    type="text" placeholder="Year"
+                                    class="border p-1 w-[10%]  mt-2 input border-white rounded" ></p>
+                                <div class="mt-5 w-52 h-16 border-2 border-dashed border-white flex items-center justify-center">
+
+                                    <span class="text-sm">Signature</span>
+                                </div>
+                                <p>Advocate for the Petitioner</p>
+
+                            </div>
+                            <div class="text-right">
+                                
+                                <div class="mt-5  h-16 border-2 border-dashed border-white flex items-center justify-center">
+                                    <span class="text-sm">Signature</span>
+                                </div>
+                                <p class="mt-10">Signature of Petitioner</p>
+                                
+                            </div>
+                        </div>
+                        
+                    </td>
+                </tr>
+                
+                </tbody>
+
+
+        </table>
+
+    </div>
+</div>

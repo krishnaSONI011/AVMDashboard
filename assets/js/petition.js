@@ -3,20 +3,25 @@
     const page_2 = document.getElementById('page2');
     const page_3 = document.getElementById('page3');
     const page_4 = document.getElementById('page4');
+    const page_5 = document.getElementById('page5');
     async function getThePage() {
         const res = await fetch('./page1.html');
         const res1 = await fetch('./page2.html')
         const res2 = await fetch('./page3.html')
         const res3 = await fetch('./page4.html')
+        const res4 = await fetch('./page5.html')
+
         
         const html = await res.text();
         const html1 = await res1.text();
         const html2 = await res2.text();
         const html3 = await res3.text();
+        const html4 = await res4.text();
         page_1.innerHTML = html;
         page_2.innerHTML = html1
         page_3.innerHTML = html2
         page_4.innerHTML = html3
+        page_5.innerHTML = html4
         // ✅ Now that content is loaded, run your setup logic
         setupPage1Events();
         setupPage2Events();
