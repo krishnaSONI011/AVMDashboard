@@ -56,7 +56,13 @@
                                     Divorcee</option>
                             </select>
                             , Occupation- <input type="text" placeholder="Enter Occupation"
-                                class="border bg-[#334155] text-white border-black p-1 mt-2 rounded" /> , who <span id="who_died">died at</span>
+                                class="border bg-[#334155] text-white border-black p-1 mt-2 rounded" /> , who <span id="who" class="">
+                                    died at
+                                </span>
+                                    <span id="place_of_death" class="hidden">
+                                        <input type="text" placeholder="Place of Death" class="border  bg-[#334155] text-white border-black p-1 mt-2 rounded" id=""/>
+                                    </span>
+                                
                                 
                             <button class="bg-blue-600 mt-2 text-white p-1 rounded mx-1"
                                 id="address_des_button">PLACE OF DEATH: SAME AS RESIDENCE CITY? </button>
@@ -68,7 +74,14 @@
                             <label for="html"> Male /</label>
                             <input type="radio" id="css" name="fav_language" value="CSS" class="bg-[#334155] text-white">
                             <label for="css"> Female</label> Death at
-                            <textarea id="enter_addressProof" class=" hidden border p-3 border-black rounded" rows="2" cols="60" placeholder="Enter the Address as per Address proof"></textarea>
+                            <span id="death_cer_address" class="hidden">
+                                <textarea id="enter_addressProof" class=" input border p-3 border-black rounded" rows="2" cols="60" placeholder="Enter the Address as per death Certificate"></textarea>
+                            </span>
+                            <span id="show_both_line" class="hidden text-left">and permanent address at</span>
+                            <span>
+                            <textarea id="ad" class="hidden input border p-3 border-black rounded" rows="2" cols="60" placeholder="Enter the Address as per Address proof"></textarea>
+                        </span>
+                        <button class="bg-red-500 p-2 rounded hidden" id="address_reset">Reset Address</button>
                             <span
                                 class="">..................................................................................Deceased</span>
 

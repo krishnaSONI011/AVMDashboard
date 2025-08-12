@@ -53,30 +53,30 @@
     </div>
 
     <!-- Model-first-->
-    <div class="fixed hidden  h-[100vh] bg-[#0000006e] z-50 w-full top-0 flex items-center" id="death_first_question">
+    <div class="fixed model hidden  h-[100vh] bg-[#0000006e] z-50 w-full top-0 flex items-center" id="death_first_question">
         <div class="bg-white p-5 rounded-lg w-[27vw] mx-auto h-fit">
             <div class="flex justify-end ">
-                <button class="bg-red-500  rounded-full p-1 px-4 text-xl text-white">x</button>
+                <button class="bg-red-500 close  rounded-full p-1 px-4 text-xl text-white" id="death_first_question_close" data-action="close1">x</button>
             </div>
             <p class="text-center text-2xl">Did the deceased died in a different city?</p>
             <div class="border-t border-gray-300 mt-4 pt-3 flex justify-evenly ">
-                <button class="bg-blue-500 text-white p-4 w-40 rounded mx-1" id="first_question_yes">Yes</button>
-                <button class="bg-red-500 text-white p-4 w-40 rounded mx-1" id="first_question_no">No</button>
+                <button class="bg-blue-500 text-white p-4 w-40 rounded mx-1" id="first_question_yes" data-action="yes1">Yes</button>
+                <button class="bg-red-500 text-white p-4 w-40 rounded mx-1" id="first_question_no" data-action="no1">No</button>
             </div>
         </div>
     </div>
     <!-- Model-second-->
-    <div class="fixed hidden h-[100vh] bg-[#0000006e] z-50 w-full top-0 flex items-center" id="death_second_question">
+    <div class="fixed model hidden h-[100vh] bg-[#0000006e] z-50 w-full top-0 flex items-center" id="death_second_question">
         <div class="bg-white p-5 rounded-lg w-[27vw] mx-auto h-fit">
             <div class="flex justify-end ">
-                <button class="bg-red-500  rounded-full p-1 px-4 text-xl text-white">x</button>
+                <button class="bg-red-500  rounded-full close p-1 px-4 text-xl text-white" id="death_second_question_close"  data-action="close2">x</button>
             </div>
             <p class="text-center text-2xl">Are the addresses on the Death Certificate and Address Proof are different?
             </p>
             <div class="border-t border-gray-300 mt-4 pt-3 flex justify-evenly ">
-                <button class="bg-blue-500 text-white p-4  w-40 rounded mx-1">Back</button>
-                <button class="bg-blue-600 text-white p-4 w-40 rounded mx-1">Yes</button>
-                <button class="bg-red-500 text-white p-4 w-40 rounded mx-1" id="second_question_no">No</button>
+                <button class="bg-blue-500 text-white p-4  w-40 rounded mx-1" id="second_question_back" data-action="back">Back</button>
+                <button class="bg-blue-600 text-white p-4 w-40 rounded mx-1" id="second_question_yes" data-action="yes2">Yes</button>
+                <button class="bg-red-500 text-white p-4 w-40 rounded mx-1" id="second_question_no" data-action="no2">No</button>
             </div>
         </div>
     </div>

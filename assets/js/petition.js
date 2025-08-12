@@ -114,6 +114,7 @@
     });
 
     function setupPage1Events() {
+       
         // Deceased alias toggle
         const alias_button = document.getElementById('deceased_alias');
         const alias_box = document.getElementById('alias_container');
@@ -133,34 +134,164 @@
             });
         }
 
-        // Place of death modal logic
+        // page 1 modal button
+        const death_first_question_close = document.getElementById('death_first_question_close');
+        const first_question_yes_modal = document.getElementById('first_question_yes');
+        const first_question_no_modal = document.getElementById('first_question_no');
+        const death_first_question = document.getElementById('death_first_question');
+        const second_question_back_button = document.getElementById('second_question_back')
+        const second_question_yes = document.getElementById('second_question_yes')
+        const second_question_no_button = document.getElementById('second_question_no')
+        const rest_button  = document.getElementById("address_reset")
+        const modal1 = document.getElementById("death_first_question")
+        const modal2 = document.getElementById("death_second_question")
+
+
+
+        const place_of_death_input = document.getElementById('place_of_death')
+        const death_cer_address_input = document.getElementById('death_cer_address')
+        const address_box = document.getElementById('ad')
+        const show_both_line_box = document.getElementById('show_both_line')
+        const died_text = document.getElementById("who")
+          const death_second_question_close_box = document.getElementById('death_second_question_close');
+        document.getElementById('address_des_button').addEventListener('click',(e)=>{
+            e.preventDefault()
+           modal1.classList.remove("hidden")
+        })
+        
+            // yes yes model
+            first_question_yes_modal.addEventListener("click",(e)=>{
+                e.preventDefault()
+                // console.log(e.target.dataset.action)
+                
+                    modal1.classList.add("hidden")
+                    modal2.classList.remove("hidden")
+                    second_question_yes.addEventListener("click",(e)=>{
+                        e.preventDefault()
+                        modal2.classList.add("hidden")
+                        place_of_death_input.classList.remove("hidden")
+                        des_button.classList.add("hidden")
+                        death_cer_address_input.classList.remove('hidden')
+                        address_box.classList.remove('hidden')
+                        show_both_line_box.classList.remove('hidden')
+                        rest_button.classList.remove("hidden")
+                    })
+
+                    second_question_no_button.addEventListener("click",(e)=>{
+                        e.preventDefault()
+                        modal2.classList.add("hidden")
+                        des_button.classList.add("hidden")
+                        died_text.classList.add("hidden")
+                        place_of_death_input.classList.remove("hidden")
+                        address_box.classList.remove('hidden')
+                        rest_button.classList.remove("hidden")
+                    })
+                        
+                    })
+                
+                    first_question_no_modal.addEventListener("click", (e)=>{
+                        e.preventDefault()
+                        modal1.classList.add("hidden")
+                        modal2.classList.remove("hidden")
+                        second_question_yes.addEventListener("click",(e)=>{
+                            e.preventDefault()
+                            modal2.classList.add("hidden")
+                            
+                            des_button.classList.add("hidden")
+                            death_cer_address_input.classList.remove('hidden')
+                            address_box.classList.remove('hidden')
+                            show_both_line_box.classList.remove('hidden')
+                            rest_button.classList.remove("hidden")
+                        })
+                        second_question_no_button.addEventListener("click",(e)=>{
+                            e.preventDefault()
+                            modal2.classList.add("hidden")
+                            des_button.classList.add("hidden")
+                            rest_button.classList.remove("hidden")
+                            address_box.classList.remove('hidden')
+                            
+                        })
+                        
+                    })
+                
+                rest_button.addEventListener("click" , (e)=>{
+                    e.preventDefault()
+                    
+                    place_of_death_input.classList.add("hidden")
+                    des_button.classList.remove("hidden")
+                    death_cer_address_input.classList.add('hidden')
+                    address_box.classList.add('hidden')
+                    show_both_line_box.classList.add('hidden')
+                    rest_button.classList.add("hidden")
+                })
+        
+                    
+                second_question_back_button.addEventListener("click",(e)=>{
+                    e.preventDefault()
+                    modal2.classList.add("hidden")
+                    modal1.classList.remove("hidden")
+                })
+                death_second_question_close_box.addEventListener("click",(e)=>{
+                    e.preventDefault()
+                    modal2.classList.add("hidden")
+                })
+
+                death_first_question_close.addEventListener("click",(e)=>{
+                    e.preventDefault()
+                    modal1.classList.add("hidden")
+                })
+            // const showModal = (id)=>{
+            // document.querySelectorAll('.model').forEach(model => console.log("showing"))
+            //  document.getElementById(id).classList.remove("hidden")
+            // }
+
+
+
+
+
+
+
+
+        // death_first_question_close.addEventListener('click', function (e) {
+        //     e.preventDefault();
+        //     const death_first_question = document.getElementById('death_first_question');
+        //     death_first_question.classList.add('hidden');
+        // }); 
+        // // death second question close
+        // const death_second_question_close = document.getElementById('death_second_question_close');
+        // death_second_question_close.addEventListener('click', function (e) {
+        //     e.preventDefault();
+        //     const death_second_question = document.getElementById('death_second_question');
+        //     death_second_question.classList.add('hidden');
+        // }); 
+        // // Place of death modal logic
         const des_button = document.getElementById('address_des_button');
-        if (des_button) {
-            des_button.addEventListener('click', function (e) {
-                e.preventDefault();
-                const death_first_question = document.getElementById('death_first_question');
-                const death_second_question = document.getElementById('death_second_question');
-                death_first_question.classList.remove('hidden');
+        // if (des_button) {
+        //     des_button.addEventListener('click', function (e) {
+        //         e.preventDefault();
+        //         const death_first_question = document.getElementById('death_first_question');
+        //         const death_second_question = document.getElementById('death_second_question');
+        //         death_first_question.classList.remove('hidden');
 
-                const first_question_no_click = document.getElementById('first_question_no');
-                first_question_no_click.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    death_first_question.classList.add('hidden');
-                    death_second_question.classList.remove('hidden');
+        //         const first_question_no_click = document.getElementById('first_question_no');
+        //         first_question_no_click.addEventListener('click', function (e) {
+        //             e.preventDefault();
+        //             death_first_question.classList.add('hidden');
+        //             death_second_question.classList.remove('hidden');
 
-                    const second_question_no_click = document.getElementById('second_question_no');
-                    second_question_no_click.addEventListener('click', function (e) {
-                        e.preventDefault();
-                        const who_died_text = document.getElementById('who_died');
-                        const enter_addressProof_box = document.getElementById('enter_addressProof');
-                        death_second_question.classList.add('hidden');
-                        des_button.classList.add('hidden');
-                        who_died_text.classList.add('hidden');
-                        enter_addressProof_box.classList.remove('hidden');
-                    });
-                });
-            });
-        }
+        //             const second_question_no_click = document.getElementById('second_question_no');
+        //             second_question_no_click.addEventListener('click', function (e) {
+        //                 e.preventDefault();
+                        
+                        
+        //                 death_second_question.classList.add('hidden');
+        //                 des_button.classList.add('hidden');
+        //                 who_died_text.classList.add('hidden');
+        //                 enter_addressProof_box.classList.remove('hidden');
+        //             });
+        //         });
+        //     });
+        // }
 
         // Petitioner add/remove
         const addPetitionerBtn = document.getElementById("add_petitioner_button");
