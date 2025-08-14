@@ -1,8 +1,8 @@
-
-    const page_1 = document.getElementById('page1');
-    const page_2 = document.getElementById('page2');
-    const page_3 = document.getElementById('page3');
-    const page_4 = document.getElementById('page4');
+// Initialize page elements
+const page_1 = document.getElementById('page1');
+const page_2 = document.getElementById('page2');
+const page_3 = document.getElementById('page3');
+const page_4 = document.getElementById('page4');
     // const page_5 = document.getElementById('page5');
     // const page_6 = document.getElementById('page6');
     // const page_7 = document.getElementById('page7');
@@ -204,6 +204,18 @@
                     if (el.tagName === "SELECT") el.selectedIndex = 0;
                 });
 
+                // Hide alias container in new block
+                const aliasContainer = newBlock.querySelector(".petitioner-alias-container");
+                if (aliasContainer) {
+                    aliasContainer.classList.add("hidden");
+                }
+
+                // Hide address container in new block
+                const addressContainer = newBlock.querySelector(".petitioner-address-container");
+                if (addressContainer) {
+                    addressContainer.classList.add("hidden");
+                }
+
                 newBlock.classList.add("border-t", "border-dashed", "border-black", "mt-4", "pt-4");
 
                 // Petitioner number
@@ -226,29 +238,236 @@
                 newBlock.appendChild(removeBtn);
                 petitionerWrapper.appendChild(newBlock);
                 updatePetitionerNumbers();
+                
+                // Setup alias functionality for the new block
+                setupPetitionerAliasEvents(newBlock);
+                
+                // Setup address functionality for the new block
+                setupPetitionerAddressEvents(newBlock);
             });
+        }
 
-            function updatePetitionerNumbers() {
-                const blocks = petitionerWrapper.querySelectorAll(".petitioner_block");
-                blocks.forEach((block, index) => {
-                    const numberSpan = block.querySelector(".petitioner_number");
-                    if (numberSpan) numberSpan.textContent = `${index + 1}.`;
+        // Setup petitioner alias functionality
+        function setupPetitionerAliasEvents(container = document) {
+            const aliasButtons = container.querySelectorAll(".petitioner-alias-btn");
+            const removeAliasButtons = container.querySelectorAll(".remove-petitioner-alias");
 
-                    let removeBtn = block.querySelector(".remove_petitioner_btn");
-                    if (!removeBtn && index > 0) {
-                        removeBtn = document.createElement("button");
-                        removeBtn.className = "remove_petitioner_btn bg-gray-500 text-white px-3 py-1 rounded mt-3 ml-2";
-                        removeBtn.textContent = "Remove Petitioner";
-                        removeBtn.onclick = () => {
-                            block.remove();
-                            updatePetitionerNumbers();
-                        };
-                        block.appendChild(removeBtn);
-                    } else if (removeBtn && index === 0) {
-                        removeBtn.remove();
+            aliasButtons.forEach(button => {
+                button.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    const aliasContainer = this.nextElementSibling;
+                    if (aliasContainer && aliasContainer.classList.contains("petitioner-alias-container")) {
+                        aliasContainer.classList.remove("hidden");
+                        this.classList.add("hidden");
                     }
                 });
+            });
+
+            removeAliasButtons.forEach(button => {
+                button.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    const aliasContainer = this.closest(".petitioner-alias-container");
+                    const aliasButton = aliasContainer.previousElementSibling;
+                    if (aliasContainer && aliasButton && aliasButton.classList.contains("petitioner-alias-btn")) {
+                        aliasContainer.classList.add("hidden");
+                        aliasButton.classList.remove("hidden");
+                        // Clear the alias input
+                        const aliasInput = aliasContainer.querySelector("input");
+                        if (aliasInput) aliasInput.value = "";
+                    }
+                });
+            });
+        }
+
+        // Setup alias functionality for existing petitioner blocks
+        setupPetitionerAliasEvents();
+        
+        // Setup petitioner address functionality
+        function setupPetitionerAddressEvents(container = document) {
+            const addressButtons = container.querySelectorAll(".petitioner-address-btn");
+            const removeAddressButtons = container.querySelectorAll(".remove-petitioner-address");
+
+            addressButtons.forEach(button => {
+                button.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    currentPetitionerBlock = this.closest('.petitioner_block');
+                    const modal = document.getElementById('petitioner_address_question');
+                    if (modal) {
+                        modal.classList.remove('hidden');
+                    }
+                });
+            });
+
+            removeAddressButtons.forEach(button => {
+                button.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    const addressContainer = this.closest(".petitioner-address-container");
+                    const addressButton = addressContainer.previousElementSibling;
+                    if (addressContainer && addressButton && addressButton.classList.contains("petitioner-address-btn")) {
+                        addressContainer.classList.add("hidden");
+                        addressButton.classList.remove("hidden");
+                        // Clear the address input
+                        const addressInput = addressContainer.querySelector("textarea");
+                        if (addressInput) addressInput.value = "";
+                    }
+                });
+            });
+        }
+        
+        setupPetitionerAddressEvents();
+
+        // Setup petitioner address modal functionality
+        const petitionerAddressModal = document.getElementById('petitioner_address_question');
+        const petitionerAddressClose = document.getElementById('petitioner_address_close');
+        const petitionerAddressYes = document.getElementById('petitioner_address_yes');
+        const petitionerAddressNo = document.getElementById('petitioner_address_no');
+        
+        // Setup petitioner address type modal functionality
+        const petitionerAddressTypeModal = document.getElementById('petitioner_address_type_question');
+        const petitionerAddressTypeClose = document.getElementById('petitioner_address_type_close');
+        const petitionerAddressDC = document.getElementById('petitioner_address_dc');
+        const petitionerAddressPermanent = document.getElementById('petitioner_address_permanent');
+        
+        let currentPetitionerBlock = null;
+
+        if (petitionerAddressClose) {
+            petitionerAddressClose.addEventListener('click', (e) => {
+                e.preventDefault();
+                petitionerAddressModal.classList.add('hidden');
+            });
+        }
+
+        if (petitionerAddressYes) {
+            petitionerAddressYes.addEventListener('click', (e) => {
+                e.preventDefault();
+                petitionerAddressModal.classList.add('hidden');
+                // Show the second modal to choose address type
+                if (petitionerAddressTypeModal) {
+                    petitionerAddressTypeModal.classList.remove('hidden');
+                }
+            });
+        }
+
+        if (petitionerAddressNo) {
+            petitionerAddressNo.addEventListener('click', (e) => {
+                e.preventDefault();
+                petitionerAddressModal.classList.add('hidden');
+                // If no, show the address input field
+                if (currentPetitionerBlock) {
+                    const addressContainer = currentPetitionerBlock.querySelector('.petitioner-address-container');
+                    const addressButton = currentPetitionerBlock.querySelector('.petitioner-address-btn');
+                    if (addressContainer && addressButton) {
+                        addressContainer.classList.remove('hidden');
+                        addressButton.classList.add('hidden');
+                    }
+                }
+            });
+        }
+
+        // Setup second modal event listeners
+        if (petitionerAddressTypeClose) {
+            petitionerAddressTypeClose.addEventListener('click', (e) => {
+                e.preventDefault();
+                petitionerAddressTypeModal.classList.add('hidden');
+            });
+        }
+
+        if (petitionerAddressDC) {
+            petitionerAddressDC.addEventListener('click', (e) => {
+                e.preventDefault();
+                petitionerAddressTypeModal.classList.add('hidden');
+                // Convert button to reset button with DC address
+                if (currentPetitionerBlock) {
+                    const addressButton = currentPetitionerBlock.querySelector('.petitioner-address-btn');
+                    if (addressButton) {
+                        addressButton.textContent = 'Reset Address (DC)';
+                        addressButton.classList.remove('bg-red-500');
+                        addressButton.classList.add('bg-orange-500');
+                        addressButton.onclick = function(e) {
+                            e.preventDefault();
+                            // Reset to original state
+                            addressButton.textContent = 'Same As Deceased Address';
+                            addressButton.classList.remove('bg-orange-500');
+                            addressButton.classList.add('bg-red-500');
+                            // Restore original click handler
+                            setupPetitionerAddressEvents(currentPetitionerBlock);
+                        };
+                    }
+                }
+            });
+        }
+
+        if (petitionerAddressPermanent) {
+            petitionerAddressPermanent.addEventListener('click', (e) => {
+                e.preventDefault();
+                petitionerAddressTypeModal.classList.add('hidden');
+                // Convert button to reset button with Permanent address
+                if (currentPetitionerBlock) {
+                    const addressButton = currentPetitionerBlock.querySelector('.petitioner-address-btn');
+                    if (addressButton) {
+                        addressButton.textContent = 'Reset Address (Permanent)';
+                        addressButton.classList.remove('bg-red-500');
+                        addressButton.classList.add('bg-orange-500');
+                        addressButton.onclick = function(e) {
+                            e.preventDefault();
+                            // Reset to original state
+                            addressButton.textContent = 'Same As Deceased Address';
+                            addressButton.classList.remove('bg-orange-500');
+                            addressButton.classList.add('bg-red-500');
+                            // Restore original click handler
+                            setupPetitionerAddressEvents(currentPetitionerBlock);
+                        };
+                    }
+                }
+            });
+        }
+
+        function updatePetitionerNumbers() {
+            const blocks = petitionerWrapper.querySelectorAll(".petitioner_block");
+            blocks.forEach((block, index) => {
+                const numberSpan = block.querySelector(".petitioner_number");
+                if (numberSpan) {
+                    // Show number only when there's more than one petitioner
+                    if (blocks.length > 1) {
+                        numberSpan.textContent = `${index + 1}.`;
+                        numberSpan.classList.remove('hidden');
+                    } else {
+                        numberSpan.classList.add('hidden');
+                    }
+                }
+
+                let removeBtn = block.querySelector(".remove_petitioner_btn");
+                if (!removeBtn && index > 0) {
+                    removeBtn = document.createElement("button");
+                    removeBtn.className = "remove_petitioner_btn bg-gray-500 text-white px-3 py-1 rounded mt-3 ml-2";
+                    removeBtn.textContent = "Remove Petitioner";
+                    removeBtn.onclick = () => {
+                        block.remove();
+                        updatePetitionerNumbers();
+                    };
+                    block.appendChild(removeBtn);
+                } else if (removeBtn && index === 0) {
+                    removeBtn.remove();
+                }
+            });
+
+            // Update "being" text based on number of petitioners
+            updateBeingText(blocks.length);
+        }
+
+        function updateBeingText(petitionerCount) {
+            const beingTextElements = document.querySelectorAll(".petitioner-being-text");
+            let newText = "being";
+            
+            if (petitionerCount === 2) {
+                newText = "both";
+            } else if (petitionerCount > 2) {
+                newText = "all";
             }
+            
+            beingTextElements.forEach(element => {
+                element.textContent = newText;
+            });
         }
 
 
@@ -297,8 +516,6 @@
             },2000)
             })
         })
-        
-
     }
 
     // Legal Heir functionality for page 2

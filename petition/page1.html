@@ -179,30 +179,51 @@
                         <div id="petitioner_wrapper">
                             <div class="petitioner_block">
                                 <p class="text-justify py-5 px-2">
-                                    <span class="petitioner_number font-bold mr-1">1.</span>
+                                    <span class="petitioner_number font-bold mr-1"></span>
                                     <input type="text" placeholder="Enter Petitioner Name"
-                                        class="border bg-[#334155] text-white p-1 mt-2 border-black rounded" />
-                                    <button class="bg-blue-600 text-white p-1 rounded mx-1">Alias Name</button>,
+                                        class="border bg-[#334155] text-white p-1 mt-2 border-black rounded w-full" />
+                                    <button class="bg-blue-600 text-white p-1 rounded mx-1 petitioner-alias-btn">Alias Name</button>
+                                    <span class="hidden petitioner-alias-container">
+                                        <span class="flex justify-between my-2">Alias Name</span>
+                                        <input type="text" placeholder="Enter Petitioner Alias Name"
+                                            class="border bg-[#334155] w-full text-white p-1 mt-2 border-black rounded" />
+                                        <button class="bg-red-500 text-white my-4 p-1 rounded mx-1 remove-petitioner-alias">Remove Alias</button>
+                                    </span>,
                                     Age-<input type="text" placeholder="Enter Petitioner Age"
-                                        class="border bg-[#334155] text-white p-1 mt-2 border-black rounded" /> Years,
+                                        class="border bg-[#334155] text-white p-1 mt-2 border-black rounded w-full" /> Years,
                                     Occupation-<input type="text" placeholder="Enter Petitioner Occupation"
-                                        class="border bg-[#334155] text-white p-1 mt-2 border-black rounded" />,
-                                    <input type="text" placeholder="Enter Religion of Petitioner"
-                                        class="border p-1 mt-2 border-black bg-[#334155] text-white rounded" />,
-                                    <select class="border bg-[#334155] text-white border-black mt-1 p-1 rounded">
+                                        class="border bg-[#334155] text-white p-1 mt-2 border-black rounded w-full" />,
+
+                                        <select name="religin" id="petitioner-religin"
+                                        class="border bg-[#334155] text-white my-2 w-full border-black mt-1 p-1 rounded">
+                                        <option value="">Select Religion of petitioner</option>
+                                        <option value="hindu">Hindu</option>
+                                        <option value="">Christian</option>
+                                        <option value="">Sunni Muslim</option>
+                                        <option value="">Shia Muslim</option>
+                                        <option value="">Parsi Zoroastrian</option>
+        
+                                    </select>,
+                                    <select class="border bg-[#334155] text-white border-black mt-1 p-1 rounded w-full">
                                         <option value="">Select citizen</option>
                                         <option value="Indian">Indian</option>
                                         <option value="NRI">NRI</option>
                                     </select>
                                     Inhabitant of
                                     <input type="text" placeholder="Enter Inhabitant"
-                                        class="border bg-[#334155] text-white p-1 mt-2 border-black rounded" />
+                                        class="border bg-[#334155] text-white p-1 mt-2 border-black rounded w-full" />
                                     residing at
-                                    <button class="bg-red-500 mt-2 text-white p-1 rounded mx-1">Same As Deceased
+                                    <button class="bg-red-500 mt-2 text-white p-1 rounded mx-1 petitioner-address-btn">Same As Deceased
                                         Address</button>
-                                    being the
+                                    <span class="hidden petitioner-address-container">
+                                        <textarea placeholder="Enter Petitioner Address" 
+                                            class="border bg-[#334155] text-white p-2 mt-2 border-black rounded w-full" 
+                                            rows="3"></textarea>
+                                        <button class="bg-red-500 text-white my-2 p-1 rounded mx-1 remove-petitioner-address">Remove Address</button>
+                                    </span>
+                                    <span class="petitioner-being-text">being</span> the
                                     <input type="text" placeholder="Relation to Deceased"
-                                        class="border p-1 mt-2 border-black bg-[#334155] text-white rounded" />
+                                        class="border p-1 mt-2 border-black bg-[#334155] text-white rounded w-full" />
                                     of the deceased above named.
                                 </p>
                             </div>
@@ -214,8 +235,8 @@
 
                     </td>
 
-                    <td class="flex h-[45vh] justify-center items-end">
-                        ..........................................................................................................Petitioner's
+                    <td class="flex h-[28vh] justify-center items-end ">
+                        ..........................................................................................................<span>Petitioner's</span>
                     </td>
                 </tr>
 
