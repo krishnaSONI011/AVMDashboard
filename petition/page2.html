@@ -15,16 +15,19 @@
                         died at<input
                         type="text" placeholder="Enter Deceased Name"
                         class="border input p-1  mt-2 border-white rounded" >
-                        on or about the <input type="date" class="border p-1 mt-2 border-white rounded input"  placeholder="hy">. Hereto annexed and marked as Exhibit-"<input type="text" placeholder="Enter Exhibit Number" class="border input p-1 mt-2 border-white rounded" >" is a copy of the death certificate of deceased and Exhibit"<input type="text" placeholder="Enter Exhibit Number" class="border p-1 mt-2 input border-white rounded" >" is a copy of <select class="border input p-1 mt-2 border-white rounded">
+                        on or about the <input type="date" class="border p-1 mt-2 border-white rounded input"  placeholder="hy">. Hereto annexed and marked as Exhibit-"<input type="text" placeholder="Enter Exhibit Number" class="border input p-1 mt-2 border-white rounded" >" is a copy of the death certificate of deceased and Exhibit"<input type="text" placeholder="Enter Exhibit Number" class="border p-1 mt-2 input border-white rounded" >" is a copy of <select class="border input p-1 mt-2 border-white rounded" id="proof_select">
                             <option value="1">AADHAR CARD</option>
                             <option value="2">PAN CARD</option>
                             <option value="3">VOTER ID</option>
                             <option value="4">DRIVING LICENCE</option>
                             <option value="5">PASSPORT</option>
                             <option value="6">OTHERS</option>
+                            <option value="7">NO</option>
                         </select> 
                         of Deceased.
+
                     </p>
+                    <p class="text-red-400 mt-10 hidden" id="no_proof">( The identity Proof of the deceased is not available therefore the petitioner/s has executed his affidavit in respect of the same, which is hereto annexed and marked as Exhibit-“A-1”) </p>
                     </td>
                 </tr>
                 <!-- first page body -->
@@ -37,7 +40,7 @@
                         class="border input p-1 mt-2 border-white rounded"
                         >
                               <option value="State of Maharashtra">State of Maharashtra</option>
-                              <option value="State of Maharashtra and elsewhere in India.">State of Maharashtra and elsewhere in India.</option>
+                              <option value="State of Maharashtra and elsewhere in India."> elsewhere in India.</option>
                           </select>
                           </td>
                 </tr>

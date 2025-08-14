@@ -3,36 +3,36 @@
     const page_2 = document.getElementById('page2');
     const page_3 = document.getElementById('page3');
     const page_4 = document.getElementById('page4');
-    const page_5 = document.getElementById('page5');
-    const page_6 = document.getElementById('page6');
-    const page_7 = document.getElementById('page7');
-    const page_8 = document.getElementById('page8')
+    // const page_5 = document.getElementById('page5');
+    // const page_6 = document.getElementById('page6');
+    // const page_7 = document.getElementById('page7');
+    // const page_8 = document.getElementById('page8')
     async function getThePage() {
         const res = await fetch('./page1.html');
         const res1 = await fetch('./page2.html')
         const res2 = await fetch('./page3.html')
         const res3 = await fetch('./page4.html')
-        const res4 = await fetch('./page5.html')
-        const res5 = await fetch('./page6.html')
-        const res6 = await fetch('./page7.html')
-        const res7 = await fetch('./page8.html')
+        // const res4 = await fetch('./page5.html')
+        // const res5 = await fetch('./page6.html')
+        // const res6 = await fetch('./page7.html')
+        // const res7 = await fetch('./page8.html')
         
         const html = await res.text();
         const html1 = await res1.text();
         const html2 = await res2.text();
         const html3 = await res3.text();
-        const html4 = await res4.text();
-        const html5 = await res5.text();
-        const html6 = await res6.text();
-        const html7 = await res7.text();
+        // const html4 = await res4.text();
+        // const html5 = await res5.text();
+        // const html6 = await res6.text();
+        // const html7 = await res7.text();
         page_1.innerHTML = html;
         page_2.innerHTML = html1
         page_3.innerHTML = html2
         page_4.innerHTML = html3
-        page_5.innerHTML = html4
-        page_6.innerHTML = html5
-        page_7.innerHTML = html6
-        page_8.innerHTML = html7
+        // page_5.innerHTML = html4
+        // page_6.innerHTML = html5
+        // page_7.innerHTML = html6
+        // page_8.innerHTML = html7
         // ✅ Now that content is loaded, run your setup logic
         setupPage1Events();
         setupPage2Events();
@@ -42,76 +42,7 @@
     getThePage();
 
     // Global event listener as backup for consent affidavit button
-    document.addEventListener('click', function(e) {
-        if (e.target && e.target.id === 'append_consent_affidavit') {
-            console.log('Global event listener triggered for append button');
-            const affidavitsContainer = document.getElementById('consent_affidavits_container');
-            if (affidavitsContainer) {
-                // Create and append new affidavit
-                const newAffidavit = document.createElement('div');
-                newAffidavit.className = 'bg-[#334155] text-white p-6 rounded-lg border border-white mb-6';
-                newAffidavit.innerHTML = `
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-bold">Consent Affidavit (Global)</h3>
-                        <button type="button" class="remove-affidavit bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
-                            <i class="fas fa-trash"></i> Remove
-                        </button>
-                    </div>
-                    
-                    <div class="bg-[#334155] text-white p-6 rounded-lg border border-white">
-                        <div class="text-justify space-y-4">
-                            <p><strong>1.</strong> That I know that the abovenamed <input type="text" placeholder="Enter Deceased Name" class="border bg-[#334155] text-white p-1 rounded w-48" /> deceased died at <input type="text" placeholder="Enter Place of Death" class="border bg-[#334155] text-white p-1 rounded w-48" /> on or about <input type="text" placeholder="Enter Day" class="border bg-[#334155] text-white p-1 rounded w-16" /> day of <input type="text" placeholder="Enter Month" class="border bg-[#334155] text-white p-1 rounded w-24" />, <input type="text" placeholder="Enter Year" class="border bg-[#334155] text-white p-1 rounded w-20" /> as intestate.</p>
-                            
-                            <p><strong>2.</strong> I say that I am aware that the Petitioner abovenamed is filing and/or has filed a Petition for Letters of Administration to the property and credits of the deceased abovenamed in his capacity as the <select class="border bg-[#334155] text-white p-1 rounded">
-                                <option value="">Select Relation</option>
-                                <option value="Widow">Widow</option>
-                                <option value="Widower">Widower</option>
-                                <option value="Son">Son</option>
-                                <option value="Daughter">Daughter</option>
-                                <option value="Mother">Mother</option>
-                                <option value="Father">Father</option>
-                                <option value="Brother">Brother</option>
-                                <option value="Sister">Sister</option>
-                            </select> of the deceased, in this Hon'ble Court.</p>
-                            
-                            <p><strong>3.</strong> I being the <select class="border bg-[#334155] text-white p-1 rounded">
-                                <option value="">Select Relation</option>
-                                <option value="Mother">Mother</option>
-                                <option value="Father">Father</option>
-                                <option value="Son">Son</option>
-                                <option value="Daughter">Daughter</option>
-                                <option value="Brother">Brother</option>
-                                <option value="Sister">Sister</option>
-                                <option value="Wife">Wife</option>
-                                <option value="Husband">Husband</option>
-                            </select> of the above named deceased do hereby give my full and free consent in favour of the above named Petitioner and pray that the Letters of Administration may be granted in her favour without service of any Citation/Notice upon me and without any surety being justified in the estate left by the deceased abovenamed.</p>
-                        </div>
-                        
-                        <div class="mt-8 flex justify-between">
-                            <div>
-                                <p class="mb-4">Solemnly affirmed at <input type="text" placeholder="Enter Place" class="border bg-[#334155] text-white p-1 rounded" /></p>
-                                <p>Dated this <input type="text" placeholder="Day" class="border bg-[#334155] text-white p-1 rounded w-16" /> day of <input type="text" placeholder="Month" class="border bg-[#334155] text-white p-1 rounded w-24" />, <input type="text" placeholder="Year" class="border bg-[#334155] text-white p-1 rounded w-20" /></p>
-                            </div>
-                            <div class="text-right">
-                                <div class="w-48 h-16 border-2 border-dashed border-white flex items-center justify-center mb-2">
-                                    <span class="text-sm">Signature</span>
-                                </div>
-                                <p class="text-sm">Consenting Party</p>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                affidavitsContainer.appendChild(newAffidavit);
-                
-                // Add event listener to the remove button
-                const removeBtn = newAffidavit.querySelector('.remove-affidavit');
-                removeBtn.addEventListener('click', function() {
-                    newAffidavit.remove();
-                });
-            }
-        }
-    });
+  
 
     function setupPage1Events() {
        
@@ -145,7 +76,7 @@
         const rest_button  = document.getElementById("address_reset")
         const modal1 = document.getElementById("death_first_question")
         const modal2 = document.getElementById("death_second_question")
-
+        const and = document.getElementById("and")
 
 
         const place_of_death_input = document.getElementById('place_of_death')
@@ -181,10 +112,11 @@
                         e.preventDefault()
                         modal2.classList.add("hidden")
                         des_button.classList.add("hidden")
-                        died_text.classList.add("hidden")
+                       // died_text.classList.add("hidden")
                         place_of_death_input.classList.remove("hidden")
                         address_box.classList.remove('hidden')
                         rest_button.classList.remove("hidden")
+                        and.classList.remove("hidden")
                     })
                         
                     })
@@ -207,7 +139,9 @@
                             e.preventDefault()
                             modal2.classList.add("hidden")
                             des_button.classList.add("hidden")
+                            died_text.classList.add("hidden")
                             rest_button.classList.remove("hidden")
+                            place_of_death_input.classList.add("hidden")
                             address_box.classList.remove('hidden')
                             
                         })
@@ -252,47 +186,9 @@
 
 
 
-        // death_first_question_close.addEventListener('click', function (e) {
-        //     e.preventDefault();
-        //     const death_first_question = document.getElementById('death_first_question');
-        //     death_first_question.classList.add('hidden');
-        // }); 
-        // // death second question close
-        // const death_second_question_close = document.getElementById('death_second_question_close');
-        // death_second_question_close.addEventListener('click', function (e) {
-        //     e.preventDefault();
-        //     const death_second_question = document.getElementById('death_second_question');
-        //     death_second_question.classList.add('hidden');
-        // }); 
-        // // Place of death modal logic
+       
         const des_button = document.getElementById('address_des_button');
-        // if (des_button) {
-        //     des_button.addEventListener('click', function (e) {
-        //         e.preventDefault();
-        //         const death_first_question = document.getElementById('death_first_question');
-        //         const death_second_question = document.getElementById('death_second_question');
-        //         death_first_question.classList.remove('hidden');
-
-        //         const first_question_no_click = document.getElementById('first_question_no');
-        //         first_question_no_click.addEventListener('click', function (e) {
-        //             e.preventDefault();
-        //             death_first_question.classList.add('hidden');
-        //             death_second_question.classList.remove('hidden');
-
-        //             const second_question_no_click = document.getElementById('second_question_no');
-        //             second_question_no_click.addEventListener('click', function (e) {
-        //                 e.preventDefault();
-                        
-                        
-        //                 death_second_question.classList.add('hidden');
-        //                 des_button.classList.add('hidden');
-        //                 who_died_text.classList.add('hidden');
-        //                 enter_addressProof_box.classList.remove('hidden');
-        //             });
-        //         });
-        //     });
-        // }
-
+       
         // Petitioner add/remove
         const addPetitionerBtn = document.getElementById("add_petitioner_button");
         const petitionerWrapper = document.getElementById("petitioner_wrapper");
@@ -354,6 +250,55 @@
                 });
             }
         }
+
+
+
+
+
+        // copy text  dc address
+        const dc_address_copy_button = document.getElementById("dc_address_button")
+        const enter_addressProof_text = document.getElementById("enter_addressProof")
+        const toast = document.getElementById("toast")
+        
+        
+        dc_address_copy_button.addEventListener("click",(e)=>{
+            e.preventDefault()
+            
+            const dc_address = enter_addressProof_text.value
+            navigator.clipboard.writeText(dc_address).then(()=>{
+            
+            toast.innerText = "DC ADDRESS COPY !"
+            toast.classList.remove("hidden")
+
+            setTimeout(()=>{
+                toast.classList.add("hidden")
+                toast.innerText = ""
+            },2000)
+            })
+
+        })
+       
+
+        // copy address proof
+
+        const address_proof_copy_button = document.getElementById("address_proof_button")
+        const address_proof_input = document.getElementById("address_proof")
+        address_proof_copy_button.addEventListener("click",(e)=>{
+            e.preventDefault()
+            const dc_address = address_proof_input.value
+            navigator.clipboard.writeText(dc_address).then(()=>{
+            
+            toast.innerText = "Address Proof Copy"
+            toast.classList.remove("hidden")
+
+            setTimeout(()=>{
+                toast.classList.add("hidden")
+                toast.innerText = ""
+            },2000)
+            })
+        })
+        
+
     }
 
     // Legal Heir functionality for page 2
@@ -361,9 +306,14 @@
     let subHeirCounter = 0; // Counter for sub-heirs
 
     function setupPage2Events() {
+        const the_proof_selector = document.getElementById('proof_select')
         const addMoreLegalHeirBtn = document.getElementById('add-more-legal-heir');
         const addSubLegalHeirBtn = document.getElementById('add-sub-legal-heir');
         const addSonBtn = document.getElementById('add-son-btn');
+        the_proof_selector.addEventListener("change",(e)=>{
+            if(e.target.value === "7") document.getElementById("no_proof").classList.remove("hidden")
+            else document.getElementById("no_proof").classList.add("hidden")
+        })
 
         if (addMoreLegalHeirBtn) {
             addMoreLegalHeirBtn.addEventListener('click', addMoreLegalHeir);
