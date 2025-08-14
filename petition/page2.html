@@ -1,7 +1,7 @@
 <div class="bg-[#57606c] text-white mt-5">
     <div class="p-10">
         <!-- table start -->
-        <table class=" w-full border-2 border-white">
+        <table class=" w-full border-2 border-white text-justify">
             <tbody>
                 <!-- heading row -->
                 <tr class="py-5">
@@ -11,11 +11,40 @@
                     <td colspan="3" class="py-5">
                        <p>That the above named <input
                         type="text" placeholder="Enter Deceased Name"
-                        class="border p-1 mt-2 input border-white rounded" >
+                        class="border p-1 w-[50%] mt-2 input border-white rounded" 
+                        data-deceased-name="page2">
                         died at<input
-                        type="text" placeholder="Enter Deceased Name"
-                        class="border input p-1  mt-2 border-white rounded" >
-                        on or about the <input type="date" class="border p-1 mt-2 border-white rounded input"  placeholder="hy">. Hereto annexed and marked as Exhibit-"<input type="text" placeholder="Enter Exhibit Number" class="border input p-1 mt-2 border-white rounded" >" is a copy of the death certificate of deceased and Exhibit"<input type="text" placeholder="Enter Exhibit Number" class="border p-1 mt-2 input border-white rounded" >" is a copy of <select class="border input p-1 mt-2 border-white rounded" id="proof_select">
+                        type="text" placeholder="Enter Place of death"
+                        class="border input p-1   mt-2 border-white rounded" >
+                        on or about the <input type="date" class="border p-1 mt-2 border-white rounded input"  placeholder="hy">. Hereto annexed and marked as Exhibit-"<select class="border input p-1 mt-2 border-white rounded exhibit-select" id="exhibit1">
+                            <option value="">Select Exhibit</option>
+                            <option value="A">A</option>
+                            <option value="A-1">A-1</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                            <option value="F">F</option>
+                            <option value="G">G</option>
+                            <option value="H">H</option>
+                            <option value="I">I</option>
+                            <option value="J">J</option>
+                            <option value="custom">Unique</option>
+                        </select><input type="text" placeholder="Enter Custom Exhibit" class="border w-7 input p-1 mt-2 border-white rounded hidden custom-exhibit-input" id="custom-exhibit1">" is a copy of the death certificate of deceased and Exhibit"<select class="border p-1 mt-2 input border-white rounded exhibit-select" id="exhibit2">
+                            <option value="">Select Exhibit</option>
+                            <option value="A">A</option>
+                            <option value="A-1">A-1</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                            <option value="F">F</option>
+                            <option value="G">G</option>
+                            <option value="H">H</option>
+                            <option value="I">I</option>
+                            <option value="J">J</option>
+                            <option value="custom">Unique</option>
+                        </select><input type="text" placeholder="Enter Custom Exhibit" class="border w-5 p-1 mt-2 input border-white rounded hidden custom-exhibit-input" id="custom-exhibit2">" is a copy of <span class="text-red-400 mt-10 hidden" id="no_proof"> The identity Proof of the deceased is not available therefore the petitioner/s has executed his affidavit in respect of the same, which is hereto annexed and marked as Exhibit-“A-1” </span><select class="border input p-1 mt-2 border-white rounded" id="proof_select">
                             <option value="1">AADHAR CARD</option>
                             <option value="2">PAN CARD</option>
                             <option value="3">VOTER ID</option>
@@ -27,7 +56,7 @@
                         of Deceased.
 
                     </p>
-                    <p class="text-red-400 mt-10 hidden" id="no_proof">( The identity Proof of the deceased is not available therefore the petitioner/s has executed his affidavit in respect of the same, which is hereto annexed and marked as Exhibit-“A-1”) </p>
+                    
                     </td>
                 </tr>
                 <!-- first page body -->
@@ -35,12 +64,17 @@
                     <td  class=" text-center py-5 border-r border-white w-[10%]">
                        2.
                     </td>
-                    <td colspan="3"> That the said deceased at the time of <input type="radio" id="gender" name="gender1" value="His" class="form-required input sync-field" data-sync-group="gender"> Male /
-                        <input type="radio" id="gender" name="gender1" value="Her" class="" data-sync-group="gender"> Female  death had a fixed place of abode at ADDRESS OF DECEASED and/or left property within Greater Mumbai and in the <select name="deceased_property_place"
+                    <td colspan="3"> That the said deceased at the time of <input type="radio" id="gender" name="gender1" value="His" class="form-required input sync-field" data-sync-group="gender"> his /
+                        <input type="radio" id="gender" name="gender1" value="Her" class="" data-sync-group="gender"> her  death had a fixed place of abode at <button class="bg-blue-600 text-white p-1 rounded mx-1 deceased-address-btn">ADDRESS OF DECEASED</button><span class="hidden deceased-address-container">
+                            <textarea placeholder="Enter Deceased Address" 
+                                class="border bg-[#334155] text-white p-2 mt-2 border-white rounded w-full" 
+                                rows="3"></textarea>
+                            <button class="bg-red-500 text-white my-2 p-1 rounded mx-1 remove-deceased-address">Remove Address</button>
+                        </span> and/or left property within Greater Mumbai and in the <select name="deceased_property_place"
                         class="border input p-1 mt-2 border-white rounded"
                         >
                               <option value="State of Maharashtra">State of Maharashtra</option>
-                              <option value="State of Maharashtra and elsewhere in India."> elsewhere in India.</option>
+                              <option value="State of Maharashtra and elsewhere in India.">State of Maharashtra elsewhere in India.</option>
                           </select>
                           </td>
                 </tr>
@@ -62,15 +96,16 @@
                     </td>
                     <td colspan="3"> 
                        <p>
-                        That the said deceased left <input type="radio" id="surviving_male" name="surviving_gender" value="Male" class="form-required input "> Male /
-                        <input type="radio" id="surviving_female" name="surviving_gender" value="Female" class=""> Female surviving as 
-                        <input type="radio" id="heir_type1" name="heir_type" value="Male" class=""> Male /
-                        <input type="radio" id="heir_type2" name="heir_type" value="only heirs" class=""> only heirs and next-of-kins according to 
+                        That the said deceased left <input type="radio" id="surviving_male" name="surviving_gender" value="Male" class="form-required input "> him /
+                        <input type="radio" id="surviving_female" name="surviving_gender" value="Female" class=""> her surviving as 
+                        <input type="radio" id="heir_type1" name="heir_type" value="Male" class=""> his /
+                        <input type="radio" id="heir_type2" name="heir_type" value="only heirs" class=""> her only heirs and next-of-kins according to 
                         <select class="border input p-1 mt-2 border-white rounded">
                             <option value="Hindu Succession Act, 1956">Hindu Succession Act, 1956</option>
-                            <option value="Muslim Personal Law">Muslim Personal Law</option>
-                            <option value="Christian Succession Act">Christian Succession Act</option>
-                            <option value="Parsi Succession Act">Parsi Succession Act</option>
+                            <option value="Indian Succession Act,1925">Indian Succession Act,1925</option>
+                            <option value="Muslim Personal Law">Mahomedan Law as applicable to the Sunni</option>
+                            <option value="Christian Succession Act">Mahomedan Law as applicable to the Shia Muslims</option>
+                            
                         </select> the following persons who are residing at the addresses set out against their respective names:
                        </p>
                        
@@ -149,7 +184,21 @@
                                     <button type="button" class="remove-son-btn bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600">Remove</button>
                                 </div>
                                 <div class="flex items-center gap-2">
-                                    Hereto annexed and marked as Exhibit – "<input type="text" placeholder="B" class="border input p-1 border-white rounded w-12">" is the true copy of birth certificate.
+                                    Hereto annexed and marked as Exhibit – "<select class="border input p-1 border-white rounded w-12 son-exhibit-select">
+                                        <option value="">Select</option>
+                                        <option value="A">A</option>
+                                        <option value="A-1">A-1</option>
+                                        <option value="B">B</option>
+                                        <option value="C">C</option>
+                                        <option value="D">D</option>
+                                        <option value="E">E</option>
+                                        <option value="F">F</option>
+                                        <option value="G">G</option>
+                                        <option value="H">H</option>
+                                        <option value="I">I</option>
+                                        <option value="J">J</option>
+                                        <option value="custom">OTHERS</option>
+                                    </select><input type="text" placeholder="Custom" class="border input p-1 border-white rounded w-[10%] hidden son-custom-exhibit-input">" is the true copy of birth certificate.
                                 </div>
                             </div>
                         </div>

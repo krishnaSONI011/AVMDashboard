@@ -1,8 +1,8 @@
 // Initialize page elements
-const page_1 = document.getElementById('page1');
-const page_2 = document.getElementById('page2');
-const page_3 = document.getElementById('page3');
-const page_4 = document.getElementById('page4');
+    const page_1 = document.getElementById('page1');
+    const page_2 = document.getElementById('page2');
+    const page_3 = document.getElementById('page3');
+    const page_4 = document.getElementById('page4');
     // const page_5 = document.getElementById('page5');
     // const page_6 = document.getElementById('page6');
     // const page_7 = document.getElementById('page7');
@@ -316,6 +316,137 @@ const page_4 = document.getElementById('page4');
         
         setupPetitionerAddressEvents();
 
+        // Setup deceased address functionality
+        function setupDeceasedAddressEvents() {
+            const addressButtons = document.querySelectorAll(".deceased-address-btn");
+            const removeAddressButtons = document.querySelectorAll(".remove-deceased-address");
+
+            addressButtons.forEach(button => {
+                button.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    const modal = document.getElementById('deceased_address_question');
+                    if (modal) {
+                        modal.classList.remove('hidden');
+                    }
+                });
+            });
+
+            removeAddressButtons.forEach(button => {
+                button.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    const addressContainer = this.closest(".deceased-address-container");
+                    const addressButton = addressContainer.previousElementSibling;
+                    if (addressContainer && addressButton && addressButton.classList.contains("deceased-address-btn")) {
+                        addressContainer.classList.add("hidden");
+                        addressButton.classList.remove("hidden");
+                        // Clear the address input
+                        const addressInput = addressContainer.querySelector("textarea");
+                        if (addressInput) addressInput.value = "";
+                    }
+                });
+            });
+        }
+        
+        setupDeceasedAddressEvents();
+
+        // Setup deceased name auto-fill functionality
+        function setupDeceasedNameAutoFill() {
+            const mainDeceasedInput = document.querySelector('.deceased-name-main');
+            
+            if (mainDeceasedInput) {
+                mainDeceasedInput.addEventListener('input', function() {
+                    const deceasedName = this.value;
+                    
+                    // Find all deceased name inputs using dataset attribute
+                    const allDeceasedInputs = document.querySelectorAll('input[data-deceased-name]');
+                    
+                    allDeceasedInputs.forEach(input => {
+                        // Don't update the main input itself to avoid infinite loop
+                        if (input !== mainDeceasedInput) {
+                            input.value = deceasedName;
+                        }
+                    });
+                });
+            }
+        }
+        
+        setupDeceasedNameAutoFill();
+
+        // Setup exhibit select functionality
+        function setupExhibitSelects() {
+            // Handle main exhibit selects
+            const exhibitSelects = document.querySelectorAll('.exhibit-select');
+            exhibitSelects.forEach(select => {
+                select.addEventListener('change', function() {
+                    const customInput = this.nextElementSibling;
+                    if (this.value === 'custom') {
+                        this.classList.add('hidden');
+                        if (customInput && customInput.classList.contains('custom-exhibit-input')) {
+                            customInput.classList.remove('hidden');
+                            customInput.focus();
+                        }
+                    } else {
+                        if (customInput && customInput.classList.contains('custom-exhibit-input')) {
+                            customInput.classList.add('hidden');
+                            customInput.value = '';
+                        }
+                    }
+                });
+            });
+
+            // Handle custom exhibit inputs
+            const customExhibitInputs = document.querySelectorAll('.custom-exhibit-input');
+            customExhibitInputs.forEach(input => {
+                input.addEventListener('blur', function() {
+                    if (this.value.trim() === '') {
+                        this.classList.add('hidden');
+                        const select = this.previousElementSibling;
+                        if (select && select.classList.contains('exhibit-select')) {
+                            select.classList.remove('hidden');
+                            select.value = '';
+                        }
+                    }
+                });
+            });
+
+            // Handle son exhibit selects
+            const sonExhibitSelects = document.querySelectorAll('.son-exhibit-select');
+            sonExhibitSelects.forEach(select => {
+                select.addEventListener('change', function() {
+                    const customInput = this.nextElementSibling;
+                    if (this.value === 'custom') {
+                        this.classList.add('hidden');
+                        if (customInput && customInput.classList.contains('son-custom-exhibit-input')) {
+                            customInput.classList.remove('hidden');
+                            customInput.focus();
+                        }
+                    } else {
+                        if (customInput && customInput.classList.contains('son-custom-exhibit-input')) {
+                            customInput.classList.add('hidden');
+                            customInput.value = '';
+                        }
+                    }
+                });
+            });
+
+            // Handle son custom exhibit inputs
+            const sonCustomExhibitInputs = document.querySelectorAll('.son-custom-exhibit-input');
+            sonCustomExhibitInputs.forEach(input => {
+                input.addEventListener('blur', function() {
+                    if (this.value.trim() === '') {
+                        this.classList.add('hidden');
+                        const select = this.previousElementSibling;
+                        if (select && select.classList.contains('son-exhibit-select')) {
+                            select.classList.remove('hidden');
+                            select.value = '';
+                        }
+                    }
+                });
+            });
+        }
+        
+        setupExhibitSelects();
+
         // Setup petitioner address modal functionality
         const petitionerAddressModal = document.getElementById('petitioner_address_question');
         const petitionerAddressClose = document.getElementById('petitioner_address_close');
@@ -327,6 +458,12 @@ const page_4 = document.getElementById('page4');
         const petitionerAddressTypeClose = document.getElementById('petitioner_address_type_close');
         const petitionerAddressDC = document.getElementById('petitioner_address_dc');
         const petitionerAddressPermanent = document.getElementById('petitioner_address_permanent');
+        
+        // Setup deceased address modal functionality
+        const deceasedAddressModal = document.getElementById('deceased_address_question');
+        const deceasedAddressClose = document.getElementById('deceased_address_close');
+        const deceasedAddressDC = document.getElementById('deceased_address_dc');
+        const deceasedAddressPermanent = document.getElementById('deceased_address_permanent');
         
         let currentPetitionerBlock = null;
 
@@ -422,10 +559,64 @@ const page_4 = document.getElementById('page4');
             });
         }
 
-        function updatePetitionerNumbers() {
-            const blocks = petitionerWrapper.querySelectorAll(".petitioner_block");
-            blocks.forEach((block, index) => {
-                const numberSpan = block.querySelector(".petitioner_number");
+        // Setup deceased address modal event listeners
+        if (deceasedAddressClose) {
+            deceasedAddressClose.addEventListener('click', (e) => {
+                e.preventDefault();
+                deceasedAddressModal.classList.add('hidden');
+            });
+        }
+
+        if (deceasedAddressDC) {
+            deceasedAddressDC.addEventListener('click', (e) => {
+                e.preventDefault();
+                deceasedAddressModal.classList.add('hidden');
+                // Convert button to reset button with DC address
+                const addressButton = document.querySelector('.deceased-address-btn');
+                if (addressButton) {
+                    addressButton.textContent = 'Reset Address (DC)';
+                    addressButton.classList.remove('bg-blue-600');
+                    addressButton.classList.add('bg-orange-500');
+                    addressButton.onclick = function(e) {
+                        e.preventDefault();
+                        // Reset to original state
+                        addressButton.textContent = 'ADDRESS OF DECEASED';
+                        addressButton.classList.remove('bg-orange-500');
+                        addressButton.classList.add('bg-blue-600');
+                        // Restore original click handler
+                        setupDeceasedAddressEvents();
+                    };
+                }
+            });
+        }
+
+        if (deceasedAddressPermanent) {
+            deceasedAddressPermanent.addEventListener('click', (e) => {
+                e.preventDefault();
+                deceasedAddressModal.classList.add('hidden');
+                // Convert button to reset button with Permanent address
+                const addressButton = document.querySelector('.deceased-address-btn');
+                if (addressButton) {
+                    addressButton.textContent = 'Reset Address (Permanent)';
+                    addressButton.classList.remove('bg-blue-600');
+                    addressButton.classList.add('bg-orange-500');
+                    addressButton.onclick = function(e) {
+                        e.preventDefault();
+                        // Reset to original state
+                        addressButton.textContent = 'ADDRESS OF DECEASED';
+                        addressButton.classList.remove('bg-orange-500');
+                        addressButton.classList.add('bg-blue-600');
+                        // Restore original click handler
+                        setupDeceasedAddressEvents();
+                    };
+                }
+            });
+        }
+
+            function updatePetitionerNumbers() {
+                const blocks = petitionerWrapper.querySelectorAll(".petitioner_block");
+                blocks.forEach((block, index) => {
+                    const numberSpan = block.querySelector(".petitioner_number");
                 if (numberSpan) {
                     // Show number only when there's more than one petitioner
                     if (blocks.length > 1) {
@@ -436,20 +627,20 @@ const page_4 = document.getElementById('page4');
                     }
                 }
 
-                let removeBtn = block.querySelector(".remove_petitioner_btn");
-                if (!removeBtn && index > 0) {
-                    removeBtn = document.createElement("button");
-                    removeBtn.className = "remove_petitioner_btn bg-gray-500 text-white px-3 py-1 rounded mt-3 ml-2";
-                    removeBtn.textContent = "Remove Petitioner";
-                    removeBtn.onclick = () => {
-                        block.remove();
-                        updatePetitionerNumbers();
-                    };
-                    block.appendChild(removeBtn);
-                } else if (removeBtn && index === 0) {
-                    removeBtn.remove();
-                }
-            });
+                    let removeBtn = block.querySelector(".remove_petitioner_btn");
+                    if (!removeBtn && index > 0) {
+                        removeBtn = document.createElement("button");
+                        removeBtn.className = "remove_petitioner_btn bg-gray-500 text-white px-3 py-1 rounded mt-3 ml-2";
+                        removeBtn.textContent = "Remove Petitioner";
+                        removeBtn.onclick = () => {
+                            block.remove();
+                            updatePetitionerNumbers();
+                        };
+                        block.appendChild(removeBtn);
+                    } else if (removeBtn && index === 0) {
+                        removeBtn.remove();
+                    }
+                });
 
             // Update "being" text based on number of petitioners
             updateBeingText(blocks.length);
@@ -661,9 +852,6 @@ const page_4 = document.getElementById('page4');
         const container = document.getElementById('sons-container');
         const newSonEntry = document.createElement('div');
         
-        // Get next exhibit letter
-        const exhibitLetter = String.fromCharCode(65 + sonCounter); // A=65, B=66, C=67, etc.
-        
         newSonEntry.className = 'son-entry border border-gray-300 p-3 rounded mb-2';
         newSonEntry.innerHTML = `
             <div class="flex items-center gap-2 mb-2">
@@ -673,7 +861,20 @@ const page_4 = document.getElementById('page4');
                 <button type="button" class="remove-son-btn input bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600">Remove</button>
             </div>
             <div class="flex items-center gap-2">
-                Hereto annexed and marked as Exhibit – "<input type="text" placeholder="${exhibitLetter}" class="border p-1 input border-black rounded w-12">" is the true copy of birth certificate.
+                Hereto annexed and marked as Exhibit – "<select class="border input p-1 border-black rounded w-12 son-exhibit-select">
+                    <option value="">Select</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                    <option value="F">F</option>
+                    <option value="G">G</option>
+                    <option value="H">H</option>
+                    <option value="I">I</option>
+                    <option value="J">J</option>
+                    <option value="custom">OTHERS</option>
+                </select><input type="text" placeholder="Custom" class="border input p-1 border-black rounded w-12 hidden son-custom-exhibit-input">" is the true copy of birth certificate.
             </div>
         `;
         
@@ -685,6 +886,9 @@ const page_4 = document.getElementById('page4');
             newSonEntry.remove();
             updateSonNumbers();
         });
+
+        // Setup exhibit functionality for the new son entry
+        setupExhibitSelects();
     }
 
     function setupSonRemoveButtons() {
