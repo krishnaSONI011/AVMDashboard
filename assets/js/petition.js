@@ -36,8 +36,34 @@
         // ✅ Now that content is loaded, run your setup logic
         setupPage1Events();
         setupPage2Events();
-
+        
+        // Initialize legal heirs table after page content is loaded
+        setTimeout(() => {
+            if (typeof initializeLegalHeirsTable === 'function') {
+                console.log('Calling initializeLegalHeirsTable from timeout');
+                initializeLegalHeirsTableWithRetry();
+            } else {
+                console.log('initializeLegalHeirsTable function not found');
+            }
+        }, 500);
     }
+
+    function initializeLegalHeirsTableWithRetry() {
+        // Check if petitioner blocks are available
+        const petitionerBlocks = document.querySelectorAll('.petitioner_block');
+        console.log('Petitioner blocks found:', petitionerBlocks.length);
+        
+        if (petitionerBlocks.length > 0) {
+            initializeLegalHeirsTable();
+        } else {
+            console.log('No petitioner blocks found, retrying in 1 second...');
+            setTimeout(() => {
+                initializeLegalHeirsTableWithRetry();
+            }, 1000);
+        }
+    }
+
+    
 
     getThePage();
 
@@ -349,6 +375,79 @@
         
         setupDeceasedAddressEvents();
 
+        // Setup petitioner display functionality
+        function setupPetitionerDisplay() {
+            // Function to update petitioner display (make it global)
+            window.updatePetitionerDisplay = function() {
+                const petitionerBlocks = document.querySelectorAll('.petitioner_block');
+                const petitionerNameDisplay = document.querySelector('.petitioner-name-display');
+                const petitionerAddressDisplay = document.querySelector('.petitioner-address-display');
+                const petitionerReferenceText = document.querySelector('.petitioner-reference-text');
+                
+                if (petitionerBlocks.length > 0 && petitionerNameDisplay && petitionerAddressDisplay && petitionerReferenceText) {
+                    // Get first petitioner's name
+                    const firstPetitionerName = petitionerBlocks[0].querySelector('input[placeholder*="Petitioner Name"]');
+                    const firstPetitionerAddress = petitionerBlocks[0].querySelector('textarea[placeholder*="Petitioner Address"]');
+                    
+                    if (firstPetitionerName && firstPetitionerName.value.trim() !== '') {
+                        petitionerNameDisplay.value = firstPetitionerName.value;
+                    } else {
+                        petitionerNameDisplay.value = '';
+                    }
+                    
+                    if (firstPetitionerAddress && firstPetitionerAddress.value.trim() !== '') {
+                        petitionerAddressDisplay.value = firstPetitionerAddress.value;
+                    } else {
+                        petitionerAddressDisplay.value = '';
+                    }
+                    
+                    // Update reference text based on number of petitioners
+                    if (petitionerBlocks.length === 1) {
+                        petitionerReferenceText.textContent = '(The Petitioner herein)';
+                    } else {
+                        petitionerReferenceText.textContent = '(The Petitioner No.1 herein)';
+                    }
+                }
+            }
+            
+            // Set up event listeners for petitioner inputs
+            function setupPetitionerInputListeners() {
+                const petitionerInputs = document.querySelectorAll('.petitioner_block input, .petitioner_block textarea');
+                petitionerInputs.forEach(input => {
+                    // Remove existing listeners to avoid duplicates
+                    input.removeEventListener('input', updatePetitionerDisplay);
+                    input.removeEventListener('change', updatePetitionerDisplay);
+                    // Add new listeners
+                    input.addEventListener('input', updatePetitionerDisplay);
+                    input.addEventListener('change', updatePetitionerDisplay);
+                });
+            }
+            
+            // Initial setup
+            setupPetitionerInputListeners();
+            updatePetitionerDisplay();
+            
+            // Set up observer to watch for new petitioner blocks
+            const petitionerWrapper = document.getElementById('petitioner_wrapper');
+            if (petitionerWrapper) {
+                const observer = new MutationObserver(function(mutations) {
+                    mutations.forEach(function(mutation) {
+                        if (mutation.type === 'childList') {
+                            setupPetitionerInputListeners();
+                            updatePetitionerDisplay();
+                        }
+                    });
+                });
+                
+                observer.observe(petitionerWrapper, {
+                    childList: true,
+                    subtree: true
+                });
+            }
+        }
+        
+        setupPetitionerDisplay();
+
         // Setup deceased name auto-fill functionality
         function setupDeceasedNameAutoFill() {
             const mainDeceasedInput = document.querySelector('.deceased-name-main');
@@ -446,6 +545,23 @@
         }
         
         setupExhibitSelects();
+
+        // Function to update legal heirs table numbering (exclude petitioner rows)
+        function updateLegalHeirsTableNumbers() {
+            const petitionerRows = document.querySelectorAll('#legal-heirs-table tbody tr.petitioner-row');
+            const legalHeirsRows = document.querySelectorAll('#legal-heirs-table tbody tr:not(.petitioner-row)');
+            
+            legalHeirsRows.forEach((row, index) => {
+                const firstCell = row.querySelector('td:first-child');
+                if (firstCell) {
+                    // Only update if it's a main heir (not a sub-heir with letters)
+                    const currentText = firstCell.textContent.trim();
+                    if (/^\d+$/.test(currentText)) {
+                        firstCell.textContent = petitionerRows.length + index + 1;
+                    }
+                }
+            });
+        }
 
         // Setup petitioner address modal functionality
         const petitionerAddressModal = document.getElementById('petitioner_address_question');
@@ -644,6 +760,20 @@
 
             // Update "being" text based on number of petitioners
             updateBeingText(blocks.length);
+            
+            // Update petitioner display
+            if (typeof window.updatePetitionerDisplay === 'function') {
+                window.updatePetitionerDisplay();
+            }
+            
+            // Update legal heirs table with new petitioner information
+            if (typeof initializeLegalHeirsTable === 'function') {
+                initializeLegalHeirsTable();
+            }
+            
+            // Update legal heirs table numbering (exclude petitioner row)
+            updateLegalHeirsTableNumbers();
+        }
         }
 
         function updateBeingText(petitionerCount) {
@@ -670,58 +800,80 @@
         const enter_addressProof_text = document.getElementById("enter_addressProof")
         const toast = document.getElementById("toast")
         
-        
-        dc_address_copy_button.addEventListener("click",(e)=>{
-            e.preventDefault()
-            
-            const dc_address = enter_addressProof_text.value
-            navigator.clipboard.writeText(dc_address).then(()=>{
-            
-            toast.innerText = "DC ADDRESS COPY !"
-            toast.classList.remove("hidden")
+        if (dc_address_copy_button && enter_addressProof_text && toast) {
+            dc_address_copy_button.addEventListener("click",(e)=>{
+                e.preventDefault()
+                
+                const dc_address = enter_addressProof_text.value
+                navigator.clipboard.writeText(dc_address).then(()=>{
+                
+                toast.innerText = "DC ADDRESS COPY !"
+                toast.classList.remove("hidden")
 
-            setTimeout(()=>{
-                toast.classList.add("hidden")
-                toast.innerText = ""
-            },2000)
+                setTimeout(()=>{
+                    toast.classList.add("hidden")
+                    toast.innerText = ""
+                },2000)
+                })
             })
-
-        })
-       
+        }
 
         // copy address proof
 
         const address_proof_copy_button = document.getElementById("address_proof_button")
         const address_proof_input = document.getElementById("address_proof")
-        address_proof_copy_button.addEventListener("click",(e)=>{
-            e.preventDefault()
-            const dc_address = address_proof_input.value
-            navigator.clipboard.writeText(dc_address).then(()=>{
-            
-            toast.innerText = "Address Proof Copy"
-            toast.classList.remove("hidden")
+        if (address_proof_copy_button && address_proof_input && toast) {
+            address_proof_copy_button.addEventListener("click",(e)=>{
+                e.preventDefault()
+                const dc_address = address_proof_input.value
+                navigator.clipboard.writeText(dc_address).then(()=>{
+                
+                toast.innerText = "Address Proof Copy"
+                toast.classList.remove("hidden")
 
-            setTimeout(()=>{
-                toast.classList.add("hidden")
-                toast.innerText = ""
-            },2000)
+                setTimeout(()=>{
+                    toast.classList.add("hidden")
+                    toast.innerText = ""
+                },2000)
+                })
             })
-        })
-    }
+        }
+    
 
-    // Legal Heir functionality for page 2
-    let legalHeirCounter = 2; // Starting from 2 since we already have 2 rows
+    // Legal Heir functionality for page 2 - Global variables
+    let legalHeirCounter = 0; // Will be set based on number of petitioners
     let subHeirCounter = 0; // Counter for sub-heirs
+    
+    console.log('Global variables initialized - legalHeirCounter:', legalHeirCounter, 'subHeirCounter:', subHeirCounter);
 
     function setupPage2Events() {
+        // Don't initialize legal heirs table here - it will be called after a delay
+        // to ensure all content is loaded
+        
         const the_proof_selector = document.getElementById('proof_select')
+        if (the_proof_selector) {
+            the_proof_selector.addEventListener("change",(e)=>{
+                if(e.target.value === "7") document.getElementById("no_proof").classList.remove("hidden")
+                else document.getElementById("no_proof").classList.add("hidden")
+            })
+        }
+
+        // Setup buttons with retry mechanism
+        setupLegalHeirButtons();
+        
+        // Setup remove buttons for existing sons
+        setupSonRemoveButtons();
+    }
+
+    function setupLegalHeirButtons() {
         const addMoreLegalHeirBtn = document.getElementById('add-more-legal-heir');
         const addSubLegalHeirBtn = document.getElementById('add-sub-legal-heir');
         const addSonBtn = document.getElementById('add-son-btn');
-        the_proof_selector.addEventListener("change",(e)=>{
-            if(e.target.value === "7") document.getElementById("no_proof").classList.remove("hidden")
-            else document.getElementById("no_proof").classList.add("hidden")
-        })
+        
+        console.log('Setting up legal heir buttons...');
+        console.log('Add More Legal Heir button found:', !!addMoreLegalHeirBtn);
+        console.log('Add Sub Legal Heir button found:', !!addSubLegalHeirBtn);
+        console.log('Add Son button found:', !!addSonBtn);
 
         if (addMoreLegalHeirBtn) {
             addMoreLegalHeirBtn.addEventListener('click', addMoreLegalHeir);
@@ -734,32 +886,288 @@
         if (addSonBtn) {
             addSonBtn.addEventListener('click', addSon);
         }
-
-        // Setup remove buttons for existing sons
-        setupSonRemoveButtons();
+        
+        // If buttons are not found, retry after a delay
+        if (!addMoreLegalHeirBtn || !addSubLegalHeirBtn || !addSonBtn) {
+            console.log('Some buttons not found, retrying in 1 second...');
+            setTimeout(setupLegalHeirButtons, 1000);
+        }
     }
 
-    function addMoreLegalHeir() {
-        legalHeirCounter++;
+    function initializeLegalHeirsTable() {
+        console.log('Initializing legal heirs table...');
         const tbody = document.querySelector('#legal-heirs-table tbody');
+        if (!tbody) {
+            console.log('Table body not found');
+            return;
+        }
+        
+        // Remove any existing rows
+        const existingRows = tbody.querySelectorAll('tr');
+        existingRows.forEach(row => row.remove());
+        
+        // Get petitioner blocks
+        const petitionerBlocks = document.querySelectorAll('.petitioner_block');
+        const petitionerCount = petitionerBlocks.length;
+        console.log('Found', petitionerCount, 'petitioner blocks');
+        
+        if (petitionerCount === 0) {
+            console.log('No petitioner blocks found. Checking if page1 is loaded...');
+            const page1Content = document.querySelector('#page1');
+            console.log('Page1 content exists:', !!page1Content);
+            if (page1Content) {
+                console.log('Page1 innerHTML length:', page1Content.innerHTML.length);
+            }
+        }
+        
+        // Set the counter
+        legalHeirCounter = petitionerCount;
+        
+        // Create rows for each petitioner
+        for (let i = 0; i < petitionerCount; i++) {
+            const petitionerBlock = petitionerBlocks[i];
+            console.log('Processing petitioner block', i + 1);
+            const newRow = document.createElement('tr');
+            newRow.className = 'petitioner-row';
+            
+            // Get petitioner information from the block
+            const nameInput = petitionerBlock.querySelector('input[placeholder="Enter Petitioner Name"]');
+            const addressInput = petitionerBlock.querySelector('textarea[placeholder="Enter Petitioner Address"]');
+            
+            const petitionerName = nameInput ? nameInput.value : '';
+            const petitionerAddress = addressInput ? addressInput.value : '';
+            console.log('Petitioner', i + 1, 'Name:', petitionerName, 'Address:', petitionerAddress);
+            console.log('Name input found:', !!nameInput, 'Address input found:', !!addressInput);
+            
+            // Determine reference text based on petitioner number
+            let referenceText = '(The Petitioner herein)';
+            if (petitionerCount > 1) {
+                referenceText = `(The Petitioner No.${i + 1} herein)`;
+            }
+            if (petitionerBlocks.length === 1) {
+                newRow.innerHTML = `
+                <td class="border border-white p-2 text-center">${i + 1}</td>
+                <td class="border border-white p-2">
+                    <div class="space-y-2">
+                        <input type="text" value="${petitionerName}" placeholder="NAME OF PETITIONER" class="w-full input border p-1 border-white rounded petitioner-name-display">
+                        <input type="text" placeholder="Residing at" class="w-full input border p-1 border-white rounded">
+                        <input type="text" value="${petitionerAddress}" placeholder="ADDRESS OF PETITIONER AS PER TITLE OF PETITIONER" class="w-full input border p-1 border-white rounded petitioner-address-display">
+                        <span class="petitioner-reference-text text-white">${referenceText}</span>
+                    </div>
+                </td>
+                <td class="border border-white p-2">
+                    <span class="text-white">-</span>
+                </td>
+                                <td class="border border-white p-2">
+                    
+                </td>
+                <td class="border border-white p-2 text-center">
+                    <!-- No action needed for petitioner -->
+                </td>
+            `;
+            } if(petitionerBlocks.length > 1) {
+                newRow.innerHTML = `
+                <td class="border border-white p-2 text-center">${i + 1}</td>
+                <td class="border border-white p-2">
+                    <span class="petitioner-reference-text text-white">${referenceText}</span>
+                    </div>
+                </td>
+                <td class="border border-white p-2">
+                    <span class="text-white">-</span>
+                </td>
+                                <td class="border border-white p-2">
+                    
+                </td>
+                <td class="border border-white p-2 text-center">
+                    <!-- No action needed for petitioner -->
+                </td>
+            `;
+            }
+           
+            
+            tbody.appendChild(newRow);
+        }
+        
+        // Update row numbers
+        updateRowNumbers();
+        console.log('Legal heirs table initialization complete');
+        
+        // Set up real-time sync for petitioner data
+        setupPetitionerDataSync();
+    }
+
+    function setupPetitionerDataSync() {
+        // Set up event listeners for petitioner inputs to sync with legal heirs table
+        const petitionerBlocks = document.querySelectorAll('.petitioner_block');
+        
+        petitionerBlocks.forEach((block, index) => {
+            const nameInput = block.querySelector('input[placeholder="Enter Petitioner Name"]');
+            const addressInput = block.querySelector('textarea[placeholder="Enter Petitioner Address"]');
+            
+            if (nameInput) {
+                nameInput.addEventListener('input', function() {
+                    updatePetitionerInLegalHeirsTable(index, 'name', this.value);
+                });
+            }
+            
+            if (addressInput) {
+                addressInput.addEventListener('input', function() {
+                    updatePetitionerInLegalHeirsTable(index, 'address', this.value);
+                });
+            }
+        });
+    }
+
+    function updatePetitionerInLegalHeirsTable(petitionerIndex, field, value) {
+        const tbody = document.querySelector('#legal-heirs-table tbody');
+        if (!tbody) return;
+        
+        const petitionerRows = tbody.querySelectorAll('tr.petitioner-row');
+        const targetRow = petitionerRows[petitionerIndex];
+        
+        if (targetRow) {
+            if (field === 'name') {
+                const nameInput = targetRow.querySelector('.petitioner-name-display');
+                if (nameInput) {
+                    nameInput.value = value;
+                }
+            } else if (field === 'address') {
+                const addressInput = targetRow.querySelector('.petitioner-address-display');
+                if (addressInput) {
+                    addressInput.value = value;
+                }
+            }
+        }
+    }
+
+    // Manual trigger function for testing
+    window.testLegalHeirsTable = function() {
+        console.log('Manual test trigger called');
+        if (typeof initializeLegalHeirsTable === 'function') {
+            initializeLegalHeirsTable();
+        } else {
+            console.log('Function not available');
+        }
+    };
+
+    // Manual trigger function for testing buttons
+    window.testLegalHeirButtons = function() {
+        console.log('Manual button test trigger called');
+        setupLegalHeirButtons();
+    };
+
+    // Manual trigger function for complete setup
+    window.testCompleteSetup = function() {
+        console.log('Manual complete setup trigger called');
+        setupLegalHeirButtons();
+        initializeLegalHeirsTableWithRetry();
+    };
+
+    // Manual trigger function to refresh petitioner data
+    window.refreshPetitionerData = function() {
+        console.log('Refreshing petitioner data in legal heirs table...');
+        initializeLegalHeirsTable();
+    };
+
+    // Debug function to check current state
+    window.debugCurrentState = function() {
+        console.log('=== DEBUG CURRENT STATE ===');
+        
+        // Check global variables
+        console.log('Global variables - legalHeirCounter:', legalHeirCounter, 'subHeirCounter:', subHeirCounter);
+        
+        // Check table
+        const table = document.querySelector('#legal-heirs-table');
+        console.log('Legal heirs table found:', !!table);
+        
+        const tbody = document.querySelector('#legal-heirs-table tbody');
+        console.log('Table body found:', !!tbody);
+        
+        if (tbody) {
+            const rows = tbody.querySelectorAll('tr');
+            console.log('Number of rows in table:', rows.length);
+        }
+        
+        // Check petitioner blocks
+        const petitionerBlocks = document.querySelectorAll('.petitioner_block');
+        console.log('Number of petitioner blocks:', petitionerBlocks.length);
+        
+        petitionerBlocks.forEach((block, index) => {
+            const nameInput = block.querySelector('input[placeholder="Enter Petitioner Name"]');
+            const addressInput = block.querySelector('textarea[placeholder="Enter Petitioner Address"]');
+            console.log(`Petitioner ${index + 1}:`, {
+                nameInput: !!nameInput,
+                nameValue: nameInput ? nameInput.value : 'N/A',
+                namePlaceholder: nameInput ? nameInput.placeholder : 'N/A',
+                addressInput: !!addressInput,
+                addressValue: addressInput ? addressInput.value : 'N/A',
+                addressPlaceholder: addressInput ? addressInput.placeholder : 'N/A'
+            });
+        });
+        
+        // Check buttons
+        const addMoreBtn = document.getElementById('add-more-legal-heir');
+        const addSubBtn = document.getElementById('add-sub-legal-heir');
+        console.log('Add More Legal Heir button found:', !!addMoreBtn);
+        console.log('Add Sub Legal Heir button found:', !!addSubBtn);
+        
+        console.log('=== END DEBUG ===');
+    };
+
+    function addMoreLegalHeir() {
+        console.log('Add More Legal Heir button clicked');
+        console.log('Current legalHeirCounter before increment:', legalHeirCounter);
+        legalHeirCounter++;
+        console.log('Current legalHeirCounter after increment:', legalHeirCounter);
+        const tbody = document.querySelector('#legal-heirs-table tbody');
+        if (!tbody) {
+            console.log('Table body not found for adding legal heir');
+            return;
+        }
         const newRow = document.createElement('tr');
+        newRow.className = 'legal-heir-row';
+        newRow.dataset.heirId = legalHeirCounter;
         
         newRow.innerHTML = `
-            <td class="border border-black p-2 text-center">${legalHeirCounter}</td>
-            <td class="border border-black p-2">
+            <td class="border border-white p-2 text-center">${legalHeirCounter}</td>
+            <td class="border border-white p-2">
                 <div class="space-y-2">
-                    <input type="text" placeholder="Name of Legal Heir" class="w-full border input p-1 border-black rounded">
-                    <input type="text" placeholder="Residing at" class="w-full border p-1 border-black input rounded">
-                    <input type="text" placeholder="Address of Legal Heir" class="w-full border input p-1 border-black rounded">
+                    <input type="text" placeholder="LEGAL HEIR FULL NAME" class="w-full input border p-1 border-white rounded legal-heir-name">
+                    <div class="flex items-center gap-4 mt-2">
+                        <label class="text-white text-sm">Alive or Died:</label>
+                        <label class="text-white text-sm">
+                            <input type="radio" name="alive_died_${legalHeirCounter}" value="alive" class="mr-1 alive-died-radio"> Alive
+                        </label>
+                        <label class="text-white text-sm">
+                            <input type="radio" name="alive_died_${legalHeirCounter}" value="died" class="mr-1 alive-died-radio"> Died
+                        </label>
+                    </div>
+                    <div class="died-details hidden" id="died_details_${legalHeirCounter}">
+                        <div class="flex items-center gap-4 mt-2">
+                            <label class="text-white text-sm">
+                                <input type="radio" name="deceased_type_${legalHeirCounter}" value="since_deceased" class="mr-1"> Since deceased
+                            </label>
+                            <label class="text-white text-sm">
+                                <input type="radio" name="deceased_type_${legalHeirCounter}" value="predeceased" class="mr-1"> Predeceased
+                            </label>
+                        </div>
+                        <div class="mt-2">
+                            <label class="text-white text-sm">Died on:</label>
+                            <input type="date" class="border p-1 border-white rounded ml-2 died-date">
+                        </div>
+                        <button type="button" class="add-sub-heirs-btn bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600 mt-2" data-heir-id="${legalHeirCounter}">
+                            + Add Sub Legal Heirs
+                        </button>
+                    </div>
                 </div>
             </td>
-            <td class="border border-black p-2">
-                <input type="number" placeholder="Age of Legal Heir" class="w-full border p-1 border-black input rounded">
+            <td class="border border-white p-2">
+                <input type="number" placeholder="Age of Legal Heir" class="w-full border p-1 border-white input rounded">
             </td>
-            <td class="border border-black p-2">
-                <input type="text" placeholder="Relation with deceased" class="w-full border p-1 border-black input rounded">
+            <td class="border border-white p-2">
+                <input type="text" placeholder="Relation with deceased" class="w-full border p-1 border-white input rounded">
             </td>
-            <td class="border border-black p-2 text-center">
+            <td class="border border-white p-2 text-center">
                 <button type="button" class="remove-row-btn bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600">Remove</button>
             </td>
         `;
@@ -767,17 +1175,52 @@
         tbody.appendChild(newRow);
         subHeirCounter = 0; // Reset sub-heir counter when adding new main heir
         
+        // Add event listeners
+        setupLegalHeirRowEvents(newRow);
+    }
+
+    function setupLegalHeirRowEvents(row) {
         // Add event listener to the remove button
-        const removeBtn = newRow.querySelector('.remove-row-btn');
+        const removeBtn = row.querySelector('.remove-row-btn');
         removeBtn.addEventListener('click', function() {
-            newRow.remove();
+            row.remove();
             updateRowNumbers();
         });
+
+        // Add event listeners for alive/died radio buttons
+        const aliveDiedRadios = row.querySelectorAll('.alive-died-radio');
+        aliveDiedRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                const heirId = row.dataset.heirId;
+                const diedDetails = document.getElementById(`died_details_${heirId}`);
+                if (this.value === 'died') {
+                    diedDetails.classList.remove('hidden');
+                } else {
+                    diedDetails.classList.add('hidden');
+                }
+            });
+        });
+
+        // Add event listener for sub-heirs button
+        const addSubHeirsBtn = row.querySelector('.add-sub-heirs-btn');
+        if (addSubHeirsBtn) {
+            addSubHeirsBtn.addEventListener('click', function() {
+                const heirId = this.dataset.heirId;
+                addSubLegalHeirsForHeir(heirId);
+            });
+        }
     }
 
     function addSubLegalHeir() {
+        console.log('Add Sub Legal Heir button clicked');
+        console.log('Current subHeirCounter before increment:', subHeirCounter);
         subHeirCounter++;
+        console.log('Current subHeirCounter after increment:', subHeirCounter);
         const tbody = document.querySelector('#legal-heirs-table tbody');
+        if (!tbody) {
+            console.log('Table body not found for adding sub legal heir');
+            return;
+        }
         const newRow = document.createElement('tr');
         
         // Get the current main heir number
@@ -785,21 +1228,21 @@
         const subHeirNumber = `${currentMainHeir}(${String.fromCharCode(96 + subHeirCounter)})`; // a, b, c, etc.
         
         newRow.innerHTML = `
-            <td class="border border-black p-2 text-center">${subHeirNumber}</td>
-            <td class="border border-black p-2">
+            <td class="border border-white p-2 text-center">${subHeirNumber}</td>
+            <td class="border border-white p-2">
                 <div class="space-y-2">
-                    <input type="text" placeholder="Name of Sub Legal Heir" class="w-full input border p-1 border-black rounded">
-                    <input type="text" placeholder="Residing at" class="w-full border p-1 border-black input rounded">
-                    <input type="text" placeholder="Address of Sub Legal Heir" class="w-full border input p-1 border-black rounded">
+                    <input type="text" placeholder="Name of Sub Legal Heir" class="w-full input border p-1 border-white rounded">
+                    <input type="text" placeholder="Residing at" class="w-full input border p-1 border-white rounded">
+                    <input type="text" placeholder="Address of Sub Legal Heir" class="w-full input border p-1 border-white rounded">
                 </div>
             </td>
-            <td class="border border-black p-2">
-                <input type="number" placeholder="Age of Sub Legal Heir" class="w-full border p-1 border-black input rounded">
+            <td class="border border-white p-2">
+                <input type="number" placeholder="Age of Sub Legal Heir" class="w-full border p-1 border-white input rounded">
             </td>
-            <td class="border border-black p-2">
-                <input type="text" placeholder="Relation with deceased" class="w-full border p-1 border-black input rounded">
+            <td class="border border-white p-2">
+                <input type="text" placeholder="Relation with deceased" class="w-full border p-1 border-white input rounded">
             </td>
-            <td class="border border-black p-2 text-center">
+            <td class="border border-white p-2 text-center">
                 <button type="button" class="remove-row-btn bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600">Remove</button>
             </td>
         `;
@@ -814,14 +1257,227 @@
         });
     }
 
+    function addSubLegalHeirsForHeir(heirId) {
+        console.log('Adding sub legal heirs for heir ID:', heirId);
+        const tbody = document.querySelector('#legal-heirs-table tbody');
+        if (!tbody) return;
+        
+        // Get the legal heir name for reference
+        const heirRow = document.querySelector(`tr[data-heir-id="${heirId}"]`);
+        const heirNameInput = heirRow.querySelector('.legal-heir-name');
+        const heirName = heirNameInput ? heirNameInput.value : `Heir ${heirId}`;
+        
+        // Create sub-heir row
+        const newRow = document.createElement('tr');
+        newRow.className = 'sub-heir-row';
+        newRow.dataset.parentHeirId = heirId;
+        
+        // Generate sub-heir number (2A, 2B, etc.)
+        const existingSubHeirs = tbody.querySelectorAll(`tr[data-parent-heir-id="${heirId}"]`);
+        const subHeirLetter = String.fromCharCode(97 + existingSubHeirs.length); // a, b, c, etc.
+        const subHeirNumber = `${heirId}${subHeirLetter.toUpperCase()}`;
+        
+        newRow.innerHTML = `
+            <td class="border border-white p-2 text-center">${subHeirNumber}</td>
+            <td class="border border-white p-2">
+                <div class="space-y-2">
+                    <input type="text" placeholder="SUB LEGAL HEIR FULL NAME" class="w-full input border p-1 border-white rounded sub-heir-name">
+                    <div class="flex items-center gap-4 mt-2">
+                        <label class="text-white text-sm">Alive or Died:</label>
+                        <label class="text-white text-sm">
+                            <input type="radio" name="sub_alive_died_${heirId}_${subHeirLetter}" value="alive" class="mr-1 sub-alive-died-radio"> Alive
+                        </label>
+                        <label class="text-white text-sm">
+                            <input type="radio" name="sub_alive_died_${heirId}_${subHeirLetter}" value="died" class="mr-1 sub-alive-died-radio"> Died
+                        </label>
+                    </div>
+                    <div class="sub-died-details hidden" id="sub_died_details_${heirId}_${subHeirLetter}">
+                        <div class="flex items-center gap-4 mt-2">
+                            <label class="text-white text-sm">
+                                <input type="radio" name="sub_deceased_type_${heirId}_${subHeirLetter}" value="since_deceased" class="mr-1"> Since deceased
+                            </label>
+                            <label class="text-white text-sm">
+                                <input type="radio" name="sub_deceased_type_${heirId}_${subHeirLetter}" value="predeceased" class="mr-1"> Predeceased
+                            </label>
+                        </div>
+                        <div class="mt-2">
+                            <label class="text-white text-sm">Died on:</label>
+                            <input type="date" class="border p-1 border-white rounded ml-2 sub-died-date">
+                        </div>
+                        <button type="button" class="add-sub-sub-heirs-btn bg-green-500 text-white px-2 py-1 rounded text-sm hover:bg-green-600 mt-2" data-parent-heir-id="${heirId}" data-sub-heir-id="${subHeirLetter}">
+                            + Add Sub-Sub Legal Heirs
+                        </button>
+                    </div>
+                </div>
+            </td>
+            <td class="border border-white p-2">
+                <input type="number" placeholder="Age of Sub Legal Heir" class="w-full border p-1 border-white input rounded">
+            </td>
+            <td class="border border-white p-2">
+                <input type="text" placeholder="Relation with deceased" class="w-full border p-1 border-white input rounded">
+            </td>
+            <td class="border border-white p-2 text-center">
+                <button type="button" class="remove-row-btn bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600">Remove</button>
+            </td>
+        `;
+        
+        tbody.appendChild(newRow);
+        
+        // Add event listeners for sub-heir row
+        setupSubHeirRowEvents(newRow);
+    }
+
+    function setupSubHeirRowEvents(row) {
+        // Add event listener to the remove button
+        const removeBtn = row.querySelector('.remove-row-btn');
+        removeBtn.addEventListener('click', function() {
+            row.remove();
+            updateRowNumbers();
+        });
+
+        // Add event listeners for sub-heir alive/died radio buttons
+        const aliveDiedRadios = row.querySelectorAll('.sub-alive-died-radio');
+        aliveDiedRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                const parentHeirId = row.dataset.parentHeirId;
+                const subHeirId = row.querySelector('.add-sub-sub-heirs-btn').dataset.subHeirId;
+                const diedDetails = document.getElementById(`sub_died_details_${parentHeirId}_${subHeirId}`);
+                if (this.value === 'died') {
+                    diedDetails.classList.remove('hidden');
+                } else {
+                    diedDetails.classList.add('hidden');
+                }
+            });
+        });
+
+        // Add event listener for sub-sub-heirs button
+        const addSubSubHeirsBtn = row.querySelector('.add-sub-sub-heirs-btn');
+        if (addSubSubHeirsBtn) {
+            addSubSubHeirsBtn.addEventListener('click', function() {
+                const parentHeirId = this.dataset.parentHeirId;
+                const subHeirId = this.dataset.subHeirId;
+                addSubSubLegalHeirsForHeir(parentHeirId, subHeirId);
+            });
+        }
+    }
+
+    function addSubSubLegalHeirsForHeir(parentHeirId, subHeirId) {
+        console.log('Adding sub-sub legal heirs for parent heir ID:', parentHeirId, 'sub heir ID:', subHeirId);
+        const tbody = document.querySelector('#legal-heirs-table tbody');
+        if (!tbody) return;
+        
+        // Create sub-sub-heir row
+        const newRow = document.createElement('tr');
+        newRow.className = 'sub-sub-heir-row';
+        newRow.dataset.parentHeirId = parentHeirId;
+        newRow.dataset.subHeirId = subHeirId;
+        
+        // Generate sub-sub-heir number (2A1, 2A2, etc.)
+        const existingSubSubHeirs = tbody.querySelectorAll(`tr[data-parent-heir-id="${parentHeirId}"][data-sub-heir-id="${subHeirId}"]`);
+        const subSubHeirNumber = existingSubSubHeirs.length + 1;
+        const fullSubSubHeirNumber = `${parentHeirId}${subHeirId.toUpperCase()}${subSubHeirNumber}`;
+        
+        newRow.innerHTML = `
+            <td class="border border-white p-2 text-center">${fullSubSubHeirNumber}</td>
+            <td class="border border-white p-2">
+                <div class="space-y-2">
+                    <input type="text" placeholder="SUB-SUB LEGAL HEIR FULL NAME" class="w-full input border p-1 border-white rounded sub-sub-heir-name">
+                    <div class="flex items-center gap-4 mt-2">
+                        <label class="text-white text-sm">Alive or Died:</label>
+                        <label class="text-white text-sm">
+                            <input type="radio" name="sub_sub_alive_died_${parentHeirId}_${subHeirId}_${subSubHeirNumber}" value="alive" class="mr-1 sub-sub-alive-died-radio"> Alive
+                        </label>
+                        <label class="text-white text-sm">
+                            <input type="radio" name="sub_sub_alive_died_${parentHeirId}_${subHeirId}_${subSubHeirNumber}" value="died" class="mr-1 sub-sub-alive-died-radio"> Died
+                        </label>
+                    </div>
+                    <div class="sub-sub-died-details hidden" id="sub_sub_died_details_${parentHeirId}_${subHeirId}_${subSubHeirNumber}">
+                        <div class="flex items-center gap-4 mt-2">
+                            <label class="text-white text-sm">
+                                <input type="radio" name="sub_sub_deceased_type_${parentHeirId}_${subHeirId}_${subSubHeirNumber}" value="since_deceased" class="mr-1"> Since deceased
+                            </label>
+                            <label class="text-white text-sm">
+                                <input type="radio" name="sub_sub_deceased_type_${parentHeirId}_${subHeirId}_${subSubHeirNumber}" value="predeceased" class="mr-1"> Predeceased
+                            </label>
+                        </div>
+                        <div class="mt-2">
+                            <label class="text-white text-sm">Died on:</label>
+                            <input type="date" class="border p-1 border-white rounded ml-2 sub-sub-died-date">
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td class="border border-white p-2">
+                <input type="number" placeholder="Age of Sub-Sub Legal Heir" class="w-full border p-1 border-white input rounded">
+            </td>
+            <td class="border border-white p-2">
+                <input type="text" placeholder="Relation with deceased" class="w-full border p-1 border-white input rounded">
+            </td>
+            <td class="border border-white p-2 text-center">
+                <button type="button" class="remove-row-btn bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600">Remove</button>
+            </td>
+        `;
+        
+        tbody.appendChild(newRow);
+        
+        // Add event listeners for sub-sub-heir row
+        setupSubSubHeirRowEvents(newRow);
+    }
+
+    function setupSubSubHeirRowEvents(row) {
+        // Add event listener to the remove button
+        const removeBtn = row.querySelector('.remove-row-btn');
+        removeBtn.addEventListener('click', function() {
+            row.remove();
+            updateRowNumbers();
+        });
+
+        // Add event listeners for sub-sub-heir alive/died radio buttons
+        const aliveDiedRadios = row.querySelectorAll('.sub-sub-alive-died-radio');
+        aliveDiedRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                const parentHeirId = row.dataset.parentHeirId;
+                const subHeirId = row.dataset.subHeirId;
+                const subSubHeirNumber = row.querySelector('td:first-child').textContent.replace(/[A-Z]/g, '').replace(/[a-z]/g, '');
+                const diedDetails = document.getElementById(`sub_sub_died_details_${parentHeirId}_${subHeirId}_${subSubHeirNumber}`);
+                if (this.value === 'died') {
+                    diedDetails.classList.remove('hidden');
+                } else {
+                    diedDetails.classList.add('hidden');
+                }
+            });
+        });
+    }
+
     function updateRowNumbers() {
         const tbody = document.querySelector('#legal-heirs-table tbody');
-        const rows = tbody.querySelectorAll('tr');
-        let mainHeirCount = 0;
+        const petitionerRows = tbody.querySelectorAll('tr.petitioner-row');
+        const otherRows = tbody.querySelectorAll('tr:not(.petitioner-row)');
+        
+        // Update petitioner row numbers
+        petitionerRows.forEach((row, index) => {
+            const firstCell = row.querySelector('td:first-child');
+            if (firstCell) {
+                firstCell.textContent = index + 1;
+            }
+            
+            // Update reference text for multiple petitioners
+            const referenceCell = row.querySelector('.petitioner-reference-text');
+            if (referenceCell) {
+                if (petitionerRows.length === 1) {
+                    referenceCell.textContent = '(The Petitioner herein)';
+                } else {
+                    referenceCell.textContent = `(The Petitioner No.${index + 1} herein)`;
+                }
+            }
+        });
+        
+        // Update other legal heir rows (non-petitioner rows)
+        let mainHeirCount = petitionerRows.length;
         let subHeirCount = 0;
-        let currentMainHeir = 0;
+        let currentMainHeir = mainHeirCount;
 
-        rows.forEach((row, index) => {
+        otherRows.forEach((row) => {
             const firstCell = row.querySelector('td:first-child');
             const currentText = firstCell.textContent.trim();
             
