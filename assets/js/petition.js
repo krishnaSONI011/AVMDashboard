@@ -33,9 +33,10 @@
         // page_6.innerHTML = html5
         // page_7.innerHTML = html6
         // page_8.innerHTML = html7
-        // ✅ Now that content is loaded, run your setup logic
+        
         setupPage1Events();
         setupPage2Events();
+        setupPage3Events();
         
         // Initialize legal heirs table after page content is loaded
         setTimeout(() => {
@@ -66,6 +67,29 @@
     
 
     getThePage();
+
+    // Helper function to convert numbers to roman numerals
+    function numberToRoman(num) {
+        const romanNumerals = [
+            { value: 10, numeral: 'x' },
+            { value: 9, numeral: 'ix' },
+            { value: 5, numeral: 'v' },
+            { value: 4, numeral: 'iv' },
+            { value: 1, numeral: 'i' }
+        ];
+        
+        let result = '';
+        let remaining = num;
+        
+        for (const { value, numeral } of romanNumerals) {
+            while (remaining >= value) {
+                result += numeral;
+                remaining -= value;
+            }
+        }
+        
+        return result;
+    }
 
     // Global event listener as backup for consent affidavit button
   
@@ -478,6 +502,12 @@
             exhibitSelects.forEach(select => {
                 select.addEventListener('change', function() {
                     const customInput = this.nextElementSibling;
+                    const previousValue = this.dataset.previousValue || '';
+                    const currentValue = this.value;
+                    
+                    // Store the current value for next change
+                    this.dataset.previousValue = currentValue;
+                    
                     if (this.value === 'custom') {
                         this.classList.add('hidden');
                         if (customInput && customInput.classList.contains('custom-exhibit-input')) {
@@ -489,6 +519,23 @@
                             customInput.classList.add('hidden');
                             customInput.value = '';
                         }
+                    }
+                    
+                    // If value was cleared or changed, restore all options first
+                    if (currentValue === '' || (previousValue && previousValue !== currentValue)) {
+                        // Restore all options
+                        restoreExhibitOptions();
+                        
+                        // Then re-apply current selections from all dropdowns
+                        const allExhibitSelects = document.querySelectorAll('.exhibit-select, .son-exhibit-select');
+                        allExhibitSelects.forEach(otherSelect => {
+                            if (otherSelect.value && otherSelect.value !== 'custom') {
+                                updateExhibitDropdowns(otherSelect);
+                            }
+                        });
+                    } else {
+                        // Just update other dropdowns to remove the selected option
+                        updateExhibitDropdowns(this);
                     }
                 });
             });
@@ -513,6 +560,12 @@
             sonExhibitSelects.forEach(select => {
                 select.addEventListener('change', function() {
                     const customInput = this.nextElementSibling;
+                    const previousValue = this.dataset.previousValue || '';
+                    const currentValue = this.value;
+                    
+                    // Store the current value for next change
+                    this.dataset.previousValue = currentValue;
+                    
                     if (this.value === 'custom') {
                         this.classList.add('hidden');
                         if (customInput && customInput.classList.contains('son-custom-exhibit-input')) {
@@ -524,6 +577,23 @@
                             customInput.classList.add('hidden');
                             customInput.value = '';
                         }
+                    }
+                    
+                    // If value was cleared or changed, restore all options first
+                    if (currentValue === '' || (previousValue && previousValue !== currentValue)) {
+                        // Restore all options
+                        restoreExhibitOptions();
+                        
+                        // Then re-apply current selections from all dropdowns
+                        const allExhibitSelects = document.querySelectorAll('.exhibit-select, .son-exhibit-select');
+                        allExhibitSelects.forEach(otherSelect => {
+                            if (otherSelect.value && otherSelect.value !== 'custom') {
+                                updateExhibitDropdowns(otherSelect);
+                            }
+                        });
+                    } else {
+                        // Just update other dropdowns to remove the selected option
+                        updateExhibitDropdowns(this);
                     }
                 });
             });
@@ -544,7 +614,69 @@
             });
         }
         
+        // Function to update exhibit dropdowns when one is selected
+        function updateExhibitDropdowns(selectedSelect) {
+            const selectedValue = selectedSelect.value;
+            if (!selectedValue || selectedValue === 'custom') return;
+            
+            // Get all exhibit selects (both main and son)
+            const allExhibitSelects = document.querySelectorAll('.exhibit-select, .son-exhibit-select');
+            
+            allExhibitSelects.forEach(select => {
+                if (select !== selectedSelect) {
+                    // Remove the selected option from this dropdown
+                    const optionToRemove = select.querySelector(`option[value="${selectedValue}"]`);
+                    if (optionToRemove) {
+                        optionToRemove.style.display = 'none';
+                        optionToRemove.disabled = true;
+                    }
+                }
+            });
+        }
+        
+        // Function to restore all exhibit options when one is deselected
+        function restoreExhibitOptions() {
+            const allExhibitSelects = document.querySelectorAll('.exhibit-select, .son-exhibit-select');
+            
+            allExhibitSelects.forEach(select => {
+                const options = select.querySelectorAll('option');
+                options.forEach(option => {
+                    option.style.display = '';
+                    option.disabled = false;
+                });
+            });
+        }
+        
+        // Add event listeners to restore options when exhibits are cleared or changed
+        function setupExhibitRestoreEvents() {
+            const allExhibitSelects = document.querySelectorAll('.exhibit-select, .son-exhibit-select');
+            
+            allExhibitSelects.forEach(select => {
+                select.addEventListener('change', function() {
+                    const previousValue = this.dataset.previousValue || '';
+                    const currentValue = this.value;
+                    
+                    // Store the current value for next change
+                    this.dataset.previousValue = currentValue;
+                    
+                    // If value was cleared or changed, restore all options first
+                    if (currentValue === '' || (previousValue && previousValue !== currentValue)) {
+                        // Restore all options
+                        restoreExhibitOptions();
+                        
+                        // Then re-apply current selections from all dropdowns
+                        allExhibitSelects.forEach(otherSelect => {
+                            if (otherSelect.value && otherSelect.value !== 'custom') {
+                                updateExhibitDropdowns(otherSelect);
+                            }
+                        });
+                    }
+                });
+            });
+        }
+        
         setupExhibitSelects();
+        setupExhibitRestoreEvents();
 
         // Function to update legal heirs table numbering (exclude petitioner rows)
         function updateLegalHeirsTableNumbers() {
@@ -933,57 +1065,67 @@
             // Get petitioner information from the block
             const nameInput = petitionerBlock.querySelector('input[placeholder="Enter Petitioner Name"]');
             const addressInput = petitionerBlock.querySelector('textarea[placeholder="Enter Petitioner Address"]');
+            const ageInput = petitionerBlock.querySelector('input[placeholder="Enter Petitioner Age"]');
+            const relationshipSelect = petitionerBlock.querySelector('select:last-of-type'); // The relationship select
             
             const petitionerName = nameInput ? nameInput.value : '';
             const petitionerAddress = addressInput ? addressInput.value : '';
-            console.log('Petitioner', i + 1, 'Name:', petitionerName, 'Address:', petitionerAddress);
-            console.log('Name input found:', !!nameInput, 'Address input found:', !!addressInput);
+            const petitionerAge = ageInput ? ageInput.value : '';
+            const petitionerRelationship = relationshipSelect ? relationshipSelect.value : '';
+            
             
             // Determine reference text based on petitioner number
             let referenceText = '(The Petitioner herein)';
             if (petitionerCount > 1) {
                 referenceText = `(The Petitioner No.${i + 1} herein)`;
             }
-            if (petitionerBlocks.length === 1) {
-                newRow.innerHTML = `
+            
+            // Create the same structure for both single and multiple petitioners
+            newRow.innerHTML = `
                 <td class="border border-white p-2 text-center">${i + 1}</td>
                 <td class="border border-white p-2">
                     <div class="space-y-2">
-                        <input type="text" value="${petitionerName}" placeholder="NAME OF PETITIONER" class="w-full input border p-1 border-white rounded petitioner-name-display">
-                        <input type="text" placeholder="Residing at" class="w-full input border p-1 border-white rounded">
-                        <input type="text" value="${petitionerAddress}" placeholder="ADDRESS OF PETITIONER AS PER TITLE OF PETITIONER" class="w-full input border p-1 border-white rounded petitioner-address-display">
+                     <input type="text" value="${petitionerName}" placeholder="NAME OF PETITIONER" class="w-full input border p-1 border-white rounded petitioner-name-display"> <br>
+                Residing at <input type="text" value="${petitionerAddress}" placeholder="ADDRESS OF PETITIONER AS PER TITLE OF PETITIONER" class="w-full input border p-1 border-white rounded petitioner-address-display">  <br>
+                 <br>
+                        
                         <span class="petitioner-reference-text text-white">${referenceText}</span>
+                        <div class="mt-2">
+                            <button type="button" class="add-sub-heirs-btn bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600" data-heir-id="${i + 1}" data-petitioner="true">
+                                + Add Sub Legal Heirs
+                            </button>
+                        </div>
                     </div>
                 </td>
                 <td class="border border-white p-2">
-                    <span class="text-white">-</span>
+                    <input type="text" value="${petitionerAge}" placeholder="Enter Age" class="w-full input border p-1 border-white rounded petitioner-age-display">
                 </td>
-                                <td class="border border-white p-2">
-                    
+                <td class="border border-white p-2">
+                    <select class="w-full input border p-1 border-white rounded petitioner-relationship-display">
+                        <option value="">Select Relation to Deceased</option>
+                        <option value="Widow" ${petitionerRelationship === 'Widow' ? 'selected' : ''}>Widow</option>
+                        <option value="Widower" ${petitionerRelationship === 'Widower' ? 'selected' : ''}>Widower</option>
+                        <option value="Son" ${petitionerRelationship === 'Son' ? 'selected' : ''}>Son</option>
+                        <option value="Daughter" ${petitionerRelationship === 'Daughter' ? 'selected' : ''}>Daughter</option>
+                        <option value="Mother" ${petitionerRelationship === 'Mother' ? 'selected' : ''}>Mother</option>
+                        <option value="Father" ${petitionerRelationship === 'Father' ? 'selected' : ''}>Father</option>
+                        <option value="Brother" ${petitionerRelationship === 'Brother' ? 'selected' : ''}>Brother</option>
+                        <option value="Sister" ${petitionerRelationship === 'Sister' ? 'selected' : ''}>Sister</option>
+                        <option value="Grandson" ${petitionerRelationship === 'Grandson' ? 'selected' : ''}>Grandson</option>
+                        <option value="Granddaughter" ${petitionerRelationship === 'Granddaughter' ? 'selected' : ''}>Granddaughter</option>
+                        <option value="Uncle" ${petitionerRelationship === 'Uncle' ? 'selected' : ''}>Uncle</option>
+                        <option value="Aunt" ${petitionerRelationship === 'Aunt' ? 'selected' : ''}>Aunt</option>
+                        <option value="Nephew" ${petitionerRelationship === 'Nephew' ? 'selected' : ''}>Nephew</option>
+                        <option value="Niece" ${petitionerRelationship === 'Niece' ? 'selected' : ''}>Niece</option>
+                        <option value="Cousin" ${petitionerRelationship === 'Cousin' ? 'selected' : ''}>Cousin</option>
+                        <option value="Brother in Law" ${petitionerRelationship === 'Brother in Law' ? 'selected' : ''}>Brother in Law</option>
+                        <option value="Sister in Law" ${petitionerRelationship === 'Sister in Law' ? 'selected' : ''}>Sister in Law</option>
+                    </select>
                 </td>
                 <td class="border border-white p-2 text-center">
                     <!-- No action needed for petitioner -->
                 </td>
             `;
-            } if(petitionerBlocks.length > 1) {
-                newRow.innerHTML = `
-                <td class="border border-white p-2 text-center">${i + 1}</td>
-                <td class="border border-white p-2">
-                    <span class="petitioner-reference-text text-white">${referenceText}</span>
-                    </div>
-                </td>
-                <td class="border border-white p-2">
-                    <span class="text-white">-</span>
-                </td>
-                                <td class="border border-white p-2">
-                    
-                </td>
-                <td class="border border-white p-2 text-center">
-                    <!-- No action needed for petitioner -->
-                </td>
-            `;
-            }
-           
             
             tbody.appendChild(newRow);
         }
@@ -994,8 +1136,94 @@
         
         // Set up real-time sync for petitioner data
         setupPetitionerDataSync();
+        
+        // Set up event listeners for petitioner sub-heir buttons
+        setupPetitionerSubHeirButtons();
     }
 
+    function setupPetitionerSubHeirButtons() {
+        console.log('Setting up petitioner sub-heir buttons...');
+        
+        // Use event delegation on the table body
+        const tbody = document.querySelector('#legal-heirs-table tbody');
+        if (!tbody) {
+            console.log('Table body not found for event delegation');
+            return;
+        }
+        
+        // Remove existing delegated event listener
+        tbody.removeEventListener('click', handleDelegatedSubHeirClick);
+        
+        // Add delegated event listener
+        tbody.addEventListener('click', handleDelegatedSubHeirClick);
+        
+        // Also check individual buttons for debugging
+        const petitionerRows = document.querySelectorAll('#legal-heirs-table tbody tr.petitioner-row');
+        console.log('Found petitioner rows:', petitionerRows.length);
+        
+        petitionerRows.forEach((row, index) => {
+            const addSubHeirsBtn = row.querySelector('.add-sub-heirs-btn');
+            console.log(`Petitioner row ${index + 1}: button exists =`, !!addSubHeirsBtn);
+            if (addSubHeirsBtn) {
+                console.log('Button data:', {
+                    heirId: addSubHeirsBtn.dataset.heirId,
+                    petitioner: addSubHeirsBtn.dataset.petitioner,
+                    className: addSubHeirsBtn.className
+                });
+            }
+        });
+    }
+
+    function handleDelegatedSubHeirClick(event) {
+        console.log('Delegated click handler called, target:', event.target);
+        // Check if the clicked element is an add-sub-heirs-btn
+        if (event.target.classList.contains('add-sub-heirs-btn')) {
+            console.log('Sub-heir button clicked via delegation:', event.target);
+            
+            const heirId = event.target.dataset.heirId;
+            const isPetitioner = event.target.dataset.petitioner === 'true';
+            
+            console.log('Button data:', {
+                heirId: heirId,
+                isPetitioner: isPetitioner,
+                target: event.target
+            });
+            
+            if (heirId) {
+                addSubLegalHeirsForHeir(heirId, isPetitioner);
+            } else {
+                console.error('No heir ID found on button');
+            }
+        }
+    }
+
+    function handlePetitionerSubHeirClick(event) {
+        console.log('Petitioner sub-heir button clicked');
+        const heirId = event.target.dataset.heirId;
+        const isPetitioner = event.target.dataset.petitioner === 'true';
+        console.log('Heir ID:', heirId, 'Is Petitioner:', isPetitioner);
+        addSubLegalHeirsForHeir(heirId, isPetitioner);
+    }
+
+// select the unique select exibit 
+const select = document.querySelectorAll('[data-unique="true"]');
+function updateUniqueSelects() {
+    const selectedValues = Array.from(select).map((s)=>s.value).filter(value => value !== '');
+    select.forEach((s) => {
+        s.querySelectorAll('option').forEach((option) => {
+            if (selectedValues.includes(option.value) && option.value !== s.value) {
+                option.disabled = true;
+                option.style.display = 'none';
+            } else {
+                option.disabled = false;
+                option.style.display = '';
+            }
+        });
+    });
+}
+select.forEach(select => {
+    select.addEventListener("change", updateUniqueSelects);
+  });
     function setupPetitionerDataSync() {
         // Set up event listeners for petitioner inputs to sync with legal heirs table
         const petitionerBlocks = document.querySelectorAll('.petitioner_block');
@@ -1003,6 +1231,8 @@
         petitionerBlocks.forEach((block, index) => {
             const nameInput = block.querySelector('input[placeholder="Enter Petitioner Name"]');
             const addressInput = block.querySelector('textarea[placeholder="Enter Petitioner Address"]');
+            const ageInput = block.querySelector('input[placeholder="Enter Petitioner Age"]');
+            const relationshipSelect = block.querySelector('select:last-of-type'); // The relationship select
             
             if (nameInput) {
                 nameInput.addEventListener('input', function() {
@@ -1013,6 +1243,18 @@
             if (addressInput) {
                 addressInput.addEventListener('input', function() {
                     updatePetitionerInLegalHeirsTable(index, 'address', this.value);
+                });
+            }
+            
+            if (ageInput) {
+                ageInput.addEventListener('input', function() {
+                    updatePetitionerInLegalHeirsTable(index, 'age', this.value);
+                });
+            }
+            
+            if (relationshipSelect) {
+                relationshipSelect.addEventListener('change', function() {
+                    updatePetitionerInLegalHeirsTable(index, 'relationship', this.value);
                 });
             }
         });
@@ -1035,6 +1277,16 @@
                 const addressInput = targetRow.querySelector('.petitioner-address-display');
                 if (addressInput) {
                     addressInput.value = value;
+                }
+            } else if (field === 'age') {
+                const ageInput = targetRow.querySelector('.petitioner-age-display');
+                if (ageInput) {
+                    ageInput.value = value;
+                }
+            } else if (field === 'relationship') {
+                const relationshipSelect = targetRow.querySelector('.petitioner-relationship-display');
+                if (relationshipSelect) {
+                    relationshipSelect.value = value;
                 }
             }
         }
@@ -1067,6 +1319,49 @@
     window.refreshPetitionerData = function() {
         console.log('Refreshing petitioner data in legal heirs table...');
         initializeLegalHeirsTable();
+    };
+
+    // Debug function to check petitioner buttons
+    window.debugPetitionerButtons = function() {
+        console.log('=== DEBUGGING PETITIONER BUTTONS ===');
+        const petitionerRows = document.querySelectorAll('#legal-heirs-table tbody tr.petitioner-row');
+        console.log('Found petitioner rows:', petitionerRows.length);
+        
+        petitionerRows.forEach((row, index) => {
+            const addSubHeirsBtn = row.querySelector('.add-sub-heirs-btn');
+            console.log(`Petitioner row ${index + 1}:`, {
+                row: row,
+                button: addSubHeirsBtn,
+                buttonExists: !!addSubHeirsBtn,
+                heirId: addSubHeirsBtn ? addSubHeirsBtn.dataset.heirId : 'N/A',
+                isPetitioner: addSubHeirsBtn ? addSubHeirsBtn.dataset.petitioner : 'N/A'
+            });
+        });
+        console.log('=== END DEBUG ===');
+    };
+
+    // Debug function to manually trigger button click
+    window.testPetitionerButton = function(petitionerIndex = 0) {
+        console.log('=== TESTING PETITIONER BUTTON ===');
+        const petitionerRows = document.querySelectorAll('#legal-heirs-table tbody tr.petitioner-row');
+        if (petitionerRows[petitionerIndex]) {
+            const button = petitionerRows[petitionerIndex].querySelector('.add-sub-heirs-btn');
+            if (button) {
+                console.log('Manually clicking button:', button);
+                button.click();
+            } else {
+                console.log('Button not found');
+            }
+        } else {
+            console.log('Petitioner row not found at index:', petitionerIndex);
+        }
+    };
+
+    // Debug function to manually test sub-heir creation
+    window.testSubHeirCreation = function(heirId = 1, isPetitioner = true) {
+        console.log('=== TESTING SUB-HEIR CREATION ===');
+        console.log('Heir ID:', heirId, 'Is Petitioner:', isPetitioner);
+        addSubLegalHeirsForHeir(heirId, isPetitioner);
     };
 
     // Debug function to check current state
@@ -1134,13 +1429,19 @@
                 <div class="space-y-2">
                     <input type="text" placeholder="LEGAL HEIR FULL NAME" class="w-full input border p-1 border-white rounded legal-heir-name">
                     <div class="flex items-center gap-4 mt-2">
-                        <label class="text-white text-sm">Alive or Died:</label>
+                        
                         <label class="text-white text-sm">
                             <input type="radio" name="alive_died_${legalHeirCounter}" value="alive" class="mr-1 alive-died-radio"> Alive
                         </label>
                         <label class="text-white text-sm">
                             <input type="radio" name="alive_died_${legalHeirCounter}" value="died" class="mr-1 alive-died-radio"> Died
                         </label>
+                    </div>
+                    <div class="alive-details hidden" id="alive_details_${legalHeirCounter}">
+                        <div class="mt-2">
+                            <label class="text-white text-sm">Address:</label>
+                            <input type="text" placeholder="Enter Address" class="w-full input border p-1 border-white rounded mt-1 legal-heir-address">
+                        </div>
                     </div>
                     <div class="died-details hidden" id="died_details_${legalHeirCounter}">
                         <div class="flex items-center gap-4 mt-2">
@@ -1153,7 +1454,7 @@
                         </div>
                         <div class="mt-2">
                             <label class="text-white text-sm">Died on:</label>
-                            <input type="date" class="border p-1 border-white rounded ml-2 died-date">
+                            <input type="date" class="border p-1 border-white rounded ml-2 died-date" style="background-color: #334155; color: white;">
                         </div>
                         <button type="button" class="add-sub-heirs-btn bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600 mt-2" data-heir-id="${legalHeirCounter}">
                             + Add Sub Legal Heirs
@@ -1162,16 +1463,39 @@
                 </div>
             </td>
             <td class="border border-white p-2">
-                <input type="number" placeholder="Age of Legal Heir" class="w-full border p-1 border-white input rounded">
+                <div class="age-field-container">
+                    <input type="number" placeholder="Age of Legal Heir" class="w-full border p-1 border-white input rounded age-input" id="age_input_${legalHeirCounter}">
+                    <span class="age-dots text-white text-lg hidden" id="age_dots_${legalHeirCounter}">...</span>
+                </div>
             </td>
             <td class="border border-white p-2">
-                <input type="text" placeholder="Relation with deceased" class="w-full border p-1 border-white input rounded">
+                <select class="border p-1 mt-2 border-black bg-[#334155] text-white rounded w-full">
+                                        <option value="">Select Relation to Deceased</option>
+                                        <option value="Widow">Widow</option>
+                                        <option value="Widower">Widower</option>
+                                        <option value="Son">Son</option>
+                                        <option value="Daughter">Daughter</option>
+                                        <option value="Mother">Mother</option>
+                                        <option value="Father">Father</option>
+                                        <option value="Brother">Brother</option>
+                                        <option value="Sister">Sister</option>
+                                        <option value="Grandson">Grandson</option>
+                                        <option value="Granddaughter">Granddaughter</option>
+                                        <option value="Uncle">Uncle</option>
+                                        <option value="Aunt">Aunt</option>
+                                        <option value="Nephew">Nephew</option>
+                                        <option value="Niece">Niece</option>
+                                        <option value="Cousin">Cousin</option>
+                                        <option value="Other"> Brother in Law</option>
+                                        <option value="Other"> Sister in Law</option>
+                                    </select>
             </td>
             <td class="border border-white p-2 text-center">
                 <button type="button" class="remove-row-btn bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600">Remove</button>
             </td>
         `;
         
+        // For main legal heirs, append to the end is correct behavior
         tbody.appendChild(newRow);
         subHeirCounter = 0; // Reset sub-heir counter when adding new main heir
         
@@ -1193,10 +1517,22 @@
             radio.addEventListener('change', function() {
                 const heirId = row.dataset.heirId;
                 const diedDetails = document.getElementById(`died_details_${heirId}`);
+                const aliveDetails = document.getElementById(`alive_details_${heirId}`);
+                const ageInput = document.getElementById(`age_input_${heirId}`);
+                const ageDots = document.getElementById(`age_dots_${heirId}`);
+                
                 if (this.value === 'died') {
                     diedDetails.classList.remove('hidden');
+                    aliveDetails.classList.add('hidden');
+                    // Hide age input and show dots for dead person
+                    if (ageInput) ageInput.classList.add('hidden');
+                    if (ageDots) ageDots.classList.remove('hidden');
                 } else {
                     diedDetails.classList.add('hidden');
+                    aliveDetails.classList.remove('hidden');
+                    // Show age input and hide dots for alive person
+                    if (ageInput) ageInput.classList.remove('hidden');
+                    if (ageDots) ageDots.classList.add('hidden');
                 }
             });
         });
@@ -1206,7 +1542,8 @@
         if (addSubHeirsBtn) {
             addSubHeirsBtn.addEventListener('click', function() {
                 const heirId = this.dataset.heirId;
-                addSubLegalHeirsForHeir(heirId);
+                const isPetitioner = this.dataset.petitioner === 'true';
+                addSubLegalHeirsForHeir(heirId, isPetitioner);
             });
         }
     }
@@ -1257,30 +1594,55 @@
         });
     }
 
-    function addSubLegalHeirsForHeir(heirId) {
-        console.log('Adding sub legal heirs for heir ID:', heirId);
+    function addSubLegalHeirsForHeir(heirId, isPetitioner = false) {
+        console.log('Adding sub legal heirs for heir ID:', heirId, 'isPetitioner:', isPetitioner);
         const tbody = document.querySelector('#legal-heirs-table tbody');
         if (!tbody) return;
         
         // Get the legal heir name for reference
-        const heirRow = document.querySelector(`tr[data-heir-id="${heirId}"]`);
-        const heirNameInput = heirRow.querySelector('.legal-heir-name');
-        const heirName = heirNameInput ? heirNameInput.value : `Heir ${heirId}`;
+        let heirRow, heirNameInput, heirName;
+        if (isPetitioner) {
+            // For petitioners, find the petitioner row by checking the first cell content
+            const petitionerRows = tbody.querySelectorAll('tr.petitioner-row');
+            console.log('Found petitioner rows:', petitionerRows.length);
+            
+            // Find the petitioner row with the matching number
+            heirRow = null;
+            petitionerRows.forEach((row, index) => {
+                const firstCell = row.querySelector('td:first-child');
+                if (firstCell && firstCell.textContent.trim() === heirId.toString()) {
+                    heirRow = row;
+                    console.log('Found petitioner row for heir ID:', heirId, 'at index:', index);
+                }
+            });
+            
+            heirNameInput = heirRow ? heirRow.querySelector('.petitioner-name-display') : null;
+            heirName = heirNameInput ? heirNameInput.value : `Petitioner ${heirId}`;
+            console.log('Petitioner row found:', !!heirRow, 'Name:', heirName);
+        } else {
+            // For regular legal heirs
+            heirRow = document.querySelector(`tr[data-heir-id="${heirId}"]`);
+            heirNameInput = heirRow ? heirRow.querySelector('.legal-heir-name') : null;
+            heirName = heirNameInput ? heirNameInput.value : `Heir ${heirId}`;
+        }
         
         // Create sub-heir row
         const newRow = document.createElement('tr');
         newRow.className = 'sub-heir-row';
         newRow.dataset.parentHeirId = heirId;
+        newRow.dataset.isPetitioner = isPetitioner;
         
-        // Generate sub-heir number (2A, 2B, etc.)
+        // Generate sub-heir number (2(a), 2(b), etc.)
         const existingSubHeirs = tbody.querySelectorAll(`tr[data-parent-heir-id="${heirId}"]`);
         const subHeirLetter = String.fromCharCode(97 + existingSubHeirs.length); // a, b, c, etc.
-        const subHeirNumber = `${heirId}${subHeirLetter.toUpperCase()}`;
+        const subHeirNumber = `${heirId}(${subHeirLetter})`;
         
         newRow.innerHTML = `
             <td class="border border-white p-2 text-center">${subHeirNumber}</td>
             <td class="border border-white p-2">
                 <div class="space-y-2">
+                
+                <br>
                     <input type="text" placeholder="SUB LEGAL HEIR FULL NAME" class="w-full input border p-1 border-white rounded sub-heir-name">
                     <div class="flex items-center gap-4 mt-2">
                         <label class="text-white text-sm">Alive or Died:</label>
@@ -1302,7 +1664,10 @@
                         </div>
                         <div class="mt-2">
                             <label class="text-white text-sm">Died on:</label>
-                            <input type="date" class="border p-1 border-white rounded ml-2 sub-died-date">
+                            <input type="date" class="border text-white p-1  bg-[#334155] text-black
+                              rounded ml-2 " stlye="background: #334155; 
+    color: white;
+">
                         </div>
                         <button type="button" class="add-sub-sub-heirs-btn bg-green-500 text-white px-2 py-1 rounded text-sm hover:bg-green-600 mt-2" data-parent-heir-id="${heirId}" data-sub-heir-id="${subHeirLetter}">
                             + Add Sub-Sub Legal Heirs
@@ -1321,10 +1686,40 @@
             </td>
         `;
         
-        tbody.appendChild(newRow);
+        // Insert the sub-heir row after the parent row (and any existing sub-heirs)
+        let insertAfterRow = heirRow;
+        
+        if (isPetitioner) {
+            // For petitioners, find the last sub-heir of this petitioner to insert after
+            const existingSubHeirs = tbody.querySelectorAll(`tr[data-parent-heir-id="${heirId}"][data-is-petitioner="true"]`);
+            if (existingSubHeirs.length > 0) {
+                insertAfterRow = existingSubHeirs[existingSubHeirs.length - 1];
+            }
+        } else {
+            // For regular legal heirs, find the last sub-heir of this heir
+            const existingSubHeirs = tbody.querySelectorAll(`tr[data-parent-heir-id="${heirId}"]`);
+            if (existingSubHeirs.length > 0) {
+                insertAfterRow = existingSubHeirs[existingSubHeirs.length - 1];
+            }
+        }
+        
+        console.log('Inserting new sub-heir row after:', insertAfterRow);
+        
+        // Insert the new row after the determined position
+        if (insertAfterRow && insertAfterRow.nextSibling) {
+            tbody.insertBefore(newRow, insertAfterRow.nextSibling);
+        } else if (insertAfterRow) {
+            // If no next sibling, append after the parent
+            insertAfterRow.parentNode.insertBefore(newRow, insertAfterRow.nextElementSibling);
+        } else {
+            // Fallback: append to end
+            tbody.appendChild(newRow);
+        }
+        console.log('Sub-heir row added successfully');
         
         // Add event listeners for sub-heir row
         setupSubHeirRowEvents(newRow);
+        console.log('Sub-heir row events set up');
     }
 
     function setupSubHeirRowEvents(row) {
@@ -1356,13 +1751,14 @@
             addSubSubHeirsBtn.addEventListener('click', function() {
                 const parentHeirId = this.dataset.parentHeirId;
                 const subHeirId = this.dataset.subHeirId;
-                addSubSubLegalHeirsForHeir(parentHeirId, subHeirId);
+                const isPetitioner = row.dataset.isPetitioner === 'true';
+                addSubSubLegalHeirsForHeir(parentHeirId, subHeirId, isPetitioner);
             });
         }
     }
 
-    function addSubSubLegalHeirsForHeir(parentHeirId, subHeirId) {
-        console.log('Adding sub-sub legal heirs for parent heir ID:', parentHeirId, 'sub heir ID:', subHeirId);
+    function addSubSubLegalHeirsForHeir(parentHeirId, subHeirId, isPetitioner = false) {
+        console.log('Adding sub-sub legal heirs for parent heir ID:', parentHeirId, 'sub heir ID:', subHeirId, 'isPetitioner:', isPetitioner);
         const tbody = document.querySelector('#legal-heirs-table tbody');
         if (!tbody) return;
         
@@ -1371,11 +1767,13 @@
         newRow.className = 'sub-sub-heir-row';
         newRow.dataset.parentHeirId = parentHeirId;
         newRow.dataset.subHeirId = subHeirId;
+        newRow.dataset.isPetitioner = isPetitioner;
         
-        // Generate sub-sub-heir number (2A1, 2A2, etc.)
+        // Generate sub-sub-heir number (2(a)(i), 2(a)(ii), etc.)
         const existingSubSubHeirs = tbody.querySelectorAll(`tr[data-parent-heir-id="${parentHeirId}"][data-sub-heir-id="${subHeirId}"]`);
         const subSubHeirNumber = existingSubSubHeirs.length + 1;
-        const fullSubSubHeirNumber = `${parentHeirId}${subHeirId.toUpperCase()}${subSubHeirNumber}`;
+        const romanNumeral = numberToRoman(subSubHeirNumber);
+        const fullSubSubHeirNumber = `${parentHeirId}(${subHeirId})(${romanNumeral})`;
         
         newRow.innerHTML = `
             <td class="border border-white p-2 text-center">${fullSubSubHeirNumber}</td>
@@ -1418,7 +1816,35 @@
             </td>
         `;
         
-        tbody.appendChild(newRow);
+        // Insert the sub-sub-heir row after the parent sub-heir row (and any existing sub-sub-heirs)
+        let insertAfterRow = null;
+        
+        // Find the parent sub-heir row
+        const subHeirRows = tbody.querySelectorAll(`tr[data-parent-heir-id="${parentHeirId}"].sub-heir-row`);
+        subHeirRows.forEach(row => {
+            const button = row.querySelector('.add-sub-sub-heirs-btn');
+            if (button && button.dataset.subHeirId === subHeirId) {
+                insertAfterRow = row;
+            }
+        });
+        
+        if (insertAfterRow) {
+            // Find the last sub-sub-heir of this sub-heir to insert after
+            const existingSubSubHeirs = tbody.querySelectorAll(`tr[data-parent-heir-id="${parentHeirId}"][data-sub-heir-id="${subHeirId}"].sub-sub-heir-row`);
+            if (existingSubSubHeirs.length > 0) {
+                insertAfterRow = existingSubSubHeirs[existingSubSubHeirs.length - 1];
+            }
+            
+            // Insert the new row after the determined position
+            if (insertAfterRow.nextElementSibling) {
+                tbody.insertBefore(newRow, insertAfterRow.nextElementSibling);
+            } else {
+                tbody.appendChild(newRow);
+            }
+        } else {
+            // Fallback: append to end
+            tbody.appendChild(newRow);
+        }
         
         // Add event listeners for sub-sub-heir row
         setupSubSubHeirRowEvents(newRow);
@@ -1438,7 +1864,9 @@
             radio.addEventListener('change', function() {
                 const parentHeirId = row.dataset.parentHeirId;
                 const subHeirId = row.dataset.subHeirId;
-                const subSubHeirNumber = row.querySelector('td:first-child').textContent.replace(/[A-Z]/g, '').replace(/[a-z]/g, '');
+                const cellText = row.querySelector('td:first-child').textContent;
+                const match = cellText.match(/^(\d+)\(([a-z])\)\(([ivx]+)\)$/);
+                const subSubHeirNumber = match ? match[3] : '1';
                 const diedDetails = document.getElementById(`sub_sub_died_details_${parentHeirId}_${subHeirId}_${subSubHeirNumber}`);
                 if (this.value === 'died') {
                     diedDetails.classList.remove('hidden');
@@ -1474,30 +1902,42 @@
         
         // Update other legal heir rows (non-petitioner rows)
         let mainHeirCount = petitionerRows.length;
-        let subHeirCount = 0;
         let currentMainHeir = mainHeirCount;
+        let subHeirCounts = {}; // Track sub-heir counts for each main heir
 
         otherRows.forEach((row) => {
             const firstCell = row.querySelector('td:first-child');
             const currentText = firstCell.textContent.trim();
             
-            // Check if this is a main heir (just a number) or sub-heir (number with letter)
+            // Check if this is a main heir (just a number)
             if (/^\d+$/.test(currentText)) {
                 // This is a main heir
                 mainHeirCount++;
                 currentMainHeir = mainHeirCount;
-                subHeirCount = 0;
+                subHeirCounts[currentMainHeir] = 0;
                 firstCell.textContent = mainHeirCount;
             } else if (currentText.includes('(') && currentText.includes(')')) {
-                // This is a sub-heir
-                subHeirCount++;
-                firstCell.textContent = `${currentMainHeir}(${String.fromCharCode(96 + subHeirCount)})`;
+                // This is a sub-heir or sub-sub-heir
+                const match = currentText.match(/^(\d+)\(([a-z])\)(?:\(([ivx]+)\))?$/);
+                if (match) {
+                    const mainHeirNum = parseInt(match[1]);
+                    const subHeirLetter = match[2];
+                    const subSubHeirRoman = match[3];
+                    
+                    if (subSubHeirRoman) {
+                        // This is a sub-sub-heir: 2(a)(i)
+                        firstCell.textContent = `${mainHeirNum}(${subHeirLetter})(${subSubHeirRoman})`;
+                    } else {
+                        // This is a sub-heir: 2(a)
+                        firstCell.textContent = `${mainHeirNum}(${subHeirLetter})`;
+                    }
+                }
             }
         });
 
         // Update the global counters
         legalHeirCounter = mainHeirCount;
-        subHeirCounter = subHeirCount;
+        // subHeirCounter is already properly managed globally
     }
 
     // Sons functionality
@@ -1545,6 +1985,13 @@
 
         // Setup exhibit functionality for the new son entry
         setupExhibitSelects();
+        setupExhibitRestoreEvents();
+        
+        // Initialize previous value tracking for the new son's exhibit select
+        const newSonExhibitSelect = newSonEntry.querySelector('.son-exhibit-select');
+        if (newSonExhibitSelect) {
+            newSonExhibitSelect.dataset.previousValue = '';
+        }
     }
 
     function setupSonRemoveButtons() {
@@ -1653,3 +2100,323 @@
         }
     }
 
+function setupPage3Events() {
+    const show_else_where_in_india = document.getElementById('show_it-when-elsewhereinindia');
+    const deceased_property_place = document.getElementById('deceased_property_place');
+    
+    deceased_property_place.addEventListener('change',()=>{
+        if(deceased_property_place.value === 'State of Maharashtra and elsewhere in India.') {
+            show_else_where_in_india.classList.remove('hidden');
+        } else {
+            show_else_where_in_india.classList.add('hidden');
+        }
+    })
+    const schedule_ii_para = document.getElementById('schedule_ii_para');
+    const show_it_when_schedule_ii_para = document.getElementById('show_it-when-schedule-ii-para');
+    schedule_ii_para.addEventListener('change',()=>{
+        if(schedule_ii_para.value === 'Yes') {
+            show_it_when_schedule_ii_para.classList.remove('hidden');
+        } else {
+            show_it_when_schedule_ii_para.classList.add('hidden');
+        }
+    })
+
+    // Paragraph button functionality
+    setupParagraphButtons();
+}
+
+// Global variable to track paragraph numbers
+let currentParagraphNumber = 8; // Starting after existing paragraphs
+
+function setupParagraphButtons() {
+    const addTenantedParaBtn = document.getElementById('add-tenanted-para');
+    const addJointDeceasedParaBtn = document.getElementById('add-joint-deceased-para');
+    const addTwoNameParaBtn = document.getElementById('add-two-name-para');
+    const addAdditionalParaBtn = document.getElementById('add-additional-para');
+    const addDelayParaBtn = document.getElementById('add-delay-para');
+
+    if (addTenantedParaBtn) {
+        addTenantedParaBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            addParagraph('tenanted');
+        });
+    }
+    if (addJointDeceasedParaBtn) {
+        addJointDeceasedParaBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            addParagraph('joint-deceased');
+        });
+    }
+    if (addTwoNameParaBtn) {
+        addTwoNameParaBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            addParagraph('two-name');
+        });
+    }
+    if (addAdditionalParaBtn) {
+        addAdditionalParaBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            addParagraph('additional');
+        });
+    }
+    if (addDelayParaBtn) {
+        addDelayParaBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            addParagraph('delay');
+        });
+    }
+}
+
+function addParagraph(type) {
+    const table = document.querySelector('#page3 table tbody');
+    if (!table) return;
+
+    // Find all existing paragraphs to determine the next number
+    const existingParagraphs = table.querySelectorAll('tr');
+    let nextParagraphNumber = 8; // Start after existing paragraphs
+    
+    // Check if there are already added paragraphs and find the highest number
+    existingParagraphs.forEach(row => {
+        const firstCell = row.querySelector('td:first-child');
+        if (firstCell) {
+            const cellText = firstCell.textContent.trim();
+            const match = cellText.match(/^(\d+)\.$/);
+            if (match) {
+                const paraNumber = parseInt(match[1]);
+                if (paraNumber >= nextParagraphNumber) {
+                    nextParagraphNumber = paraNumber + 1;
+                }
+            }
+        }
+    });
+    
+    currentParagraphNumber = nextParagraphNumber;
+    
+    // Find the paragraph 7 row to insert after
+    const paragraph7Row = table.querySelector('tr:nth-child(2)'); // Paragraph 7 is the second row
+    if (!paragraph7Row) return;
+
+    const newRow = document.createElement('tr');
+    newRow.className = 'py-5 border-t border-white';
+    newRow.dataset.paragraphType = type;
+    newRow.dataset.paragraphNumber = currentParagraphNumber;
+
+    // Get paragraph content based on type
+    const paragraphContent = getParagraphContent(type);
+
+    newRow.innerHTML = `
+        <td class="text-center py-5 border-r border-white w-[10%]">
+            ${currentParagraphNumber}.
+        </td>
+        <td colspan="2" class="py-5">
+            <p>${paragraphContent}</p>
+        </td>
+        <td class="text-center py-5 border-l border-white w-[10%]">
+            <button type="button" class="remove-para-btn bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700" data-paragraph-number="${currentParagraphNumber}">
+                Remove
+            </button>
+        </td>
+    `;
+
+    // Insert after paragraph 7, but before any existing added paragraphs
+    let insertAfterRow = paragraph7Row;
+    
+    // Find the last paragraph that comes after paragraph 7
+    const allRows = Array.from(table.querySelectorAll('tr'));
+    const paragraph7Index = allRows.indexOf(paragraph7Row);
+    
+    // Look for the last paragraph after paragraph 7
+    for (let i = paragraph7Index + 1; i < allRows.length; i++) {
+        const row = allRows[i];
+        const firstCell = row.querySelector('td:first-child');
+        if (firstCell) {
+            const cellText = firstCell.textContent.trim();
+            const match = cellText.match(/^(\d+)\.$/);
+            if (match) {
+                const paraNumber = parseInt(match[1]);
+                if (paraNumber >= 8) {
+                    insertAfterRow = row;
+                }
+            }
+        }
+    }
+    
+    // Insert the new row after the determined position
+    insertAfterRow.parentNode.insertBefore(newRow, insertAfterRow.nextSibling);
+    
+    // Set up event listeners for the new paragraph
+    setupParagraphEvents(newRow, type, currentParagraphNumber);
+    
+    console.log(`Added ${type} paragraph with number ${currentParagraphNumber}`);
+}
+
+function setupParagraphEvents(row, type, paragraphNumber) {
+    // Set up remove button functionality for all paragraph types
+    const removeBtn = row.querySelector('.remove-para-btn');
+    if (removeBtn) {
+        removeBtn.addEventListener('click', function() {
+            removeParagraph(row, paragraphNumber);
+        });
+    }
+    
+    if (type === 'tenanted') {
+        // Set up receipt radio button functionality
+        const receiptRadios = row.querySelectorAll('.receipt-radio');
+        const receiptYesDiv = row.querySelector(`#receipt_yes_${paragraphNumber}`);
+        const receiptNoDiv = row.querySelector(`#receipt_no_${paragraphNumber}`);
+        
+        receiptRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.value === 'yes') {
+                    receiptYesDiv.classList.remove('hidden');
+                    receiptNoDiv.classList.add('hidden');
+                } else {
+                    receiptYesDiv.classList.add('hidden');
+                    receiptNoDiv.classList.remove('hidden');
+                }
+            });
+        });
+        
+        // Set up exhibit select functionality
+        const exhibitSelect = row.querySelector('.exhibit-select');
+        const customExhibitInput = row.querySelector('.custom-exhibit-input');
+        
+        if (exhibitSelect && customExhibitInput) {
+            exhibitSelect.addEventListener('change', function() {
+                if (this.value === 'custom') {
+                    customExhibitInput.classList.remove('hidden');
+                } else {
+                    customExhibitInput.classList.add('hidden');
+                }
+            });
+        }
+    }
+}
+
+function removeParagraph(row, paragraphNumber) {
+    // Confirm before removing
+    if (confirm(`Are you sure you want to remove paragraph ${paragraphNumber}?`)) {
+        console.log(`Removing paragraph ${paragraphNumber}`);
+        
+        // Remove the row from the table
+        row.remove();
+        
+        // Renumber all paragraphs after removal
+        renumberParagraphs();
+        
+        console.log(`Paragraph ${paragraphNumber} removed successfully`);
+    }
+}
+
+function renumberParagraphs() {
+    const table = document.querySelector('#page3 table tbody');
+    if (!table) return;
+    
+    const allRows = table.querySelectorAll('tr');
+    let dynamicParagraphNumber = 8; // Start numbering dynamic paragraphs from 9
+    
+    allRows.forEach(row => {
+        const firstCell = row.querySelector('td:first-child');
+        if (firstCell && row.dataset.paragraphType) {
+            // Only renumber dynamically added paragraphs (those with paragraphType data attribute)
+            dynamicParagraphNumber++;
+            firstCell.textContent = `${dynamicParagraphNumber}.`;
+            
+            // Update data attributes and IDs for dynamic paragraphs
+            row.dataset.paragraphNumber = dynamicParagraphNumber;
+            
+            // Update radio button names and IDs for tenanted paragraphs
+            if (row.dataset.paragraphType === 'tenanted') {
+                const receiptRadios = row.querySelectorAll('.receipt-radio');
+                const receiptYesDiv = row.querySelector('[id^="receipt_yes_"]');
+                const receiptNoDiv = row.querySelector('[id^="receipt_no_"]');
+                
+                receiptRadios.forEach(radio => {
+                    radio.name = `receipt_available_${dynamicParagraphNumber}`;
+                });
+                
+                if (receiptYesDiv) {
+                    receiptYesDiv.id = `receipt_yes_${dynamicParagraphNumber}`;
+                }
+                
+                if (receiptNoDiv) {
+                    receiptNoDiv.id = `receipt_no_${dynamicParagraphNumber}`;
+                }
+            }
+            
+            // Update remove button data attribute
+            const removeBtn = row.querySelector('.remove-para-btn');
+            if (removeBtn) {
+                removeBtn.dataset.paragraphNumber = dynamicParagraphNumber;
+            }
+        }
+        // Original paragraphs (6, 7, 8) are left unchanged
+    });
+    
+    console.log('Dynamic paragraph renumbering complete');
+}
+
+function getParagraphContent(type) {
+    switch(type) {
+        case 'tenanted':
+            return `That the deceased was the tenant in respect of Chawl No. <input type="text" placeholder="Chawl No." class="border p-1 mt-2 input border-white rounded w-20"> Room No. <input type="text" placeholder="Room No." class="border p-1 mt-2 input border-white rounded w-20">, Group No. <input type="text" placeholder="Group No." class="border p-1 mt-2 input border-white rounded w-20">, Mumbai – <input type="text" placeholder="Enter address of property" class="border p-1 mt-2 input border-white rounded w-60">, and monthly rent was of Rs.<input type="text" placeholder="Amount" class="border p-1 mt-2 input border-white rounded w-24">/-, hereto annexed and marked as Exhibit-"<select class="border p-1 mt-2 input border-white rounded exhibit-select">
+                <option value="">Select Exhibit</option>
+                <option value="A">A</option>
+                <option value="A-1">A-1</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+                <option value="E">E</option>
+                <option value="F">F</option>
+                <option value="G">G</option>
+                <option value="H">H</option>
+                <option value="I">I</option>
+                <option value="J">J</option>
+                <option value="custom">Unique</option>
+            </select><input type="text" placeholder="Custom Exhibit" class="border p-1 mt-2 input border-white rounded w-16 hidden custom-exhibit-input">" is a copy of rent receipt issued by the MHADA 
+            <div class="mt-3">
+                <label class="text-white font-semibold">Receipt Available:</label>
+                <label class="text-white ml-3">
+                    <input type="radio" name="receipt_available_${currentParagraphNumber}" value="yes" class="mr-1 receipt-radio"> Yes
+                </label>
+                <label class="text-white ml-3">
+                    <input type="radio" name="receipt_available_${currentParagraphNumber}" value="no" class="mr-1 receipt-radio"> No
+                </label>
+            </div>
+            <div class="receipt-yes hidden mt-3" id="receipt_yes_${currentParagraphNumber}">
+                The said rent receipt is the last rent receipt available which is issued by <input type="text" placeholder="Enter issuer name" class="border p-1 mt-2 input border-white rounded w-40"> and thereafter <input type="text" placeholder="Enter who stopped" class="border p-1 mt-2 input border-white rounded w-40"> stopped accepting and issuing rent receipt.
+            </div>
+            <div class="receipt-no hidden mt-3" id="receipt_no_${currentParagraphNumber}">
+                <input type="text" placeholder="Enter issuer name" class="border p-1 mt-2 input border-white rounded w-40"> and thereafter <input type="text" placeholder="Enter who stopped" class="border p-1 mt-2 input border-white rounded w-40"> stopped accepting and issuing rent receipt.
+            </div>`;
+        
+        case 'joint-deceased':
+            return `That the Petitioner has filed the above Petition in the names of two deceased individuals, who were husband and wife. The Petitioner is the daughter of both the deceased. Certain properties mentioned in Schedule No. I are standing in the names of both the deceased; therefore, the Petitioner has filed the above Petition in their names.`;
+        
+        case 'two-name':
+            return `I state that in the title of the petition, the name of the deceased is mentioned as <input type="text" placeholder="Enter who stopped" class="border p-1 mt-2 input border-white rounded w-40">. During his lifetime, the deceased changed his name from <input type="text" placeholder="Enter who stopped" class="border p-1 mt-2 input border-white rounded w-40">  as recorded in the Government Official Gazette dated <input type="date" placeholder="Enter date" class="border p-1 mt-2 input border-white rounded w-40">. A copy of the said Government Official Gazette is annexed hereto and marked as Exhibit <select class="border p-1 mt-2 input border-white rounded exhibit-select">
+                <option value="">Select Exhibit</option>
+                <option value="A">A</option>
+                <option value="A-1">A-1</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+                <option value="E">E</option>
+                <option value="F">F</option>
+                <option value="G">G</option>
+                <option value="H">H</option>
+                <option value="I">I</option>
+                <option value="J">J</option>
+                <option value="custom">Unique</option>
+            </select> I further state that all the names mentioned above refer to one and the same person, i.e., the deceased`;
+        
+        case 'additional':
+            return `That the Petitioner has made due and diligent search for any other legal heirs or next of kin of the deceased but none have been found except those mentioned hereinabove.`;
+        
+        case 'delay':
+            return `That the delay in making the present Petition is on account of the facts that Petitioner is ignorant and unaware of obtaining any legal representation. Now the Petitioner/s has/have been recently advised to obtain a legal representation. Hence this Hon’ble Court in the interest of justice may condone the delay. `;
+        
+        default:
+            return `That the Petitioner hereby declares that all the statements made herein are true to the best of his/her knowledge, information and belief.`;
+    }
+}

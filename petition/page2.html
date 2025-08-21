@@ -51,7 +51,7 @@
                             <option value="4">DRIVING LICENCE</option>
                             <option value="5">PASSPORT</option>
                             <option value="6">OTHERS</option>
-                            <option value="7">NO</option>
+                            <option value="7">NO ID PROOF</option>
                         </select> 
                         of Deceased.
 
@@ -72,9 +72,10 @@
                             <button class="bg-red-500 text-white my-2 p-1 rounded mx-1 remove-deceased-address">Remove Address</button>
                         </span> and/or left property within Greater Mumbai and in the <select name="deceased_property_place"
                         class="border input p-1 mt-2 border-white rounded"
+                        id="deceased_property_place"
                         >
                               <option value="State of Maharashtra">State of Maharashtra</option>
-                              <option value="State of Maharashtra and elsewhere in India.">State of Maharashtra elsewhere in India.</option>
+                              <option value="State of Maharashtra and elsewhere in India.">State of Maharashtra and elsewhere in India.</option>
                           </select>
                           </td>
                 </tr>
@@ -103,7 +104,7 @@
                         <select class="border input p-1 mt-2 border-white rounded">
                             <option value="Hindu Succession Act, 1956">Hindu Succession Act, 1956</option>
                             <option value="Indian Succession Act,1925">Indian Succession Act,1925</option>
-                            <option value="Muslim Personal Law">Mahomedan Law as applicable to the Sunni</option>
+                            <option value="Muslim Personal Law">Mahomedan Law as applicable to the Sunni Muslims</option>
                             <option value="Christian Succession Act">Mahomedan Law as applicable to the Shia Muslims</option>
                             
                         </select> the following persons who are residing at the addresses set out against their respective names:
@@ -154,7 +155,7 @@
                                     <button type="button" class="remove-son-btn bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600">Remove</button>
                                 </div>
                                 <div class="flex items-center gap-2">
-                                    Hereto annexed and marked as Exhibit – "<select class="border input p-1 border-white rounded w-12 son-exhibit-select">
+                                    Hereto annexed and marked as Exhibit – "<select class="border input p-1 border-white rounded w-12 son-exhibit-select" data-unique="true">
                                         <option value="">Select</option>
                                         <option value="A">A</option>
                                         <option value="A-1">A-1</option>
@@ -190,7 +191,7 @@
                     </td>
                     <td colspan="3">
                         <p>
-                            That the Petitioner as <select id="relationship" class=" border border-gray-300 input rounded p-2 mb-4">
+                            That the Petitioner as <select id="relationship" class=" border border-gray-300 input rounded p-2 mb-4" data-unique="true">
                                 <option value="Widow">Widow</option>
                                 <option value="Son">Son</option>
                                 <option value="Daughter">Daughter</option>
