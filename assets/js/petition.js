@@ -497,47 +497,18 @@
 
         // Setup exhibit select functionality
         function setupExhibitSelects() {
-            // Handle main exhibit selects
-            const exhibitSelects = document.querySelectorAll('.exhibit-select');
-            exhibitSelects.forEach(select => {
-                select.addEventListener('change', function() {
-                    const customInput = this.nextElementSibling;
-                    const previousValue = this.dataset.previousValue || '';
-                    const currentValue = this.value;
-                    
-                    // Store the current value for next change
-                    this.dataset.previousValue = currentValue;
-                    
-                    if (this.value === 'custom') {
-                        this.classList.add('hidden');
-                        if (customInput && customInput.classList.contains('custom-exhibit-input')) {
-                            customInput.classList.remove('hidden');
-                            customInput.focus();
-                        }
-                    } else {
-                        if (customInput && customInput.classList.contains('custom-exhibit-input')) {
-                            customInput.classList.add('hidden');
-                            customInput.value = '';
-                        }
-                    }
-                    
-                    // If value was cleared or changed, restore all options first
-                    if (currentValue === '' || (previousValue && previousValue !== currentValue)) {
-                        // Restore all options
-                        restoreExhibitOptions();
-                        
-                        // Then re-apply current selections from all dropdowns
-                        const allExhibitSelects = document.querySelectorAll('.exhibit-select, .son-exhibit-select');
-                        allExhibitSelects.forEach(otherSelect => {
-                            if (otherSelect.value && otherSelect.value !== 'custom') {
-                                updateExhibitDropdowns(otherSelect);
-                            }
-                        });
-                    } else {
-                        // Just update other dropdowns to remove the selected option
-                        updateExhibitDropdowns(this);
-                    }
-                });
+            // Handle all exhibit selects (both main and son)
+            const allExhibitSelects = document.querySelectorAll('.exhibit-select, .son-exhibit-select');
+            
+            allExhibitSelects.forEach(select => {
+                // Remove any existing event listeners to prevent duplicates
+                select.removeEventListener('change', handleExhibitSelectChange);
+                select.addEventListener('change', handleExhibitSelectChange);
+                
+                // Initialize previous value tracking
+                if (!select.dataset.previousValue) {
+                    select.dataset.previousValue = '';
+                }
             });
 
             // Handle custom exhibit inputs
@@ -551,49 +522,6 @@
                             select.classList.remove('hidden');
                             select.value = '';
                         }
-                    }
-                });
-            });
-
-            // Handle son exhibit selects
-            const sonExhibitSelects = document.querySelectorAll('.son-exhibit-select');
-            sonExhibitSelects.forEach(select => {
-                select.addEventListener('change', function() {
-                    const customInput = this.nextElementSibling;
-                    const previousValue = this.dataset.previousValue || '';
-                    const currentValue = this.value;
-                    
-                    // Store the current value for next change
-                    this.dataset.previousValue = currentValue;
-                    
-                    if (this.value === 'custom') {
-                        this.classList.add('hidden');
-                        if (customInput && customInput.classList.contains('son-custom-exhibit-input')) {
-                            customInput.classList.remove('hidden');
-                            customInput.focus();
-                        }
-                    } else {
-                        if (customInput && customInput.classList.contains('son-custom-exhibit-input')) {
-                            customInput.classList.add('hidden');
-                            customInput.value = '';
-                        }
-                    }
-                    
-                    // If value was cleared or changed, restore all options first
-                    if (currentValue === '' || (previousValue && previousValue !== currentValue)) {
-                        // Restore all options
-                        restoreExhibitOptions();
-                        
-                        // Then re-apply current selections from all dropdowns
-                        const allExhibitSelects = document.querySelectorAll('.exhibit-select, .son-exhibit-select');
-                        allExhibitSelects.forEach(otherSelect => {
-                            if (otherSelect.value && otherSelect.value !== 'custom') {
-                                updateExhibitDropdowns(otherSelect);
-                            }
-                        });
-                    } else {
-                        // Just update other dropdowns to remove the selected option
-                        updateExhibitDropdowns(this);
                     }
                 });
             });
@@ -614,10 +542,57 @@
             });
         }
         
+        // Unified handler for exhibit select changes
+        function handleExhibitSelectChange() {
+            console.log('Exhibit select changed:', this.value, 'Previous:', this.dataset.previousValue);
+            
+            const customInput = this.nextElementSibling;
+            const previousValue = this.dataset.previousValue || '';
+            const currentValue = this.value;
+            
+            // Store the current value for next change
+            this.dataset.previousValue = currentValue;
+            
+            // Handle custom option
+            if (this.value === 'custom') {
+                this.classList.add('hidden');
+                if (customInput && (customInput.classList.contains('custom-exhibit-input') || customInput.classList.contains('son-custom-exhibit-input'))) {
+                    customInput.classList.remove('hidden');
+                    customInput.focus();
+                }
+            } else {
+                if (customInput && (customInput.classList.contains('custom-exhibit-input') || customInput.classList.contains('son-custom-exhibit-input'))) {
+                    customInput.classList.add('hidden');
+                    customInput.value = '';
+                }
+            }
+            
+            // If value was cleared or changed, restore all options first
+            if (currentValue === '' || (previousValue && previousValue !== currentValue)) {
+                console.log('Restoring all options and re-applying selections');
+                // Restore all options
+                restoreExhibitOptions();
+                
+                // Then re-apply current selections from all dropdowns
+                const allExhibitSelects = document.querySelectorAll('.exhibit-select, .son-exhibit-select');
+                allExhibitSelects.forEach(otherSelect => {
+                    if (otherSelect.value && otherSelect.value !== 'custom') {
+                        updateExhibitDropdowns(otherSelect);
+                    }
+                });
+            } else {
+                console.log('Just updating other dropdowns to remove selected option');
+                // Just update other dropdowns to remove the selected option
+                updateExhibitDropdowns(this);
+            }
+        }
+        
         // Function to update exhibit dropdowns when one is selected
         function updateExhibitDropdowns(selectedSelect) {
             const selectedValue = selectedSelect.value;
             if (!selectedValue || selectedValue === 'custom') return;
+            
+            console.log('Updating dropdowns to hide option:', selectedValue);
             
             // Get all exhibit selects (both main and son)
             const allExhibitSelects = document.querySelectorAll('.exhibit-select, .son-exhibit-select');
@@ -629,6 +604,7 @@
                     if (optionToRemove) {
                         optionToRemove.style.display = 'none';
                         optionToRemove.disabled = true;
+                        console.log('Hidden option', selectedValue, 'in dropdown');
                     }
                 }
             });
@@ -636,6 +612,7 @@
         
         // Function to restore all exhibit options when one is deselected
         function restoreExhibitOptions() {
+            console.log('Restoring all exhibit options');
             const allExhibitSelects = document.querySelectorAll('.exhibit-select, .son-exhibit-select');
             
             allExhibitSelects.forEach(select => {
@@ -645,38 +622,10 @@
                     option.disabled = false;
                 });
             });
-        }
-        
-        // Add event listeners to restore options when exhibits are cleared or changed
-        function setupExhibitRestoreEvents() {
-            const allExhibitSelects = document.querySelectorAll('.exhibit-select, .son-exhibit-select');
-            
-            allExhibitSelects.forEach(select => {
-                select.addEventListener('change', function() {
-                    const previousValue = this.dataset.previousValue || '';
-                    const currentValue = this.value;
-                    
-                    // Store the current value for next change
-                    this.dataset.previousValue = currentValue;
-                    
-                    // If value was cleared or changed, restore all options first
-                    if (currentValue === '' || (previousValue && previousValue !== currentValue)) {
-                        // Restore all options
-                        restoreExhibitOptions();
-                        
-                        // Then re-apply current selections from all dropdowns
-                        allExhibitSelects.forEach(otherSelect => {
-                            if (otherSelect.value && otherSelect.value !== 'custom') {
-                                updateExhibitDropdowns(otherSelect);
-                            }
-                        });
-                    }
-                });
-            });
+            console.log('All options restored');
         }
         
         setupExhibitSelects();
-        setupExhibitRestoreEvents();
 
         // Function to update legal heirs table numbering (exclude petitioner rows)
         function updateLegalHeirsTableNumbers() {
@@ -922,7 +871,6 @@
                 element.textContent = newText;
             });
         }
-
 
 
 
@@ -1362,6 +1310,27 @@ select.forEach(select => {
         console.log('=== TESTING SUB-HEIR CREATION ===');
         console.log('Heir ID:', heirId, 'Is Petitioner:', isPetitioner);
         addSubLegalHeirsForHeir(heirId, isPetitioner);
+    };
+
+    // Debug function to test exhibit functionality
+    window.testExhibitFunctionality = function() {
+        console.log('=== TESTING EXHIBIT FUNCTIONALITY ===');
+        const allExhibitSelects = document.querySelectorAll('.exhibit-select, .son-exhibit-select');
+        console.log('Found exhibit selects:', allExhibitSelects.length);
+        
+        allExhibitSelects.forEach((select, index) => {
+            console.log(`Select ${index + 1}:`, {
+                value: select.value,
+                previousValue: select.dataset.previousValue,
+                className: select.className,
+                options: Array.from(select.options).map(opt => ({
+                    value: opt.value,
+                    text: opt.textContent,
+                    disabled: opt.disabled,
+                    display: opt.style.display
+                }))
+            });
+        });
     };
 
     // Debug function to check current state
@@ -1985,13 +1954,6 @@ select.forEach(select => {
 
         // Setup exhibit functionality for the new son entry
         setupExhibitSelects();
-        setupExhibitRestoreEvents();
-        
-        // Initialize previous value tracking for the new son's exhibit select
-        const newSonExhibitSelect = newSonEntry.querySelector('.son-exhibit-select');
-        if (newSonExhibitSelect) {
-            newSonExhibitSelect.dataset.previousValue = '';
-        }
     }
 
     function setupSonRemoveButtons() {
@@ -2123,10 +2085,13 @@ function setupPage3Events() {
 
     // Paragraph button functionality
     setupParagraphButtons();
+    
+    // Legal heir class wise paragraph buttons
+    setupLegalHeirClassButtons();
 }
 
 // Global variable to track paragraph numbers
-let currentParagraphNumber = 8; // Starting after existing paragraphs
+let currentParagraphNumber = 8; // Starting after paragraph 7
 
 function setupParagraphButtons() {
     const addTenantedParaBtn = document.getElementById('add-tenanted-para');
@@ -2167,87 +2132,113 @@ function setupParagraphButtons() {
     }
 }
 
+function setupLegalHeirClassButtons() {
+    const buttons = [
+        { id: 'about-deceased-btn', modal: 'about-deceased-modal' },
+        { id: 'about-parents-btn', modal: 'about-parents-modal' },
+        { id: 'about-spouse-children-btn', modal: 'about-spouse-children-modal' },
+        { id: 'about-sons-daughters-btn', modal: 'about-sons-daughters-modal' },
+        { id: 'about-husbands-heirs-btn', modal: 'about-husbands-heirs-modal' },
+        { id: 'brother-sister-btn', modal: 'brother-sister-modal' },
+        { id: 'legal-heirs-dont-cover-btn', modal: 'legal-heirs-dont-cover-modal' },
+        { id: 'no-legal-heir-btn', modal: 'no-legal-heir-modal' },
+        { id: 'minor-children-btn', modal: 'minor-children-modal' },
+        { id: 'no-dc-btn', modal: 'no-dc-modal' },
+        { id: 'divorce-btn', modal: 'divorce-modal' }
+    ];
+
+    buttons.forEach(button => {
+        const btnElement = document.getElementById(button.id);
+        if (btnElement) {
+            btnElement.addEventListener('click', (e) => {
+                e.preventDefault();
+                openModal(button.modal);
+            });
+        }
+    });
+
+    // Set up close modal buttons
+    const closeButtons = document.querySelectorAll('.close-modal');
+    closeButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            const modalId = button.getAttribute('data-modal');
+            closeModal(modalId);
+        });
+    });
+
+    // Set up modal option buttons
+    const modalOptions = document.querySelectorAll('.modal-option');
+    modalOptions.forEach(option => {
+        option.addEventListener('click', (e) => {
+            e.preventDefault();
+            const optionText = option.textContent;
+            const optionValue = option.getAttribute('data-option');
+            addToTextarea(optionText);
+            closeModal(option.closest('[id$="-modal"]').id);
+        });
+    });
+
+    // Close modal when clicking outside
+    const modals = document.querySelectorAll('[id$="-modal"]');
+    modals.forEach(modal => {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal(modal.id);
+            }
+        });
+    });
+}
+
 function addParagraph(type) {
     const table = document.querySelector('#page3 table tbody');
     if (!table) return;
 
-    // Find all existing paragraphs to determine the next number
-    const existingParagraphs = table.querySelectorAll('tr');
-    let nextParagraphNumber = 8; // Start after existing paragraphs
-    
-    // Check if there are already added paragraphs and find the highest number
-    existingParagraphs.forEach(row => {
-        const firstCell = row.querySelector('td:first-child');
-        if (firstCell) {
-            const cellText = firstCell.textContent.trim();
-            const match = cellText.match(/^(\d+)\.$/);
-            if (match) {
-                const paraNumber = parseInt(match[1]);
-                if (paraNumber >= nextParagraphNumber) {
-                    nextParagraphNumber = paraNumber + 1;
-                }
-            }
-        }
-    });
-    
-    currentParagraphNumber = nextParagraphNumber;
-    
-    // Find the paragraph 7 row to insert after
+    // Find paragraph 7 row (the second row)
     const paragraph7Row = table.querySelector('tr:nth-child(2)'); // Paragraph 7 is the second row
     if (!paragraph7Row) return;
 
+    // Get paragraph content based on type (with underscores instead of input fields)
+    const paragraphContent = getParagraphContentWithUnderscores(type);
+
+    // Create a new row for the paragraph
     const newRow = document.createElement('tr');
     newRow.className = 'py-5 border-t border-white';
     newRow.dataset.paragraphType = type;
-    newRow.dataset.paragraphNumber = currentParagraphNumber;
-
-    // Get paragraph content based on type
-    const paragraphContent = getParagraphContent(type);
+    newRow.dataset.paragraphNumber = 8;
 
     newRow.innerHTML = `
         <td class="text-center py-5 border-r border-white w-[10%]">
-            ${currentParagraphNumber}.
+            8.
         </td>
-        <td colspan="2" class="py-5">
-            <p>${paragraphContent}</p>
-        </td>
-        <td class="text-center py-5 border-l border-white w-[10%]">
-            <button type="button" class="remove-para-btn bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700" data-paragraph-number="${currentParagraphNumber}">
-                Remove
-            </button>
+        <td colspan="3" class="py-5">
+            <textarea class="border p-1 mt-2 input border-white rounded w-full" rows="4">${paragraphContent}</textarea>
+            <div class="text-right mt-3">
+                <button type="button" class="remove-para-btn bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700" data-paragraph-number="8">
+                    Remove Paragraph
+                </button>
+            </div>
         </td>
     `;
 
-    // Insert after paragraph 7, but before any existing added paragraphs
-    let insertAfterRow = paragraph7Row;
+    // Insert the new row after paragraph 7, but before paragraph 8
+    const paragraph8Row = table.querySelector('tr:nth-child(3)'); // Original paragraph 8 is the third row
     
-    // Find the last paragraph that comes after paragraph 7
-    const allRows = Array.from(table.querySelectorAll('tr'));
-    const paragraph7Index = allRows.indexOf(paragraph7Row);
-    
-    // Look for the last paragraph after paragraph 7
-    for (let i = paragraph7Index + 1; i < allRows.length; i++) {
-        const row = allRows[i];
-        const firstCell = row.querySelector('td:first-child');
-        if (firstCell) {
-            const cellText = firstCell.textContent.trim();
-            const match = cellText.match(/^(\d+)\.$/);
-            if (match) {
-                const paraNumber = parseInt(match[1]);
-                if (paraNumber >= 8) {
-                    insertAfterRow = row;
-                }
-            }
-        }
+    if (paragraph8Row) {
+        // Insert between paragraph 7 and paragraph 8
+        paragraph7Row.parentNode.insertBefore(newRow, paragraph8Row);
+    } else {
+        // If paragraph 8 doesn't exist, just append after paragraph 7
+        paragraph7Row.parentNode.insertBefore(newRow, paragraph7Row.nextSibling);
     }
     
-    // Insert the new row after the determined position
-    insertAfterRow.parentNode.insertBefore(newRow, insertAfterRow.nextSibling);
-    
     // Set up event listeners for the new paragraph
-    setupParagraphEvents(newRow, type, currentParagraphNumber);
+    setupParagraphEvents(newRow, type, 8);
     
-    console.log(`Added ${type} paragraph with number ${currentParagraphNumber}`);
+    // Renumber all paragraphs after adding the new one
+    renumberParagraphs();
+    
+    console.log(`Added ${type} paragraph with number 8`);
 }
 
 function setupParagraphEvents(row, type, paragraphNumber) {
@@ -2259,38 +2250,9 @@ function setupParagraphEvents(row, type, paragraphNumber) {
         });
     }
     
-    if (type === 'tenanted') {
-        // Set up receipt radio button functionality
-        const receiptRadios = row.querySelectorAll('.receipt-radio');
-        const receiptYesDiv = row.querySelector(`#receipt_yes_${paragraphNumber}`);
-        const receiptNoDiv = row.querySelector(`#receipt_no_${paragraphNumber}`);
-        
-        receiptRadios.forEach(radio => {
-            radio.addEventListener('change', function() {
-                if (this.value === 'yes') {
-                    receiptYesDiv.classList.remove('hidden');
-                    receiptNoDiv.classList.add('hidden');
-                } else {
-                    receiptYesDiv.classList.add('hidden');
-                    receiptNoDiv.classList.remove('hidden');
-                }
-            });
-        });
-        
-        // Set up exhibit select functionality
-        const exhibitSelect = row.querySelector('.exhibit-select');
-        const customExhibitInput = row.querySelector('.custom-exhibit-input');
-        
-        if (exhibitSelect && customExhibitInput) {
-            exhibitSelect.addEventListener('change', function() {
-                if (this.value === 'custom') {
-                    customExhibitInput.classList.remove('hidden');
-                } else {
-                    customExhibitInput.classList.add('hidden');
-                }
-            });
-        }
-    }
+    // For textarea-based paragraphs, we don't need complex event setup
+    // since they use underscores and are readonly
+    console.log(`Set up events for ${type} paragraph with number ${paragraphNumber}`);
 }
 
 function removeParagraph(row, paragraphNumber) {
@@ -2308,12 +2270,50 @@ function removeParagraph(row, paragraphNumber) {
     }
 }
 
+function removeParagraphFrom8(paragraphElement) {
+    // Confirm before removing
+    if (confirm('Are you sure you want to remove this paragraph?')) {
+        console.log('Removing paragraph from paragraph 8');
+        
+        // Remove the paragraph element
+        paragraphElement.remove();
+        
+        console.log('Paragraph removed successfully from paragraph 8');
+    }
+}
+
+function openModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.remove('hidden');
+        console.log(`Opened modal: ${modalId}`);
+    }
+}
+
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.add('hidden');
+        console.log(`Closed modal: ${modalId}`);
+    }
+}
+
+function addToTextarea(text) {
+    const textarea = document.getElementById('legal-heir-class-textarea');
+    if (textarea) {
+        const currentText = textarea.value;
+        const newText = currentText ? currentText + '\n\n' + text : text;
+        textarea.value = newText;
+        console.log(`Added text to textarea: ${text}`);
+    }
+}
+
 function renumberParagraphs() {
     const table = document.querySelector('#page3 table tbody');
     if (!table) return;
     
     const allRows = table.querySelectorAll('tr');
-    let dynamicParagraphNumber = 8; // Start numbering dynamic paragraphs from 9
+    let dynamicParagraphNumber = 7; // Start numbering dynamic paragraphs from 8 (after paragraph 7)
     
     allRows.forEach(row => {
         const firstCell = row.querySelector('td:first-child');
@@ -2322,27 +2322,8 @@ function renumberParagraphs() {
             dynamicParagraphNumber++;
             firstCell.textContent = `${dynamicParagraphNumber}.`;
             
-            // Update data attributes and IDs for dynamic paragraphs
+            // Update data attributes for dynamic paragraphs
             row.dataset.paragraphNumber = dynamicParagraphNumber;
-            
-            // Update radio button names and IDs for tenanted paragraphs
-            if (row.dataset.paragraphType === 'tenanted') {
-                const receiptRadios = row.querySelectorAll('.receipt-radio');
-                const receiptYesDiv = row.querySelector('[id^="receipt_yes_"]');
-                const receiptNoDiv = row.querySelector('[id^="receipt_no_"]');
-                
-                receiptRadios.forEach(radio => {
-                    radio.name = `receipt_available_${dynamicParagraphNumber}`;
-                });
-                
-                if (receiptYesDiv) {
-                    receiptYesDiv.id = `receipt_yes_${dynamicParagraphNumber}`;
-                }
-                
-                if (receiptNoDiv) {
-                    receiptNoDiv.id = `receipt_no_${dynamicParagraphNumber}`;
-                }
-            }
             
             // Update remove button data attribute
             const removeBtn = row.querySelector('.remove-para-btn');
@@ -2350,10 +2331,45 @@ function renumberParagraphs() {
                 removeBtn.dataset.paragraphNumber = dynamicParagraphNumber;
             }
         }
-        // Original paragraphs (6, 7, 8) are left unchanged
+        // Original paragraphs (6, 7) are left unchanged, but paragraph 8 and beyond need to be renumbered
+        else if (firstCell && !row.dataset.paragraphType) {
+            const cellText = firstCell.textContent.trim();
+            const match = cellText.match(/^(\d+)\.$/);
+            if (match) {
+                const paraNumber = parseInt(match[1]);
+                // If this is paragraph 8 or beyond, renumber it
+                if (paraNumber >= 8) {
+                    dynamicParagraphNumber++;
+                    firstCell.textContent = `${dynamicParagraphNumber}.`;
+                }
+            }
+        }
     });
     
-    console.log('Dynamic paragraph renumbering complete');
+    // Update the global counter
+    currentParagraphNumber = dynamicParagraphNumber;
+}
+
+function getParagraphContentWithUnderscores(type) {
+    switch(type) {
+        case 'tenanted':
+            return `That the deceased was the tenant in respect of Chawl No. ___ Room No. ___, Group No. ___, Mumbai – ___, and monthly rent was of Rs.___/-, hereto annexed and marked as Exhibit-"___" is a copy of rent receipt issued by the MHADA.`;
+        
+        case 'joint-deceased':
+            return `That the Petitioner has filed the above Petition in the names of two deceased individuals, who were husband and wife. The Petitioner is the daughter of both the deceased. Certain properties mentioned in Schedule No. I are standing in the names of both the deceased; therefore, the Petitioner has filed the above Petition in their names.`;
+        
+        case 'two-name':
+            return `I state that in the title of the petition, the name of the deceased is mentioned as ___. During his lifetime, the deceased changed his name from ___ as recorded in the Government Official Gazette dated ___. A copy of the said Government Official Gazette is annexed hereto and marked as Exhibit ___. I further state that all the names mentioned above refer to one and the same person, i.e., the deceased.`;
+        
+        case 'additional':
+            return `___`;
+        
+        case 'delay':
+            return `That the delay in making the present Petition is on account of the facts that Petitioner is ignorant and unaware of obtaining any legal representation. Now the Petitioner/s has/have been recently advised to obtain a legal representation. Hence this Hon'ble Court in the interest of justice may condone the delay.`;
+        
+        default:
+            return `That the Petitioner hereby declares that all the statements made herein are true to the best of his/her knowledge, information and belief.`;
+    }
 }
 
 function getParagraphContent(type) {
@@ -2394,7 +2410,7 @@ function getParagraphContent(type) {
             return `That the Petitioner has filed the above Petition in the names of two deceased individuals, who were husband and wife. The Petitioner is the daughter of both the deceased. Certain properties mentioned in Schedule No. I are standing in the names of both the deceased; therefore, the Petitioner has filed the above Petition in their names.`;
         
         case 'two-name':
-            return `I state that in the title of the petition, the name of the deceased is mentioned as <input type="text" placeholder="Enter who stopped" class="border p-1 mt-2 input border-white rounded w-40">. During his lifetime, the deceased changed his name from <input type="text" placeholder="Enter who stopped" class="border p-1 mt-2 input border-white rounded w-40">  as recorded in the Government Official Gazette dated <input type="date" placeholder="Enter date" class="border p-1 mt-2 input border-white rounded w-40">. A copy of the said Government Official Gazette is annexed hereto and marked as Exhibit <select class="border p-1 mt-2 input border-white rounded exhibit-select">
+            return `I state that in the title of the petition, the name of the deceased is mentioned as <input type="text" placeholder="Enter current name" class="border p-1 mt-2 input border-white rounded w-40">. During his lifetime, the deceased changed his name from <input type="text" placeholder="Enter previous name" class="border p-1 mt-2 input border-white rounded w-40">  as recorded in the Government Official Gazette dated <input type="date" placeholder="Enter date" class="border p-1 mt-2 input border-white rounded w-40">. A copy of the said Government Official Gazette is annexed hereto and marked as Exhibit <select class="border p-1 mt-2 input border-white rounded exhibit-select">
                 <option value="">Select Exhibit</option>
                 <option value="A">A</option>
                 <option value="A-1">A-1</option>
@@ -2408,13 +2424,13 @@ function getParagraphContent(type) {
                 <option value="I">I</option>
                 <option value="J">J</option>
                 <option value="custom">Unique</option>
-            </select> I further state that all the names mentioned above refer to one and the same person, i.e., the deceased`;
+            </select><input type="text" placeholder="Custom Exhibit" class="border p-1 mt-2 input border-white rounded w-16 hidden custom-exhibit-input"> I further state that all the names mentioned above refer to one and the same person, i.e., the deceased`;
         
         case 'additional':
-            return `That the Petitioner has made due and diligent search for any other legal heirs or next of kin of the deceased but none have been found except those mentioned hereinabove.`;
+            return `<textarea class="border p-1 mt-2 input border-white rounded w-full" placeholder="Enter additional information" rows="5"></textarea>`;
         
         case 'delay':
-            return `That the delay in making the present Petition is on account of the facts that Petitioner is ignorant and unaware of obtaining any legal representation. Now the Petitioner/s has/have been recently advised to obtain a legal representation. Hence this Hon’ble Court in the interest of justice may condone the delay. `;
+            return `That the delay in making the present Petition is on account of the facts that Petitioner is ignorant and unaware of obtaining any legal representation. Now the Petitioner/s has/have been recently advised to obtain a legal representation. Hence this Hon'ble Court in the interest of justice may condone the delay. `;
         
         default:
             return `That the Petitioner hereby declares that all the statements made herein are true to the best of his/her knowledge, information and belief.`;

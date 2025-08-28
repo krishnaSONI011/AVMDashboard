@@ -133,55 +133,203 @@
                                <button type="button" id="add-more-legal-heir" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">+ Add More Legal Heir</button>
                                <button type="button" id="add-sub-legal-heir" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">+ Add Sub Legal Heir</button>
                            </div>
-                       </div>
-                       <p>
-                        The deceased left <input type="checkbox" id="left_mother" name="left_mother" value="yes" class="form-required input"> his mother, 
-                        <input type="checkbox" id="left_wife" name="left_wife" value="yes" class="form-required input"> wife, and 
-                        <select id="has_minors" class="border input p-1 mt-2 border-white rounded">
-                            <option value="">Select</option>
-                            <option value="has_minors">has minors</option>
-                            <option value="no_minors">no minors</option>
-                        </select>. 
-                        The deceased left <input type="checkbox" id="left_daughter" name="left_daughter" value="no" class="form-required input"> no daughter. 
-                        The sons of the deceased are minors, namely 
-                        
-                        <!-- Dynamic sons container -->
-                        <div id="sons-container" class="mt-4">
-                            <div class="son-entry border border-gray-300 p-3 rounded mb-2">
-                                <div class="flex items-center gap-2 mb-2">
-                                    <span class="son-number">1)</span>
-                                    Master <input type="text" placeholder="Enter Son's Name" class="border p-1 border-white input rounded w-48">
-                                    who was born on <input type="date" class="border p-1 border-white rounded input">
-                                    <button type="button" class="remove-son-btn bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600">Remove</button>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    Hereto annexed and marked as Exhibit – "<select class="border input p-1 border-white rounded w-12 son-exhibit-select" data-unique="true">
-                                        <option value="">Select</option>
-                                        <option value="A">A</option>
-                                        <option value="A-1">A-1</option>
-                                        <option value="B">B</option>
-                                        <option value="C">C</option>
-                                        <option value="D">D</option>
-                                        <option value="E">E</option>
-                                        <option value="F">F</option>
-                                        <option value="G">G</option>
-                                        <option value="H">H</option>
-                                        <option value="I">I</option>
-                                        <option value="J">J</option>
-                                        <option value="custom">OTHERS</option>
-                                    </select><input type="text" placeholder="Custom" class="border input p-1 border-white rounded w-[10%] hidden son-custom-exhibit-input">" is the true copy of birth certificate.
-                                </div>
-                            </div>
+                           
+                           <!-- Textarea for legal heir class paragraphs -->
+                           <div class="mt-4">
+                               <textarea id="legal-heir-class-textarea" class="border p-2 border-white input rounded w-full" rows="6" placeholder="Legal heir class paragraphs will appear here..."></textarea>
+                               </div>
+</div>
+
+<!-- Legal Heir Class Modals -->
+<!-- About Deceased Modal -->
+<div id="about-deceased-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg w-96 max-h-96 overflow-y-auto">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-bold text-gray-800">About Deceased</h3>
+            <button type="button" class="close-modal text-gray-500 hover:text-gray-700 text-xl" data-modal="about-deceased-modal">&times;</button>
+        </div>
+        <div class="space-y-3">
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="bachelor">The deceased died as a Bachelor.</button>
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="spinster">The deceased died as a Spinster.</button>
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="divorcee">The deceased died as a divorcee.</button>
+        </div>
+    </div>
+</div>
+
+<!-- About Parents Modal -->
+<div id="about-parents-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg w-96 max-h-96 overflow-y-auto">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-bold text-gray-800">About Parents of Deceased</h3>
+            <button type="button" class="close-modal text-gray-500 hover:text-gray-700 text-xl" data-modal="about-parents-modal">&times;</button>
+        </div>
+        <div class="space-y-3">
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="parents-predeceased">The parents of the deceased are predeceased the deceased.</button>
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="husband-parents-predeceased">The parents of husband of the deceased are predeceased the deceased.</button>
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="grandparents-predeceased">The grandparents of the deceased are predeceased the deceased.</button>
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="husband-grandparents-predeceased">The grandparents of husband of deceased are predeceased the deceased.</button>
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="mother-death-certificate">The mother of the deceased namely ________ died on _________, hereto annexed and marked as Exhibit-__ is a copy of her death certificate.</button>
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="father-death-certificate">The father of the deceased namely ________ died on _________, hereto annexed and marked as Exhibit-__ is a copy of his death certificate.</button>
+        </div>
+    </div>
+</div>
+
+<!-- About Spouse/Children Modal -->
+<div id="about-spouse-children-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg w-96 max-h-96 overflow-y-auto">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-bold text-gray-800">About Spouse/Children of Deceased</h3>
+            <button type="button" class="close-modal text-gray-500 hover:text-gray-700 text-xl" data-modal="about-spouse-children-modal">&times;</button>
+        </div>
+        <div class="space-y-3">
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="wife-death-certificate">The wife of the deceased namely ____ died on _____, hereto annexed and marked as Exhibit-__ is a copy of her death certificate.</button>
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="husband-death-certificate">The husband of the deceased namely ____ died on _____, hereto annexed and marked as Exhibit-__ is a copy of his death certificate.</button>
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="spouse-death-no-certificate">The husband/wife of the deceased, namely __________, expired on __________. Since his/her death occurred in the year ______, the death certificate has not been preserved and, therefore, the same is not available.</button>
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="no-issue">The deceased left no issue.</button>
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="spouse-son-daughter">The deceased left his/her wife/husband, ___ son and ___daughter.</button>
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="spouse-son-no-daughter">The deceased left his wife/husband, ___ son and no daughter.</button>
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="spouse-daughter-no-son">The deceased left his/her wife/husband, ___ daughter and no son.</button>
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="son-daughter-no-spouse">The deceased left ___ son and ___daughter.</button>
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="child-death-bachelor">The one of the son/daughter of the deceased died on ___________, hereto annexed and marked as Exhibit-__ is a copy of his/her death certificate & he/she died as a bachelor/spinster.</button>
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="child-death-with-family">The one of the son/daughter of the deceased died on ___________, hereto annexed and marked as Exhibit-__ is a copy of his/her death certificate & he/she left his/her wife/husband, ___ son and ___ daughter. His/Her spouse, namely __________, also died on ______, and a copy of his/her death certificate is annexed. Since his/her death occurred in the year ______, the death certificate has not been preserved and, therefore, the same is not available.</button>
+        </div>
+    </div>
+</div>
+
+<!-- About Sons/Daughters Modal -->
+<div id="about-sons-daughters-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg w-96 max-h-96 overflow-y-auto">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-bold text-gray-800">About Sons/Daughters-Heirs of Deceased</h3>
+            <button type="button" class="close-modal text-gray-500 hover:text-gray-700 text-xl" data-modal="about-sons-daughters-modal">&times;</button>
+        </div>
+        <div class="space-y-3">
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="child-death-spouse-alive">One of the sons/daughters of the deceased, namely __________, expired on ______. A copy of his/her death certificate is annexed hereto. He/She has left behind his/her spouse, namely __________, along with ___ son(s) and ___ daughter(s). Since his/her death occurred in the year ______, the death certificate has not been preserved and, therefore, the same is not available.</button>
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="child-death-spouse-deceased">One of the sons/daughters of the deceased, namely __________, died on ______. He/She left behind ___ son(s) and ___ daughter(s). A copy of his/her death certificate is annexed. His/Her spouse, namely __________, also died on ______, and a copy of his/her death certificate is annexed.</button>
+        </div>
+    </div>
+</div>
+
+<!-- About Husbands-Heirs Modal -->
+<div id="about-husbands-heirs-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg w-96 max-h-96 overflow-y-auto">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-bold text-gray-800">About Husbands-Heirs</h3>
+            <button type="button" class="close-modal text-gray-500 hover:text-gray-700 text-xl" data-modal="about-husbands-heirs-modal">&times;</button>
+        </div>
+        <div class="space-y-3">
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="husband-parents-predeceased">The parents of husband of the deceased are predeceased the deceased.</button>
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="brother-sister-in-law">The deceased left one ____ brother in law and ____ sister in law.</button>
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="no-brother-sister-in-law">The deceased left no brother in law and sister in law.</button>
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="in-law-death-bachelor">The one of the brother in law/sister in law of the deceased namely ____________ died on ____________, hereto annexed and marked as Exhibit-___ is a copy of his/her death certificate and he/she died as a bachelor/spinster. Since his/her death occurred in the year ______, the death certificate has not been preserved and, therefore, the same is not available.</button>
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="in-law-death-with-family">The one of the brother in law/sister in law of the deceased namely ____________ died on ____________, hereto annexed and marked as Exhibit-___ is a copy of his/her death certificate and he/she left his wife, ___ Son & __ Daughter. His/Her spouse, namely __________, also died on ______ and a copy of his/her death certificate is annexed.Since his/her death occurred in the year ______, the death certificate has not been preserved and, therefore, the same is not available.</button>
+        </div>
+    </div>
+</div>
+
+<!-- Brother & Sister Modal -->
+<div id="brother-sister-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg w-96 max-h-96 overflow-y-auto">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-bold text-gray-800">Brother & Sister of Deceased</h3>
+            <button type="button" class="close-modal text-gray-500 hover:text-gray-700 text-xl" data-modal="brother-sister-modal">&times;</button>
+        </div>
+        <div class="space-y-3">
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="no-brother-sister">The deceased left no brother and sister.</button>
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="brother-sister-both">The deceased left __ brother and ___ sister.</button>
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="brother-only">The deceased left ___ brother & no sister.</button>
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="sister-only">The deceased left __ sister and no brother.</button>
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="brother-sister-death-with-spouse">The one of brother/sister of the deceased namely __________, expired on ______. A copy of his/her death certificate is annexed hereto. He/She has left behind his/her spouse, namely __________, along with ___ son(s) and ___ daughter(s). Since his/her death occurred in the year ______, the death certificate has not been preserved and, therefore, the same is not available.</button>
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="brother-sister-death-spouse-deceased">The one of brother/sister of the deceased namely __________, expired on ______. A copy of his/her death certificate is annexed hereto annexed and marked As Exhibit-___. He/She has left behind  ___ son(s) and ___ daughter(s). His/Her spouse, namely __________, also died on ______, and a copy of his/her death certificate is annexed. Since his/her death occurred in the year ______, the death certificate has not been preserved and, therefore, the same is not available.</button>
+        </div>
+    </div>
+</div>
+
+<!-- Legal Heirs Don't Cover Modal -->
+<div id="legal-heirs-dont-cover-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg w-96 max-h-96 overflow-y-auto">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-bold text-gray-800">Legal Heirs Don't Cover Para</h3>
+            <button type="button" class="close-modal text-gray-500 hover:text-gray-700 text-xl" data-modal="legal-heirs-dont-cover-modal">&times;</button>
+        </div>
+        <div class="space-y-3">
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="heirs-dont-cover">Since he/she predeceased the deceased, his/her heirs do not fall within the category of legal heirs of the deceased, and therefore they have not been shown as heirs of the deceased, in accordance with Section 8 / 15 of the Hindu Succession Act, 1956.</button>
+        </div>
+    </div>
+</div>
+
+<!-- No Legal Heir Modal -->
+<div id="no-legal-heir-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg w-96 max-h-96 overflow-y-auto">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-bold text-gray-800">No Legal Heir Para</h3>
+            <button type="button" class="close-modal text-gray-500 hover:text-gray-700 text-xl" data-modal="no-legal-heir-modal">&times;</button>
+        </div>
+        <div class="space-y-3">
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="no-heirs-bachelor">The parents of the deceased are predeceased the deceased. The deceased died as a bachelor. The deceased had no brother and sister. The deceased left no surviving heirs as per Section 8/15 of Hindu Succession Act,1956.</button>
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="no-heirs-husband-side">The husband of the deceased namely _______________ died on ________, hereto annexed and marked as Exhibit-__ is a copy of his/her death certificate. The deceased had no issue. The parents of husband of the deceased are predeceased the deceased. The deceased had no brother and sister. The deceased left no surviving heirs from the husband side as per Section 15 of Hindu Succession Act,1956. The parents of the deceased are predeceased the deceased. The deceased left __ brother and __ sister.</button>
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="no-heirs-unknown">The husband of the deceased namely _______________ died on ________, hereto annexed and marked as Exhibit-__ is a copy of his/her death certificate. The deceased had no issue. The parents of husband of the deceased are predeceased the deceased. The petitioner is not aware about the surviving legal heirs of the deceased as covered under section 8/15 of Hindu Succession Act,1956.</button>
+        </div>
+    </div>
+</div>
+
+<!-- Minor Children Modal -->
+<div id="minor-children-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg w-96 max-h-96 overflow-y-auto">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-bold text-gray-800">Minor Children Para</h3>
+            <button type="button" class="close-modal text-gray-500 hover:text-gray-700 text-xl" data-modal="minor-children-modal">&times;</button>
+        </div>
+        <div class="space-y-3">
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="minor-single-child">The one of the son/daughter of deceased is minor, namely: _____, born on ________________. Hereto annexed and marked as Exhibit "__" is a true copy of his/her birth certificates. The said minor is under the care and protection of her/his mother/father the petitioner herein.</button>
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="minor-multiple-children">The ____ son and the _____daughter of the deceased are minor, namely: 1) _____, born on ____________, and 2) ______________________, born on ______________. Hereto annexed and marked as Exhibit "__" and Exhibit "___" respectively, are true copies of their birth certificates. The said minors are under the care and protection of their mother the petitioner herein.</button>
+        </div>
+    </div>
+</div>
+
+<!-- No DC Modal -->
+<div id="no-dc-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg w-96 max-h-96 overflow-y-auto">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-bold text-gray-800">No DC Para</h3>
+            <button type="button" class="close-modal text-gray-500 hover:text-gray-700 text-xl" data-modal="no-dc-modal">&times;</button>
+        </div>
+        <div class="space-y-3">
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="dc-not-preserved">The husband of the deceased, namely __________, expired on __________. Since his death occurred in the year ______, the death certificate has not been preserved and, therefore, the same is not available.</button>
+        </div>
+    </div>
+</div>
+
+<!-- Divorce Modal -->
+<div id="divorce-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg w-96 max-h-96 overflow-y-auto">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-bold text-gray-800">Divorce Para</h3>
+            <button type="button" class="close-modal text-gray-500 hover:text-gray-700 text-xl" data-modal="divorce-modal">&times;</button>
+        </div>
+        <div class="space-y-3">
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="divorce-first-wife">The deceased obtained divorce from his first wife namely ____, hereto annexed and marked as Exhibit-__ is a copy of divorce order dated _____ passed by ______________. That out of the wedlock from the said first wife the deceased left one daughter & left no son.</button>
+        </div>
+    </div>
+</div>
+                     <p>
+                        <h1 class="my-5 bg-blue-500 text-white p-2 rounded w-fit">
+                            DECEASED-LEGAL HEIR CLASS WISE PARA 
+                        </h1>
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-4">
+                            <button type="button" id="about-deceased-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium transition-colors">ABOUT DECEASED</button>
+                            <button type="button" id="about-parents-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium transition-colors">ABOUT PARENTS OF DECEASED</button>
+                            <button type="button" id="about-spouse-children-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium transition-colors">ABOUT SPOUSE / CHILDREN OF DECEASED</button>
+                            <button type="button" id="about-sons-daughters-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium transition-colors">ABOUT SON'S / DAUGHTERS-HEIRS-OF DECEASED</button>
+                            <button type="button" id="about-husbands-heirs-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium transition-colors">ABOUT HUSBANDS-HEIRS</button>
+                            <button type="button" id="brother-sister-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium transition-colors">BROTHER & SISTER OF DECEASED</button>
+                            <button type="button" id="legal-heirs-dont-cover-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium transition-colors">LEGAL HEIRS DON'T COVER PARA</button>
+                            <button type="button" id="no-legal-heir-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium transition-colors">NO LEGAL HEIR PARA</button>
+                            <button type="button" id="minor-children-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium transition-colors">MINOR CHILDREN PARA</button>
+                            <button type="button" id="no-dc-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium transition-colors">NO DC PARA</button>
+                            <button type="button" id="divorce-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium transition-colors">DIVORCE PARA</button>
                         </div>
-                        
-                        <!-- Add son button -->
-                        <div class="mt-4">
-                            <button type="button" id="add-son-btn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">+ Add Son</button>
-                        </div>
-                        
-                        The said minors are under the care and protection of, and are being educated by, their mother, the Petitioner herein, to bring them up as good and responsible citizens. 
-                        Save and except for what is mentioned hereinabove, the deceased left no other legal heirs or next of kin.
-                    </p>
+                     </p>
                     </td>
                 </tr>
 
