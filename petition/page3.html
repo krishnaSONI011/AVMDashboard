@@ -8,7 +8,7 @@
                         6.
                     </td>
                     <td colspan="3" class="py-5">
-                        <p>
+                        <p class="text-justify p-2">
                             The Petitioner has tuly set forth in schedule <input
                             type="text" placeholder="SCHEDULE NO. "
                             class="border p-1 mt-2 input border-white rounded" >, hereto annexed and
@@ -31,7 +31,7 @@
                             to come to the Petitioner hands.<span id="show_it-when-elsewhereinindia" class="hidden">So far as the Petitioner has been able to ascertain or is aware, there are no property and credits other than what are specified in Schedule No. I attached to the petition.</span>
                         </p>
                         <p class="bg-red-500 text-white p-2 rounded w-fit"><label for="property_and_credits">ADD SCHEDULE- II PARA </label>
-                            <select class="border p-1 mt-2 input border-white rounded" id="schedule_ii_para">
+                            <select class="border ml-2 mt-2 input border-white rounded" id="schedule_ii_para">
                             <option>No</option>
                             <option>Yes</option>
                         </select></p>
@@ -42,13 +42,13 @@
                     <td class=" text-center py-5 border-r border-white w-[10%]">
                         7.
                     </td>
-                    <td colspan="3" class="py-5">
+                    <td colspan="3" class="py-5 p-2">
                         <p>
                             That the assets of the deceased <span id="show_it-when-schedule-ii-para" class="hidden">after deducting the items mentioned in Schedule-II but</span> including all rents, interest and dividends which have accrued since the date of the death of the deceased and increased value of the assets since the said date are of the value of Rs.<input
                             type="text" placeholder="ENTER AMMOUNT "
-                            class="border p-1 mt-2 input border-white rounded" >/- (Rupees <textarea
+                            class="border w-full  p-1 mt-2 input border-white rounded" >/- (Rupees <textarea
                             type="text" placeholder="ENTER AMMOUNT IN WORDS "
-                            class="border p-1 mt-2 w-[50%] input border-white rounded"></textarea>).
+                            class="border  p-1 mt-2 w-full input border-white rounded"></textarea>).
                         </p>
 
                     </td>
@@ -59,8 +59,12 @@
                     </td>
                     <td colspan="3" class="py-5">
                         <p>
-                            That no application has been made to any District Court or District Delegate or to any High Court for Probate of any will of the said deceased or for letters of administration with or without the will annexed his property and credits.
-                        </p>
+                            That no application has been made to any District Court or District Delegate or to any High Court for Probate of any will of the said deceased or for letters of administration with or without the will annexed his property and credits. <span>Save and except testamentary petition no. 152/2006, filed by the petitioner, which has been rejected under rule 435 by his Lordship Mr. Justice __________ on _________, hereto annexed and marked as Exhibit- “______” is a copy of said order.</span>
+                            <p class="bg-red-500 text-white p-2 rounded w-fit"><label for="property_and_credits">ADD EARLIER PETITION FILED PARA </label>
+                                <select class="border ml-2 mt-2 input border-white rounded" id="add_earlier">
+                                <option>No</option>
+                                <option>Yes</option>
+                            </select></p>
                         <p class="px-10 mt-10">
                             The Petitioner, therefore, prays that the Letters of Administration may be granted to <input type="checkbox" id="left_wife" name="left_wife" value="yes" class="form-required input"> her / <input type="checkbox" id="left_wife" name="left_wife" value="yes" class="form-required input"> him, having effect throughout the State of Maharashtra.
                         </p>
@@ -75,9 +79,10 @@
             <button type="button" id="add-two-name-para" class="bg-red-500 text-white p-2 rounded">ADD TWO NAME PARA</button>
             <button type="button" id="add-additional-para" class="bg-red-500 text-white p-2 rounded">ADD ADDITIONAL PARA</button>
             <button type="button" id="add-delay-para" class="bg-red-500 text-white p-2 rounded">ADD DELAY PARA</button>
+            
         </div>
         <div class="flex justify-between mt-52">
-           <p class="underline">Advocate for the Petitioner</p>
+           <p class="underline">Advocate for the <span data-petitioner-text="singular">Petitioner</span></p>
            <p><strong>SIGN:</strong> <input
             type="text" placeholder="Name of the Pretitioner"
             class="border p-1 mt-2 input border-white rounded" ></p>

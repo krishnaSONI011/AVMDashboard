@@ -51,7 +51,7 @@
 
 
                             <span class="hidden" id="alias_container">
-                                <span class="flex justify-between my-2">Alias Name</span>
+                               
                                 <input type="text" placeholder="Enter Deceased Alias Name"
                                     class="border bg-[#334155] w-full text-white p-1 mt-2 border-black rounded" 
                                     />
@@ -81,7 +81,7 @@
                            
                             <select name="citizenship" id="citizenship"
                                 class="border my-2 w-full bg-[#334155] text-white border-black  mt-1 p-1 rounded">
-                                <option value="volvo">Select citizen</option>
+                                <option value="volvo">Select Citizen</option>
                                 <option value="volvo">Indian</option>
                                 <option value="volvo">NRI</option>
 
@@ -171,13 +171,13 @@
                                 <textarea id="enter_addressProof" class=" input border p-3 border-black rounded"
                                     rows="2" cols="60"
                                     placeholder="Enter the Address as per death Certificate"></textarea>
-                                <button id="dc_address_button" class="text-white bg-red-500 p-2 rounded my-2">Copy</button>
+                                <button type="button" id="dc_address_button" class="text-white bg-red-500 p-2 rounded my-2">Copy</button>
                             </span>
                             <span id="show_both_line" class="hidden text-left">and permanent address at</span>
                             <span id="ad" class="hidden">
                                 <textarea id="address_proof"  class=" input border p-3 border-black rounded" rows="2"
                                     cols="60" placeholder="Enter the Address as per Address proof"></textarea>
-                                    <button id="address_proof_button" class="text-white bg-red-500 p-2 rounded my-2">Copy</button>
+                                    <button type="button" id="address_proof_button" class="text-white bg-red-500 p-2 rounded my-2">Copy</button>
                             </span>
                             <br>
                             <button class="bg-red-500 p-2 rounded hidden" id="address_reset">Reset Address</button>
@@ -249,6 +249,7 @@
                                         <textarea placeholder="Enter Petitioner Address" 
                                             class="border bg-[#334155] text-white p-2 mt-2 border-black rounded w-full" 
                                             rows="3"></textarea>
+                                            <button type="button" id="petitioner_address_copy_button" class="text-white bg-red-500 p-2 rounded my-2">Copy</button>
                                         <button class="bg-red-500 text-white my-2 p-1 rounded mx-1 remove-petitioner-address">Remove Address</button>
                                     </span>
                                     <span class="petitioner-being-text">being</span> the
@@ -284,7 +285,7 @@
                     </td>
 
                     <td class="flex h-[60vh] justify-center items-end ">
-                        ..........................................................................................................<span>Petitioner's</span>
+                        ..........................................................................................................<span data-petitioner-text="possessive">Petitioner</span>
                     </td>
                 </tr>
 

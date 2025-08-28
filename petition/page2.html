@@ -9,7 +9,7 @@
                        1.
                     </td>
                     <td colspan="3" class="py-5">
-                       <p>That the above named <input
+                       <p class="p-2">That the above named <input
                         type="text" placeholder="Enter Deceased Name"
                         class="border p-1 w-[50%] mt-2 input border-white rounded" 
                         data-deceased-name="page2">
@@ -64,7 +64,7 @@
                     <td  class=" text-center py-5 border-r border-white w-[10%]">
                        2.
                     </td>
-                    <td colspan="3"> That the said deceased at the time of <input type="radio" id="gender" name="gender1" value="His" class="form-required input sync-field" data-sync-group="gender"> his /
+                    <td colspan="3" class="p-2"> That the said deceased at the time of <input type="radio" id="gender" name="gender1" value="His" class="form-required input sync-field" data-sync-group="gender"> his /
                         <input type="radio" id="gender" name="gender1" value="Her" class="" data-sync-group="gender"> her  death had a fixed place of abode at <button class="bg-blue-600 text-white p-1 rounded mx-1 deceased-address-btn">ADDRESS OF DECEASED</button><span class="hidden deceased-address-container">
                             <textarea placeholder="Enter Deceased Address" 
                                 class="border bg-[#334155] text-white p-2 mt-2 border-white rounded w-full" 
@@ -85,18 +85,18 @@
                        3.
                     </td>
                     <td colspan="3"> 
-                       <p>
+                       <p class="p-2">
                         That the said deceased died intestate and that due and diligent search has been made for a will but none has been found.
                        </p>
                     </td>
                 </tr>
 
                 <tr class="py-5 border-t border-white">
-                    <td  class=" text-center py-5 border-r border-white w-[10%]">
+                    <td  class=" text-center align-top py-5 border-r border-white w-[10%]">
                        4.
                     </td>
                     <td colspan="3"> 
-                       <p>
+                       <p class="p-2">
                         That the said deceased left <input type="radio" id="surviving_male" name="surviving_gender" value="Male" class="form-required input "> him /
                         <input type="radio" id="surviving_female" name="surviving_gender" value="Female" class=""> her surviving as 
                         <input type="radio" id="heir_type1" name="heir_type" value="Male" class=""> his /
@@ -131,13 +131,15 @@
                            <!-- Action buttons -->
                            <div class="mt-4 space-x-4">
                                <button type="button" id="add-more-legal-heir" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">+ Add More Legal Heir</button>
-                               <button type="button" id="add-sub-legal-heir" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">+ Add Sub Legal Heir</button>
                            </div>
                            
                            <!-- Textarea for legal heir class paragraphs -->
                            <div class="mt-4">
                                <textarea id="legal-heir-class-textarea" class="border p-2 border-white input rounded w-full" rows="6" placeholder="Legal heir class paragraphs will appear here..."></textarea>
-                               </div>
+                           </div>
+                           
+                           <!-- Separate section for Add Sub Legal Heirs button -->
+                           
 </div>
 
 <!-- Legal Heir Class Modals -->
@@ -281,8 +283,8 @@
             <button type="button" class="close-modal text-gray-500 hover:text-gray-700 text-xl" data-modal="minor-children-modal">&times;</button>
         </div>
         <div class="space-y-3">
-            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="minor-single-child">The one of the son/daughter of deceased is minor, namely: _____, born on ________________. Hereto annexed and marked as Exhibit "__" is a true copy of his/her birth certificates. The said minor is under the care and protection of her/his mother/father the petitioner herein.</button>
-            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="minor-multiple-children">The ____ son and the _____daughter of the deceased are minor, namely: 1) _____, born on ____________, and 2) ______________________, born on ______________. Hereto annexed and marked as Exhibit "__" and Exhibit "___" respectively, are true copies of their birth certificates. The said minors are under the care and protection of their mother the petitioner herein.</button>
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="minor-single-child">The one of the son/daughter of deceased is minor, namely: _____, born on ________________. Hereto annexed and marked as Exhibit "__" is a true copy of his/her birth certificates. The said minor is under the care and protection of her/his mother/father.</button>
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="minor-multiple-children">The ____ son and the _____daughter of the deceased are minor, namely: 1) _____, born on ____________, and 2) ______________________, born on ______________. Hereto annexed and marked as Exhibit "__" and Exhibit "___" respectively, are true copies of their birth certificates. The said minors are under the care and protection of their mother.</button>
         </div>
     </div>
 </div>
@@ -330,6 +332,8 @@
                             <button type="button" id="divorce-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium transition-colors">DIVORCE PARA</button>
                         </div>
                      </p>
+                     
+                     
                     </td>
                 </tr>
 
@@ -337,7 +341,7 @@
                     <td class="text-center py-5 border-r border-white w-[10%]">
                        5.
                     </td>
-                    <td colspan="3">
+                    <td colspan="3" class="p-2">
                         <p>
                             That the Petitioner as <select id="relationship" class=" border border-gray-300 input rounded p-2 mb-4" data-unique="true">
                                 <option value="Widow">Widow</option>
@@ -349,12 +353,18 @@
                                 <option value="Sister">Sister</option>
                                 <option value="Other">Other</option>
                               </select> of the deceased claims to be a Legal heir
-                            entitled to <input
-                            type="text"
-                            id="share"
-                            class="input border border-gray-300 rounded p-2 mb-4"
-                            placeholder="Enter share like 1/4th or 25%"
-                          /> share in the estate left by the deceased.
+                            entitled to <select id="share" class=" border border-gray-300 input rounded p-2 mb-4" data-unique="true">
+                                <option value="">Full </option>
+                                <option value="1/2">1/2</option>
+                                <option value="1/2">1/3<sup>rd</sup></option>
+                                <option value="1/4">1/4<sup>th</sup></option>
+                                <option value="1/5">1/5<sup>th</sup></option>
+                                <option value="1/6">1/6<sup>th</sup></option>
+                                <option value="1/7">1/7<sup>th</sup></option>
+                                <option value="1/8">1/8<sup>th</sup></option>
+                                <option value="Unique">Unique</option>
+                              </select>
+                              <input type="text" id="unique-share-input" class="border border-gray-300 input rounded p-2 mb-4 hidden" placeholder="Enter unique share (e.g., 1/3, 2/5, etc.)"> share in the estate left by the deceased.
                         </p>
                     </td>
                 </tr>
