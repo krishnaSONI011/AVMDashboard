@@ -1265,6 +1265,46 @@
         
         // Setup unique share input
         setupUniqueShareInput();
+        
+        // Setup auto-scroll for appended paragraphs
+        function setupAutoScrollForParagraphs() {
+            const paragraphButtons = [
+                'add-tenanted-para',
+                'add-joint-deceased-para', 
+                'add-two-name-para',
+                'add-additional-para',
+                'add-delay-para'
+            ];
+            
+            paragraphButtons.forEach(buttonId => {
+                const button = document.getElementById(buttonId);
+                if (button) {
+                    button.addEventListener('click', function() {
+                        // Wait a bit for the paragraph to be appended
+                        setTimeout(() => {
+                            // Find the newly appended paragraph (usually the last paragraph in the table)
+                            const table = document.querySelector('#page3 table tbody');
+                            if (table) {
+                                const rows = table.querySelectorAll('tr');
+                                if (rows.length > 0) {
+                                    const lastRow = rows[rows.length - 1];
+                                    
+                                    // Scroll to the last row with smooth animation
+                                    console.log('Scrolling to newly appended paragraph');
+                                    lastRow.scrollIntoView({ 
+                                        behavior: 'smooth', 
+                                        block: 'center' 
+                                    });
+                                }
+                            }
+                        }, 100); // Small delay to ensure paragraph is appended
+                    });
+                }
+            });
+        }
+        
+        // Setup auto-scroll functionality
+        setupAutoScrollForParagraphs();
             
             // Check if any radio buttons are found
             const anyRadioFound = hisRadioPage1 || herRadioPage1 || hisRadioPage2 || herRadioPage2 || 
