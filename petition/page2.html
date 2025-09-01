@@ -137,6 +137,8 @@
                            <div class="mt-4">
                                <textarea id="legal-heir-class-textarea" class="border p-2 border-white input rounded w-full" rows="6" placeholder="Legal heir class paragraphs will appear here..."></textarea>
                            </div>
+                           <!-- Search Para Button -->
+                           
                            
                            <!-- Separate section for Add Sub Legal Heirs button -->
                            
@@ -312,8 +314,8 @@
         <div class="space-y-3">
             <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="divorce-first-wife">The deceased obtained divorce from his first wife namely ____, hereto annexed and marked as Exhibit-__ is a copy of divorce order dated _____ passed by ______________. That out of the wedlock from the said first wife the deceased left one daughter & left no son.</button>
         </div>
-    </div>
-</div>
+                           </div>
+                       </div>
                      <p>
                         <h1 class="my-5 bg-blue-500 text-white p-2 rounded w-fit">
                             DECEASED-LEGAL HEIR CLASS WISE PARA 
@@ -330,6 +332,8 @@
                             <button type="button" id="minor-children-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium transition-colors">MINOR CHILDREN PARA</button>
                             <button type="button" id="no-dc-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium transition-colors">NO DC PARA</button>
                             <button type="button" id="divorce-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium transition-colors">DIVORCE PARA</button>
+                                <button type="button" id="search-para-btn" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Search Para</button>
+                            
                         </div>
                      </p>
                      
@@ -371,5 +375,21 @@
                 
             </tbody>
         </table>
+    </div>
+</div>
+
+<!-- Search Para Modal -->
+<div id="search-para-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg w-[36rem] max-h-[80vh] overflow-y-auto">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-bold text-gray-800">Search Para</h3>
+            <button type="button" class="close-modal text-gray-500 hover:text-gray-700 text-xl" data-modal="search-para-modal">&times;</button>
+        </div>
+        <div class="mb-4">
+            <input type="text" id="search-para-input" class="w-full border border-gray-300 rounded p-2" placeholder="Type to search...">
+        </div>
+        <div id="search-para-list" class="space-y-2">
+            <!-- Aggregated options will be injected here -->
+        </div>
     </div>
 </div>

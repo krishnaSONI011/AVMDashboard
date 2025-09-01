@@ -14,12 +14,12 @@
 
 
                             <input type="text" placeholder="Enter Petition Number"
-                                class="border input bg-[#334155] text-white p-1 rounded" />
+                                class="border w-[17%] input bg-[#334155] text-white p-1 rounded" />
 
                             of
                             <!-- Petition Year Input -->
                             <input type="text" placeholder="Year"
-                                class="bg-[#334155] text-white input border p-1 rounded" />
+                                class="bg-[#334155] w-[8%] text-white input border p-1 rounded" id="year_inputs"/>
 
 
 
@@ -43,8 +43,8 @@
                                 data-deceased-name="main" />
                             <!-- Button That Show the Alias Name  -->
                             <button class="bg-blue-600 my-4 text-white p-1 rounded mx-1" id="deceased_alias">
-                                Alias
-                                Name
+                               Deceased Alias Name
+                                
                             </button>
                             <!-- Input For the Alias Name -->
 
@@ -122,7 +122,7 @@
                            
                             <select name="citizenship" id="citizenship"
                                 class="border my-2 w-full bg-[#334155] text-white border-black  mt-1 p-1 rounded">
-                                <option value="volvo">Select Occupation</option>
+                                <option value="volvo">Select Deceased Occupation</option>
                                 <option value="Service">Service </option>
                                 <option value="Business">Business</option>
                                 <option value="Housewife">Housewife</option>
@@ -155,7 +155,7 @@
 
 
                             <button class="bg-blue-600 mt-2 text-white p-1 rounded mx-1" id="address_des_button">PLACE
-                                OF DEATH: SAME AS RESIDENCE CITY? </button>
+                                OF DEATH ? </button>
 
                                 <span class="hidden" id="and">and</span>
                             was residing at
@@ -199,7 +199,7 @@
                                     <span class="petitioner_number font-bold mr-1"></span>
                                     <input type="text" placeholder="Enter Petitioner Name"
                                         class="border bg-[#334155] text-white p-1 mt-2 border-black rounded w-full" />
-                                    <button class="bg-blue-600 text-white p-1 rounded mx-1 petitioner-alias-btn">Alias Name</button>
+                                    <button class="bg-blue-600 my-3 text-white p-1 rounded mx-1 petitioner-alias-btn">Petitioner Alias Name</button>
                                     <span class="hidden petitioner-alias-container">
                                         <span class="flex justify-between my-2">Alias Name</span>
                                         <input type="text" placeholder="Enter Petitioner Alias Name"
@@ -209,7 +209,7 @@
                                     <input type="text" placeholder="Enter Petitioner Age"
                                         class="border bg-[#334155] text-white p-1 mt-2 border-black rounded w-full" />  <select name="citizenship" id="citizenship"
                                         class="border my-2 w-full bg-[#334155] text-white border-black  mt-1 p-1 rounded">
-                                        <option value="volvo">Select Occupation</option>
+                                        <option value="volvo">Select Petitioner Occupation</option>
                                         <option value="Service">Service </option>
                                         <option value="Business">Business</option>
                                         <option value="Housewife">Housewife</option>
@@ -226,8 +226,8 @@
                                     </select> 
 
                                         <select name="religin" id="petitioner-religin"
-                                        class="border bg-[#334155] text-white my-2 w-full border-black mt-1 p-1 rounded">
-                                        <option value="">Select Religion of petitioner</option>
+                                        class="border bg-[#334155] text-white my-2 w-full border-black my-2 p-1 rounded">
+                                        <option value="">Select Religion of Petitioner</option>
                                         <option value="hindu">Hindu</option>
                                         <option value="">Christian</option>
                                         <option value="">Sunni Muslim</option>
@@ -236,7 +236,7 @@
         
                                     </select>
                                     <select class="border bg-[#334155] text-white border-black mt-1 p-1 rounded w-full">
-                                        <option value="">Select citizen</option>
+                                        <option value="">Select Citizen</option>
                                         <option value="Indian">Indian</option>
                                         <option value="NRI">NRI</option>
                                     </select>
@@ -270,6 +270,13 @@
                                         <option value="Nephew">Nephew</option>
                                         <option value="Niece">Niece</option>
                                         <option value="Cousin">Cousin</option>
+                                        <option value="Cousin">Married Daughter</option>
+                                        <option value="Married Granddaughter">Married Granddaughter</option>
+                                        <option value="Married Sister">Married Sister</option>
+                                        <option value="Married Sister">Married Niece</option>
+                                        <option value="Married Sister">Daughter in Law</option>
+                                        <option value="Married Sister">Minor Son</option>
+                                        <option value="Married Sister">Minor Daughter</option>
                                         <option value="Other"> Brother in Law</option>
                                         <option value="Other"> Sister in Law</option>
                                     </select>
@@ -279,8 +286,10 @@
                         </div>
 
                         <!-- Add Button -->
-                        <button type="button" id="add_petitioner_button"
-                            class="bg-red-500 mt-4 ml-2 text-white p-2 rounded font-semibold">+ Add Petitioner</button>
+                        <div class="flex justify-end mt-4">
+                            <button type="button" id="add_petitioner_button"
+                                class="bg-red-500 text-white p-2 rounded font-semibold">+ Add Petitioner</button>
+                        </div>
 
                     </td>
 
@@ -304,3 +313,6 @@
         </table>
     </div>
 </div>
+
+
+

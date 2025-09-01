@@ -37,6 +37,9 @@
         setupPage1Events();
         setupPage2Events();
         setupPage3Events();
+        console.log('About to setup drawn by me modal...');
+        setupDrawnByMeModal(); // Setup immediately
+        console.log('Finished setting up drawn by me modal');
         
         // Initialize legal heirs table after page content is loaded
         setTimeout(() => {
@@ -49,6 +52,18 @@
             
             // Initialize petitioner text
             updatePetitionerText();
+            
+            // Update petitioner signature names
+            updatePetitionerSignatureNames();
+            
+            // Update paragraph count
+            updateParagraphCount();
+            
+            // Update declaration date
+            updateDeclarationDate();
+            
+            // Setup drawn by me modal
+            setupDrawnByMeModal();
         }, 500);
     }
 
@@ -59,6 +74,8 @@
         
         if (petitionerBlocks.length > 0) {
             initializeLegalHeirsTable();
+            // Update signature names after legal heirs table is initialized
+            updatePetitionerSignatureNames();
         } else {
             console.log('No petitioner blocks found, retrying in 1 second...');
             setTimeout(() => {
@@ -94,11 +111,296 @@
         return result;
     }
 
+    // Global function to update petitioner signature names
+    function updatePetitionerSignatureNames() {
+        const namesDisplay = document.getElementById('petitioner-names-display');
+        
+        if (!namesDisplay) {
+            console.log('Signature display element not found');
+            return;
+        }
+
+        const petitionerBlocks = document.querySelectorAll('.petitioner_block');
+        console.log('Found petitioner blocks:', petitionerBlocks.length);
+        const petitionerNames = [];
+
+        petitionerBlocks.forEach((block, index) => {
+            const nameInput = block.querySelector('input[placeholder="Enter Petitioner Name"]');
+            if (nameInput && nameInput.value.trim() !== '') {
+                petitionerNames.push(nameInput.value.trim());
+                console.log('Found petitioner name:', nameInput.value.trim());
+            }
+        });
+
+        if (petitionerNames.length > 0) {
+            // Create the display HTML
+            let displayHTML = '';
+            petitionerNames.forEach((name, index) => {
+                displayHTML += `<div class="text-white mb-2">${name}</div>`;
+                if (index < petitionerNames.length - 1) {
+                    displayHTML += `<div class="text-white text-sm mb-3">Petitioner</div>`;
+                }
+            });
+            
+            // Add "Petitioner" after the last name
+            displayHTML += `<div class="text-white text-sm">Petitioner</div>`;
+            
+            namesDisplay.innerHTML = displayHTML;
+            console.log('Updated signature display with names:', petitionerNames);
+        } else {
+            namesDisplay.innerHTML = '';
+            console.log('No petitioner names found, cleared signature');
+        }
+
+        // Also update the declaration section
+        updateDeclarationSection(petitionerNames);
+    }
+
+    // Function to update declaration section on page 4
+    function updateDeclarationSection(petitionerNames) {
+        const declarationPronoun = document.getElementById('declaration-pronoun');
+        const declarationNames = document.getElementById('declaration-petitioner-names');
+        const declarationText = document.getElementById('declaration-petitioner-text');
+        
+        if (!declarationPronoun || !declarationNames || !declarationText) {
+            console.log('Declaration elements not found');
+            return;
+        }
+
+        if (petitionerNames.length > 0) {
+            // Update pronoun (I/We)
+            if (petitionerNames.length === 1) {
+                declarationPronoun.textContent = 'I';
+                declarationText.textContent = 'Petitioner';
+            } else {
+                declarationPronoun.textContent = 'We';
+                declarationText.textContent = 'Petitioners';
+            }
+
+            // Update names
+            if (petitionerNames.length === 1) {
+                declarationNames.textContent = petitionerNames[0];
+            } else {
+                const formattedNames = petitionerNames.map((name, index) => `${index + 1}) ${name}`).join(', ');
+                declarationNames.textContent = formattedNames;
+            }
+
+            console.log('Updated declaration section:', {
+                pronoun: declarationPronoun.textContent,
+                names: declarationNames.textContent,
+                text: declarationText.textContent
+            });
+        } else {
+            declarationPronoun.textContent = 'I';
+            declarationNames.textContent = '';
+            declarationText.textContent = 'Petitioner';
+        }
+
+        // Also update paragraph count
+        updateParagraphCount();
+        
+        // Also update declaration date
+        updateDeclarationDate();
+        
+        // Also update signature section
+        updateSignatureSection(petitionerNames);
+    }
+
+    // Function to update declaration date with today's date
+    function updateDeclarationDate() {
+        const monthElement = document.getElementById('declaration-month');
+        const yearElement = document.getElementById('declaration-year');
+        
+        if (!monthElement || !yearElement) {
+            console.log('Declaration date elements not found');
+            return;
+        }
+
+        const today = new Date();
+        const monthNames = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+        
+        const currentMonth = monthNames[today.getMonth()];
+        const currentYear = today.getFullYear();
+        
+        monthElement.value = currentMonth;
+        yearElement.value = currentYear;
+        
+        console.log('Updated declaration date:', currentMonth, currentYear);
+    }
+
+    // Function to update signature section with petitioner names
+    function updateSignatureSection(petitionerNames) {
+        const signatureNames = document.getElementById('petitioner-signature-names');
+        
+        if (!signatureNames) {
+            console.log('Signature names element not found');
+            return;
+        }
+
+        if (petitionerNames.length > 0) {
+            // Format names with each petitioner on a new line
+            const formattedNames = petitionerNames.map((name, index) => `${name}`).join('<br>');
+            signatureNames.innerHTML = formattedNames;
+            
+            console.log('Updated signature section with names:', petitionerNames);
+        } else {
+            signatureNames.innerHTML = '';
+        }
+    }
+
+    // Function to setup drawn by me modal functionality
+    function setupDrawnByMeModal() {
+        console.log('Setting up drawn by me modal...');
+        
+        const drawnByMeBtn = document.getElementById('drawn-by-me-btn');
+        const drawnByMeModal = document.getElementById('drawn-by-me-modal');
+        const drawnByMeTextarea = document.getElementById('drawn-by-me-textarea');
+        
+        // Setup advocate section hide button
+        const hideAdvocateBtn = document.getElementById('hide-advocate-btn');
+        if (hideAdvocateBtn) {
+            hideAdvocateBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const advocateSection = document.getElementById('advocate-section');
+                if (advocateSection) {
+                    advocateSection.style.display = 'none';
+                    console.log('Advocate section hidden');
+                }
+            });
+        }
+        
+        console.log('Elements found:', {
+            button: !!drawnByMeBtn,
+            modal: !!drawnByMeModal,
+            textarea: !!drawnByMeTextarea
+        });
+        
+        if (!drawnByMeBtn || !drawnByMeModal || !drawnByMeTextarea) {
+            console.log('Drawn by me elements not found, retrying in 1 second...');
+            setTimeout(setupDrawnByMeModal, 1000);
+            return;
+        }
+
+        // Open modal when button is clicked
+        drawnByMeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('Drawn by me button clicked');
+            drawnByMeModal.classList.remove('hidden');
+            console.log('Opened drawn by me modal');
+        });
+
+        // Close modal when X is clicked
+        const closeBtn = drawnByMeModal.querySelector('.close-modal');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                drawnByMeModal.classList.add('hidden');
+                console.log('Closed drawn by me modal');
+            });
+        }
+
+        // Handle option selection
+        const modalOptions = drawnByMeModal.querySelectorAll('.modal-option');
+        console.log('Found modal options:', modalOptions.length);
+        
+        modalOptions.forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.preventDefault();
+                console.log('Modal option clicked:', option.textContent);
+                const selectedText = option.textContent;
+                
+                // Get petitioner names
+                const petitionerBlocks = document.querySelectorAll('.petitioner_block');
+                console.log('Found petitioner blocks:', petitionerBlocks.length);
+                const petitionerNames = [];
+                
+                petitionerBlocks.forEach((block, index) => {
+                    const nameInput = block.querySelector('input[placeholder="Enter Petitioner Name"]');
+                    if (nameInput && nameInput.value.trim() !== '') {
+                        petitionerNames.push(nameInput.value.trim());
+                        console.log('Found petitioner name:', nameInput.value.trim());
+                    }
+                });
+                
+                console.log('Total petitioner names:', petitionerNames.length);
+                
+                // Only add the selected text to the textarea (no petitioner names)
+                drawnByMeTextarea.value = selectedText;
+                drawnByMeModal.classList.add('hidden');
+                console.log('Final text set in textarea:', selectedText);
+                console.log('Textarea value after setting:', drawnByMeTextarea.value);
+            });
+        });
+
+        // Close modal when clicking outside
+        drawnByMeModal.addEventListener('click', (e) => {
+            if (e.target === drawnByMeModal) {
+                drawnByMeModal.classList.add('hidden');
+            }
+        });
+
+        // Test button functionality
+        const testBtn = document.getElementById('test-modal-btn');
+        if (testBtn) {
+            testBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                console.log('Test button clicked - manually opening modal');
+                drawnByMeModal.classList.remove('hidden');
+            });
+        }
+    }
+
+    // Function to count and update paragraph numbers
+    function updateParagraphCount() {
+        const paragraphCountElement = document.getElementById('paragraph-count');
+        if (!paragraphCountElement) {
+            console.log('Paragraph count element not found');
+            return;
+        }
+
+        // Count paragraphs in page 2 table - only count rows with numbered paragraphs
+        const page2Table = document.querySelector('#page2 table tbody');
+        let page2Count = 0;
+        if (page2Table) {
+            const page2Rows = page2Table.querySelectorAll('tr');
+            page2Rows.forEach(row => {
+                const firstCell = row.querySelector('td:first-child');
+                if (firstCell && firstCell.textContent.trim().match(/^\d+\.$/)) {
+                    page2Count++;
+                }
+            });
+        }
+
+        // Count paragraphs in page 3 table - only count rows with numbered paragraphs
+        const page3Table = document.querySelector('#page3 table tbody');
+        let page3Count = 0;
+        if (page3Table) {
+            const page3Rows = page3Table.querySelectorAll('tr');
+            page3Rows.forEach(row => {
+                const firstCell = row.querySelector('td:first-child');
+                if (firstCell && firstCell.textContent.trim().match(/^\d+\.$/)) {
+                    page3Count++;
+                }
+            });
+        }
+
+        // Total count
+        const totalCount = page2Count + page3Count;
+        
+        paragraphCountElement.textContent = totalCount;
+        console.log('Updated paragraph count:', totalCount, '(Page 2:', page2Count, '+ Page 3:', page3Count, ')');
+    }
+
     // Global event listener as backup for consent affidavit button
   
 
     function setupPage1Events() {
-       
+       // get the current yaer
+       const yearInput = document.getElementById('year_inputs');
+       yearInput.value = new Date().getFullYear();
         // Deceased alias toggle
         const alias_button = document.getElementById('deceased_alias');
         const alias_box = document.getElementById('alias_container');
@@ -280,15 +582,20 @@
                 const oldRemoveBtn = newBlock.querySelector(".remove_petitioner_btn");
                 if (oldRemoveBtn) oldRemoveBtn.remove();
 
+                // Create container div for remove button
+                const removeBtnContainer = document.createElement("div");
+                removeBtnContainer.className = "flex justify-end mt-3";
+
                 const removeBtn = document.createElement("button");
-                removeBtn.className = "remove_petitioner_btn bg-gray-500 text-white px-3 py-1 rounded mt-3 ml-2";
+                removeBtn.className = "remove_petitioner_btn bg-gray-500 text-white px-3 py-1 rounded";
                 removeBtn.textContent = "Remove Petitioner";
                 removeBtn.onclick = () => {
                     newBlock.remove();
                     updatePetitionerNumbers();
                 };
 
-                newBlock.appendChild(removeBtn);
+                removeBtnContainer.appendChild(removeBtn);
+                newBlock.appendChild(removeBtnContainer);
                 petitionerWrapper.appendChild(newBlock);
                 updatePetitionerNumbers();
                 
@@ -352,7 +659,7 @@
             });
 
             removeAddressButtons.forEach(button => {
-                button.addEventListener("click", function(e) {
+                button.addEventListener('click', function(e) {
                     e.preventDefault();
                     const addressContainer = this.closest(".petitioner-address-container");
                     const addressButton = addressContainer.previousElementSibling;
@@ -448,11 +755,22 @@
                     input.addEventListener('input', updatePetitionerDisplay);
                     input.addEventListener('change', updatePetitionerDisplay);
                 });
+
+                // Set up signature name updates for petitioner name inputs specifically
+                const petitionerNameInputs = document.querySelectorAll('.petitioner_block input[placeholder="Enter Petitioner Name"]');
+                petitionerNameInputs.forEach(input => {
+                    input.removeEventListener('input', updatePetitionerSignatureNames);
+                    input.addEventListener('input', updatePetitionerSignatureNames);
+                });
+                
+                // Also call it initially for any existing inputs
+                updatePetitionerSignatureNames();
             }
             
             // Initial setup
             setupPetitionerInputListeners();
             updatePetitionerDisplay();
+            updatePetitionerSignatureNames();
             
             // Set up observer to watch for new petitioner blocks
             const petitionerWrapper = document.getElementById('petitioner_wrapper');
@@ -462,6 +780,7 @@
                         if (mutation.type === 'childList') {
                             setupPetitionerInputListeners();
                             updatePetitionerDisplay();
+                            updatePetitionerSignatureNames();
                         }
                     });
                 });
@@ -829,14 +1148,20 @@
 
                     let removeBtn = block.querySelector(".remove_petitioner_btn");
                     if (!removeBtn && index > 0) {
+                        // Create container div for remove button
+                        const removeBtnContainer = document.createElement("div");
+                        removeBtnContainer.className = "flex justify-end mt-3";
+
                         removeBtn = document.createElement("button");
-                        removeBtn.className = "remove_petitioner_btn bg-gray-500 text-white px-3 py-3 rounded mt-3 ml-2";
+                        removeBtn.className = "remove_petitioner_btn bg-gray-500 text-white px-3 py-3 rounded";
                         removeBtn.textContent = "Remove Petitioner";
                         removeBtn.onclick = () => {
                             block.remove();
                             updatePetitionerNumbers();
                         };
-                        block.appendChild(removeBtn);
+                        
+                        removeBtnContainer.appendChild(removeBtn);
+                        block.appendChild(removeBtnContainer);
                     } else if (removeBtn && index === 0) {
                         removeBtn.remove();
                     }
@@ -883,30 +1208,30 @@
 
         // copy text  dc address - with retry mechanism
         function setupCopyButtons() {
-            const dc_address_copy_button = document.getElementById("dc_address_button")
-            const enter_addressProof_text = document.getElementById("enter_addressProof")
-            const toast = document.getElementById("toast")
+        const dc_address_copy_button = document.getElementById("dc_address_button")
+        const enter_addressProof_text = document.getElementById("enter_addressProof")
+        const toast = document.getElementById("toast")
             
             console.log('Copy elements found:', {
                 button: !!dc_address_copy_button,
                 textarea: !!enter_addressProof_text,
                 toast: !!toast
             });
-            
-            if (dc_address_copy_button && enter_addressProof_text && toast) {
+        
+        if (dc_address_copy_button && enter_addressProof_text && toast) {
                 console.log('Setting up DC address copy button');
-                dc_address_copy_button.addEventListener("click",(e)=>{
-                    e.preventDefault()
+            dc_address_copy_button.addEventListener("click",(e)=>{
+                e.preventDefault()
                     console.log('DC address copy button clicked');
-                    
-                    const dc_address = enter_addressProof_text.value
+                
+                const dc_address = enter_addressProof_text.value
                     console.log('Text to copy:', dc_address);
-                    
+                
                     if (navigator.clipboard && navigator.clipboard.writeText) {
                         navigator.clipboard.writeText(dc_address).then(()=>{
                             console.log('Text copied successfully');
-                            toast.innerText = "DC ADDRESS COPY !"
-                            toast.classList.remove("hidden")
+                toast.innerText = "DC ADDRESS COPY !"
+                toast.classList.remove("hidden")
 
                             setTimeout(()=>{
                                 toast.classList.add("hidden")
@@ -919,11 +1244,11 @@
                             document.execCommand('copy');
                             toast.innerText = "DC ADDRESS COPY !"
                             toast.classList.remove("hidden")
-                            setTimeout(()=>{
-                                toast.classList.add("hidden")
-                                toast.innerText = ""
-                            },2000)
-                        })
+                setTimeout(()=>{
+                    toast.classList.add("hidden")
+                    toast.innerText = ""
+                },2000)
+                })
                     } else {
                         // Fallback for browsers without clipboard API
                         enter_addressProof_text.select();
@@ -947,14 +1272,14 @@
 
         // copy address proof - with retry mechanism
         function setupAddressProofCopyButton() {
-            const address_proof_copy_button = document.getElementById("address_proof_button")
-            const address_proof_input = document.getElementById("address_proof")
+        const address_proof_copy_button = document.getElementById("address_proof_button")
+        const address_proof_input = document.getElementById("address_proof")
             const toast = document.getElementById("toast")
             
-            if (address_proof_copy_button && address_proof_input && toast) {
+        if (address_proof_copy_button && address_proof_input && toast) {
                 console.log('Setting up address proof copy button');
-                address_proof_copy_button.addEventListener("click",(e)=>{
-                    e.preventDefault()
+            address_proof_copy_button.addEventListener("click",(e)=>{
+                e.preventDefault()
                     console.log('Address proof copy button clicked');
                     
                     const address_text = address_proof_input.value
@@ -963,8 +1288,8 @@
                     if (navigator.clipboard && navigator.clipboard.writeText) {
                         navigator.clipboard.writeText(address_text).then(()=>{
                             console.log('Address text copied successfully');
-                            toast.innerText = "Address Proof Copy"
-                            toast.classList.remove("hidden")
+                toast.innerText = "Address Proof Copy"
+                toast.classList.remove("hidden")
 
                             setTimeout(()=>{
                                 toast.classList.add("hidden")
@@ -977,11 +1302,11 @@
                             document.execCommand('copy');
                             toast.innerText = "Address Proof Copy"
                             toast.classList.remove("hidden")
-                            setTimeout(()=>{
-                                toast.classList.add("hidden")
-                                toast.innerText = ""
-                            },2000)
-                        })
+                setTimeout(()=>{
+                    toast.classList.add("hidden")
+                    toast.innerText = ""
+                },2000)
+                })
                     } else {
                         // Fallback for browsers without clipboard API
                         address_proof_input.select();
@@ -1340,8 +1665,10 @@
     console.log('Global variables initialized - legalHeirCounter:', legalHeirCounter, 'subHeirCounter:', subHeirCounter);
 
     function setupPage2Events() {
-        // Don't initialize legal heirs table here - it will be called after a delay
-        // to ensure all content is loaded
+        // Initialize legal heirs table for page 2
+        setTimeout(() => {
+            initializeLegalHeirsTableWithRetry();
+        }, 100);
         
         const the_proof_selector = document.getElementById('proof_select')
         if (the_proof_selector) {
@@ -1373,13 +1700,90 @@
         if (addSubLegalHeirBtn) {
             addSubLegalHeirBtn.addEventListener('click', addSubLegalHeir);
         }
-        
+
+        // Set up event listeners for existing legal heir rows
+        setupExistingLegalHeirEvents();
+
         // Only retry if essential buttons are missing
         if (!addMoreLegalHeirBtn) {
             console.log('Add More Legal Heir button not found, retrying in 1 second...');
             setTimeout(setupLegalHeirButtons, 1000);
         } else {
             console.log('Legal heir buttons setup completed');
+        }
+    }
+
+    function setupExistingLegalHeirEvents() {
+        console.log('Setting up existing legal heir events...');
+        
+        // Set up event listeners for existing legal heir rows
+        const legalHeirRows = document.querySelectorAll('tr.legal-heir-row');
+        legalHeirRows.forEach(row => {
+            setupLegalHeirRowEvents(row);
+        });
+        
+        // Set up event listeners for existing sub-heir rows
+        const subHeirRows = document.querySelectorAll('tr.sub-heir-row');
+        subHeirRows.forEach(row => {
+            setupSubHeirRowEvents(row);
+        });
+        
+        // Set up event listeners for existing sub-sub-heir rows
+        const subSubHeirRows = document.querySelectorAll('tr.sub-sub-heir-row');
+        subSubHeirRows.forEach(row => {
+            setupSubSubHeirRowEvents(row);
+        });
+        
+        console.log('Existing legal heir events set up');
+    }
+
+    function setupLegalHeirRowEvents(row) {
+        // Add event listeners for alive/died radio buttons
+        const aliveDiedRadios = row.querySelectorAll('.alive-died-radio');
+        aliveDiedRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                const heirId = row.dataset.heirId;
+                const aliveDetails = document.getElementById(`alive_details_${heirId}`);
+                const diedDetails = document.getElementById(`died_details_${heirId}`);
+                const ageInput = document.getElementById(`age_input_${heirId}`);
+                const ageDots = document.getElementById(`age_dots_${heirId}`);
+                const addSubHeirsBtn = row.querySelector('.add-sub-heirs-btn');
+                
+                if (this.value === 'alive') {
+                    aliveDetails.classList.remove('hidden');
+                    diedDetails.classList.add('hidden');
+                    // Show age input, hide dots
+                    if (ageInput) ageInput.classList.remove('hidden');
+                    if (ageDots) ageDots.classList.add('hidden');
+                    // Show the Add Sub Legal Heirs button
+                    if (addSubHeirsBtn) addSubHeirsBtn.classList.remove('hidden');
+                } else if (this.value === 'died') {
+                    aliveDetails.classList.add('hidden');
+                    diedDetails.classList.remove('hidden');
+                    // Hide age input, show dots
+                    if (ageInput) ageInput.classList.add('hidden');
+                    if (ageDots) ageDots.classList.remove('hidden');
+                    // Show the Add Sub Legal Heirs button
+                    if (addSubHeirsBtn) addSubHeirsBtn.classList.remove('hidden');
+                } else {
+                    aliveDetails.classList.add('hidden');
+                    diedDetails.classList.add('hidden');
+                    // Hide both age input and dots
+                    if (ageInput) ageInput.classList.add('hidden');
+                    if (ageDots) ageDots.classList.add('hidden');
+                    // Hide the Add Sub Legal Heirs button
+                    if (addSubHeirsBtn) addSubHeirsBtn.classList.add('hidden');
+                }
+            });
+        });
+        
+        // Add event listener to the remove button
+        const removeBtn = row.querySelector('.remove-row-btn');
+        if (removeBtn) {
+            removeBtn.addEventListener('click', function() {
+                row.remove();
+                updateRowNumbers();
+            });
         }
     }
 
@@ -1418,6 +1822,7 @@
             console.log('Processing petitioner block', i + 1);
             const newRow = document.createElement('tr');
             newRow.className = 'petitioner-row';
+            newRow.dataset.petitionerIndex = i;
             
             // Get petitioner information from the block
             const nameInput = petitionerBlock.querySelector('input[placeholder="Enter Petitioner Name"]');
@@ -1442,9 +1847,17 @@
                 <td class="border border-white p-2 text-center">${i + 1}</td>
                 <td class="border border-white p-2">
                     <div class="space-y-2">
-                     <input type="text" value="${petitionerName}" placeholder="NAME OF PETITIONER" class="w-full input border p-1 border-white rounded petitioner-name-display"> <br>
-                Residing at <input type="text" value="${petitionerAddress}" placeholder="ADDRESS OF PETITIONER AS PER TITLE OF PETITIONER" class="w-full input border p-1 border-white rounded petitioner-address-display">  <br>
-                 <br>
+                        <!-- Parent Button -->
+                        <div class="flex justify-end mb-2">
+                            <button type="button" class="add-parent-btn bg-blue-600 text-white px-3 py-1 rounded text-sm" 
+                                data-petitioner-index="${i}" data-petitioner-number="${i + 1}">
+                                Add Parent of Petitioner ${i + 1}
+                            </button>
+                        </div>
+                        
+                        <input type="text" value="${petitionerName}" placeholder="NAME OF PETITIONER" class="w-full input border p-1 border-white rounded petitioner-name-display"> <br>
+                        Residing at <input type="text" value="${petitionerAddress}" placeholder="ADDRESS OF PETITIONER AS PER TITLE OF PETITIONER" class="w-full input border p-1 border-white rounded petitioner-address-display">  <br>
+                        <br>
                         
                         <span class="petitioner-reference-text text-white">${referenceText}</span>
                         <div class="mt-2">
@@ -1473,8 +1886,15 @@
                         <option value="Nephew" ${petitionerRelationship === 'Nephew' ? 'selected' : ''}>Nephew</option>
                         <option value="Niece" ${petitionerRelationship === 'Niece' ? 'selected' : ''}>Niece</option>
                         <option value="Cousin" ${petitionerRelationship === 'Cousin' ? 'selected' : ''}>Cousin</option>
-                        <option value="Brother in Law" ${petitionerRelationship === 'Brother in Law' ? 'selected' : ''}>Brother in Law</option>
-                        <option value="Sister in Law" ${petitionerRelationship === 'Sister in Law' ? 'selected' : ''}>Sister in Law</option>
+                        <option value="Cousin" ${petitionerRelationship === 'Married Daughter' ? 'selected' : ''}>Married Daughter</option>
+                        <option value="Married Granddaughter" ${petitionerRelationship === 'Married Granddaughter' ? 'selected' : ''}>Married Granddaughter</option>
+                        <option value="Married Sister" ${petitionerRelationship === 'Married Sister' ? 'selected' : ''}>Married Sister</option>
+                        <option value="Married Sister" ${petitionerRelationship === 'Married Niece' ? 'selected' : ''}>Married Niece</option>
+                        <option value="Married Sister" ${petitionerRelationship === 'Daughter in Law' ? 'selected' : ''}>Daughter in Law</option>
+                        <option value="Married Sister" ${petitionerRelationship === 'Minor Son' ? 'selected' : ''}>Minor Son</option>
+                        <option value="Married Sister" ${petitionerRelationship === 'Minor Daughter' ? 'selected' : ''}>Minor Daughter</option>
+                        <option value="Other" ${petitionerRelationship === 'Brother in Law' ? 'selected' : ''}> Brother in Law</option>
+                        <option value="Other" ${petitionerRelationship === 'Sister in Law' ? 'selected' : ''}> Sister in Law</option>
                     </select>
                 </td>
                 <td class="border border-white p-2 text-center">
@@ -1487,7 +1907,6 @@
         
         // Update row numbers
         updateRowNumbers();
-        console.log('Legal heirs table initialization complete');
         
         // Set up real-time sync for petitioner data
         setupPetitionerDataSync();
@@ -1497,6 +1916,318 @@
         
         // Set up event listener for separate Add Sub Legal Heirs button
         setupSeparateSubHeirsButton();
+        
+        // Set up event listeners for parent buttons
+        setupParentButtons();
+    }
+
+    function setupParentButtons() {
+        console.log('Setting up parent buttons...');
+        
+        // Use event delegation on the table body for parent buttons
+        const tbody = document.querySelector('#legal-heirs-table tbody');
+        if (!tbody) {
+            console.log('Table body not found for parent button setup');
+            return;
+        }
+        
+        // Remove existing delegated event listener
+        tbody.removeEventListener('click', handleDelegatedParentClick);
+        
+        // Add delegated event listener
+        tbody.addEventListener('click', handleDelegatedParentClick);
+    }
+
+    function handleDelegatedParentClick(event) {
+        console.log('Delegated parent click handler called, target:', event.target);
+        
+        // Check if the clicked element is an add-parent-btn
+        if (event.target.classList.contains('add-parent-btn')) {
+            console.log('Parent button clicked via delegation:', event.target);
+            
+            const petitionerIndex = parseInt(event.target.dataset.petitionerIndex);
+            const petitionerNumber = parseInt(event.target.dataset.petitionerNumber);
+            
+            console.log('Button data:', {
+                petitionerIndex: petitionerIndex,
+                petitionerNumber: petitionerNumber,
+                target: event.target
+            });
+            
+            addParentRow(petitionerIndex, petitionerNumber);
+        }
+        
+        // Check if the clicked element is a remove-parent-btn
+        if (event.target.classList.contains('remove-parent-btn')) {
+            console.log('Remove parent button clicked via delegation:', event.target);
+            
+            const petitionerIndex = parseInt(event.target.dataset.petitionerIndex);
+            removeParentRow(petitionerIndex);
+        }
+    }
+
+    function addParentRow(petitionerIndex, petitionerNumber) {
+        console.log('Adding parent row for petitioner:', petitionerNumber);
+        
+        const tbody = document.querySelector('#legal-heirs-table tbody');
+        if (!tbody) {
+            console.log('Table body not found');
+            return;
+        }
+        
+        // Find the petitioner row
+        const petitionerRows = tbody.querySelectorAll('tr.petitioner-row');
+        const petitionerRow = petitionerRows[petitionerIndex];
+        
+        if (!petitionerRow) {
+            console.log('Petitioner row not found');
+            return;
+        }
+        
+        // Create parent row
+        const parentRow = document.createElement('tr');
+        parentRow.className = 'parent-row';
+        parentRow.dataset.petitionerIndex = petitionerIndex;
+        
+        // Create parent row content
+        parentRow.innerHTML = `
+            <td class="border border-white p-2 text-center">${petitionerNumber}</td>
+            <td class="border border-white p-2">
+                <div class="space-y-2">
+                    <input type="text" placeholder="NAME OF PARENT" class="w-full input border p-1 border-white rounded parent-name-display"> <br>
+                    Residing at <input type="text" placeholder="ADDRESS OF PARENT" class="w-full input border p-1 border-white rounded parent-address-display"> <br>
+                    <br>
+                    
+                    <!-- Death Status Radio Buttons -->
+                    <div class="flex space-x-4 text-white">
+                        <label class="flex items-center">
+                            <input type="radio" name="death_status_${petitionerIndex}" value="since_deceased" class="mr-2">
+                            Since Deceased
+                        </label>
+                        <label class="flex items-center">
+                            <input type="radio" name="death_status_${petitionerIndex}" value="pre_deceased" class="mr-2">
+                            Pre Deceased
+                        </label>
+                    </div>
+                    
+                    <span class="text-white text-sm">(Parent of Petitioner ${petitionerNumber})</span>
+                </div>
+            </td>
+            <td class="border border-white p-2 text-center">
+                <span class="text-white">- - -</span>
+            </td>
+            <td class="border border-white p-2">
+                <select class="w-full input border p-1 border-white rounded">
+                    <option value="">Select Relation to Deceased</option>
+                    <option value="Father">Father</option>
+                    <option value="Mother">Mother</option>
+                </select>
+            </td>
+            <td class="border border-white p-2 text-center">
+                <button type="button" class="remove-parent-btn bg-red-500 text-white px-2 py-1 rounded text-sm" 
+                    data-petitioner-index="${petitionerIndex}">Remove</button>
+            </td>
+        `;
+        
+        // Insert parent row before the petitioner row
+        petitionerRow.parentNode.insertBefore(parentRow, petitionerRow);
+        
+        // Set the parent row number directly
+        const parentNumberCell = parentRow.querySelector('td:first-child');
+        if (parentNumberCell) {
+            parentNumberCell.textContent = petitionerNumber;
+        }
+        
+        // Update the petitioner row number to show (a)
+        const petitionerNumberCell = petitionerRow.querySelector('td:first-child');
+        if (petitionerNumberCell) {
+            petitionerNumberCell.textContent = `${petitionerNumber}(a)`;
+        }
+        
+        // Update row numbers to ensure proper numbering
+        updateRowNumbers();
+        
+        // Disable the parent button for this petitioner
+        const parentBtn = petitionerRow.querySelector('.add-parent-btn');
+        if (parentBtn) {
+            parentBtn.disabled = true;
+            parentBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            parentBtn.textContent = 'Parent Added';
+        }
+        
+        console.log('Parent row added successfully');
+    }
+
+    function updateRowNumbersAfterParent(petitionerIndex) {
+        console.log('Updating row numbers after adding parent for petitioner:', petitionerIndex);
+        
+        const tbody = document.querySelector('#legal-heirs-table tbody');
+        if (!tbody) {
+            console.log('Table body not found');
+            return;
+        }
+        
+        // Get all rows in order
+        const allRows = Array.from(tbody.querySelectorAll('tr'));
+        let currentNumber = 1;
+        
+        allRows.forEach((row, rowIndex) => {
+            const numberCell = row.querySelector('td:first-child');
+            if (!numberCell) return;
+            
+            if (row.classList.contains('parent-row')) {
+                // This is a parent row, assign current number
+                numberCell.textContent = currentNumber;
+                currentNumber++;
+            } else if (row.classList.contains('petitioner-row')) {
+                // This is a petitioner row, check if it has a parent
+                const hasParent = tbody.querySelector(`tr.parent-row[data-petitioner-index="${petitionerIndex}"]`);
+                
+                if (hasParent && parseInt(row.dataset.petitionerIndex) === petitionerIndex) {
+                    // This petitioner has a parent, show (a) suffix
+                    // The parent number is currentNumber - 1
+                    numberCell.textContent = `${currentNumber - 1}(a)`;
+                } else {
+                    // This petitioner has no parent, show regular number
+                    numberCell.textContent = currentNumber;
+                    currentNumber++;
+                }
+            } else {
+                // This is a regular legal heir row
+                numberCell.textContent = currentNumber;
+                currentNumber++;
+            }
+        });
+        
+        console.log('Row numbers updated after parent addition');
+    }
+
+    function updateSubsequentRowNumbers(petitionerIndex) {
+        console.log('Updating subsequent row numbers after adding parent for petitioner:', petitionerIndex);
+        
+        const tbody = document.querySelector('#legal-heirs-table tbody');
+        if (!tbody) {
+            console.log('Table body not found');
+            return;
+        }
+        
+        // Get all rows in order
+        const allRows = Array.from(tbody.querySelectorAll('tr'));
+        let currentNumber = 1;
+        
+        allRows.forEach((row, rowIndex) => {
+            const numberCell = row.querySelector('td:first-child');
+            if (!numberCell) return;
+            
+            if (row.classList.contains('parent-row')) {
+                // This is a parent row, assign current number
+                numberCell.textContent = currentNumber;
+                currentNumber++;
+            } else if (row.classList.contains('petitioner-row')) {
+                // This is a petitioner row, check if it has a parent
+                const hasParent = tbody.querySelector(`tr.parent-row[data-petitioner-index="${petitionerIndex}"]`);
+                
+                if (hasParent && parseInt(row.dataset.petitionerIndex) === petitionerIndex) {
+                    // This petitioner has a parent, show (a) suffix
+                    // Don't increment currentNumber for (a) rows
+                    numberCell.textContent = `${currentNumber - 1}(a)`;
+                } else {
+                    // This petitioner has no parent, show regular number
+                    numberCell.textContent = currentNumber;
+                    currentNumber++;
+                }
+            } else {
+                // This is a regular legal heir row
+                numberCell.textContent = currentNumber;
+                currentNumber++;
+            }
+        });
+        
+        console.log('Subsequent row numbers updated');
+    }
+
+    function updateRowNumbersAfterParentRemoval(petitionerIndex) {
+        console.log('Updating row numbers after removing parent for petitioner:', petitionerIndex);
+        
+        const tbody = document.querySelector('#legal-heirs-table tbody');
+        if (!tbody) {
+            console.log('Table body not found');
+            return;
+        }
+        
+        // Get all rows in order
+        const allRows = Array.from(tbody.querySelectorAll('tr'));
+        let currentNumber = 1;
+        
+        allRows.forEach((row, rowIndex) => {
+            const numberCell = row.querySelector('td:first-child');
+            if (!numberCell) return;
+            
+            if (row.classList.contains('parent-row')) {
+                // This is a parent row, keep the current number
+                numberCell.textContent = currentNumber;
+                currentNumber++;
+            } else if (row.classList.contains('petitioner-row')) {
+                // This is a petitioner row, check if it has a parent
+                const hasParent = tbody.querySelector(`tr.parent-row[data-petitioner-index="${petitionerIndex}"]`);
+                if (hasParent && parseInt(row.dataset.petitionerIndex) === petitionerIndex) {
+                    // This petitioner still has a parent, show (a) suffix
+                    numberCell.textContent = `${currentNumber - 1}(a)`;
+                } else {
+                    // This petitioner has no parent, show regular number
+                    numberCell.textContent = currentNumber;
+                    currentNumber++;
+                }
+            } else {
+                // This is a regular legal heir row
+                numberCell.textContent = currentNumber;
+                currentNumber++;
+            }
+        });
+        
+        console.log('Row numbers updated after parent removal');
+    }
+
+    function removeParentRow(petitionerIndex) {
+        console.log('Removing parent row for petitioner:', petitionerIndex);
+        
+        const tbody = document.querySelector('#legal-heirs-table tbody');
+        if (!tbody) {
+            console.log('Table body not found');
+            return;
+        }
+        
+        // Find the parent row
+        const parentRow = tbody.querySelector(`tr.parent-row[data-petitioner-index="${petitionerIndex}"]`);
+        if (!parentRow) {
+            console.log('Parent row not found');
+            return;
+        }
+        
+        // Find the petitioner row
+        const petitionerRows = tbody.querySelectorAll('tr.petitioner-row');
+        const petitionerRow = petitionerRows[petitionerIndex];
+        
+        if (!petitionerRow) {
+            console.log('Petitioner row not found');
+            return;
+        }
+        
+        // Remove the parent row
+        parentRow.remove();
+        
+        // Update row numbers after removing parent
+        updateRowNumbers();
+        
+        // Re-enable the parent button for this petitioner
+        const parentBtn = petitionerRow.querySelector('.add-parent-btn');
+        if (parentBtn) {
+            parentBtn.disabled = false;
+            parentBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            parentBtn.textContent = `Add Parent of Petitioner ${petitionerIndex + 1}`;
+        }
+        
+        console.log('Parent row removed successfully');
     }
 
     function setupPetitionerSubHeirButtons() {
@@ -1807,8 +2538,14 @@ select.forEach(select => {
             <td class="border border-white p-2">
                 <div class="space-y-2">
                     <input type="text" placeholder="LEGAL HEIR FULL NAME" class="w-full input border p-1 border-white rounded legal-heir-name">
+                    
+                    <!-- Address Field (Always Visible) -->
+                    <div class="mt-2">
+                        <label class="text-white text-sm">Address:</label>
+                        <input type="text" placeholder="Enter Address" class="w-full input border p-1 border-white rounded mt-1 legal-heir-address">
+                    </div>
+                    
                     <div class="flex items-center gap-4 mt-2">
-                        
                         <label class="text-white text-sm">
                             <input type="radio" name="alive_died_${legalHeirCounter}" value="alive" class="mr-1 alive-died-radio"> Alive
                         </label>
@@ -1817,10 +2554,7 @@ select.forEach(select => {
                         </label>
                     </div>
                     <div class="alive-details hidden" id="alive_details_${legalHeirCounter}">
-                        <div class="mt-2">
-                            <label class="text-white text-sm">Address:</label>
-                            <input type="text" placeholder="Enter Address" class="w-full input border p-1 border-white rounded mt-1 legal-heir-address">
-                        </div>
+                        <!-- Additional alive-specific fields can go here if needed -->
                     </div>
                     <div class="died-details hidden" id="died_details_${legalHeirCounter}">
                         <div class="flex items-center gap-4 mt-2">
@@ -1831,6 +2565,7 @@ select.forEach(select => {
                                 <input type="radio" name="deceased_type_${legalHeirCounter}" value="predeceased" class="mr-1"> Predeceased
                             </label>
                         </div>
+                        <!-- Address field removed - now using general address field above -->
                         <div class="mt-2">
                             <label class="text-white text-sm">Died on:</label>
                             <input type="date" class="border p-1 border-white rounded ml-2 died-date" style="background-color: #334155; color: white;">
@@ -1848,7 +2583,7 @@ select.forEach(select => {
                 </div>
             </td>
             <td class="border border-white p-2">
-                <select class="border p-1 mt-2 border-black bg-[#334155] text-white rounded w-full">
+                 <select class="border p-1 mt-2 border-black bg-[#334155] text-white rounded w-full">
                                         <option value="">Select Relation to Deceased</option>
                                         <option value="Widow">Widow</option>
                                         <option value="Widower">Widower</option>
@@ -1865,6 +2600,13 @@ select.forEach(select => {
                                         <option value="Nephew">Nephew</option>
                                         <option value="Niece">Niece</option>
                                         <option value="Cousin">Cousin</option>
+                                        <option value="Cousin">Married Daughter</option>
+                                        <option value="Married Granddaughter">Married Granddaughter</option>
+                                        <option value="Married Sister">Married Sister</option>
+                                        <option value="Married Sister">Married Niece</option>
+                                        <option value="Married Sister">Daughter in Law</option>
+                                        <option value="Married Sister">Minor Son</option>
+                                        <option value="Married Sister">Minor Daughter</option>
                                         <option value="Other"> Brother in Law</option>
                                         <option value="Other"> Sister in Law</option>
                                     </select>
@@ -1875,6 +2617,37 @@ select.forEach(select => {
         `;
         
         // For main legal heirs, append to the end is correct behavior
+        
+        // Add event listeners for alive/died radio buttons
+        const aliveDiedRadios = newRow.querySelectorAll('.alive-died-radio');
+        aliveDiedRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                const aliveDetails = document.getElementById(`alive_details_${legalHeirCounter}`);
+                const diedDetails = document.getElementById(`died_details_${legalHeirCounter}`);
+                const ageInput = document.getElementById(`age_input_${legalHeirCounter}`);
+                const ageDots = document.getElementById(`age_dots_${legalHeirCounter}`);
+                
+                if (this.value === 'alive') {
+                    aliveDetails.classList.remove('hidden');
+                    diedDetails.classList.add('hidden');
+                    // Show age input, hide dots
+                    if (ageInput) ageInput.classList.remove('hidden');
+                    if (ageDots) ageDots.classList.add('hidden');
+                } else if (this.value === 'died') {
+                    aliveDetails.classList.add('hidden');
+                    diedDetails.classList.remove('hidden');
+                    // Hide age input, show dots
+                    if (ageInput) ageInput.classList.add('hidden');
+                    if (ageDots) ageDots.classList.remove('hidden');
+                } else {
+                    aliveDetails.classList.add('hidden');
+                    diedDetails.classList.add('hidden');
+                    // Hide both age input and dots
+                    if (ageInput) ageInput.classList.add('hidden');
+                    if (ageDots) ageDots.classList.add('hidden');
+                }
+            });
+        });
         tbody.appendChild(newRow);
         subHeirCounter = 0; // Reset sub-heir counter when adding new main heir
         
@@ -1962,7 +2735,7 @@ select.forEach(select => {
                 <input type="number" placeholder="Age of Sub Legal Heir" class="w-full border p-1 border-white input rounded">
             </td>
             <td class="border border-white p-2">
-               <select class="border p-1 mt-2 border-black bg-[#334155] text-white rounded w-full">
+                <select class="border p-1 mt-2 border-black bg-[#334155] text-white rounded w-full">
                                         <option value="">Select Relation to Deceased</option>
                                         <option value="Widow">Widow</option>
                                         <option value="Widower">Widower</option>
@@ -1979,6 +2752,13 @@ select.forEach(select => {
                                         <option value="Nephew">Nephew</option>
                                         <option value="Niece">Niece</option>
                                         <option value="Cousin">Cousin</option>
+                                        <option value="Cousin">Married Daughter</option>
+                                        <option value="Married Granddaughter">Married Granddaughter</option>
+                                        <option value="Married Sister">Married Sister</option>
+                                        <option value="Married Sister">Married Niece</option>
+                                        <option value="Married Sister">Daughter in Law</option>
+                                        <option value="Married Sister">Minor Son</option>
+                                        <option value="Married Sister">Minor Daughter</option>
                                         <option value="Other"> Brother in Law</option>
                                         <option value="Other"> Sister in Law</option>
                                     </select>
@@ -2040,50 +2820,66 @@ select.forEach(select => {
         const existingSubHeirs = tbody.querySelectorAll(`tr[data-parent-heir-id="${heirId}"]`);
         const subHeirLetter = String.fromCharCode(97 + existingSubHeirs.length); // a, b, c, etc.
         const subHeirNumber = `${heirId}(${subHeirLetter})`;
-            
-            newRow.innerHTML = `
-                <td class="border border-white p-2 text-center">${subHeirNumber}</td>
-                <td class="border border-white p-2">
-                    <div class="space-y-2">
+        
+        newRow.innerHTML = `
+            <td class="border border-white p-2 text-center">${subHeirNumber}</td>
+            <td class="border border-white p-2">
+                <div class="space-y-2">
+                
+                <br>
+                    <input type="text" placeholder="SUB LEGAL HEIR FULL NAME" class="w-full input border p-1 border-white rounded sub-heir-name">
                     
-                    <br>
-                        <input type="text" placeholder="SUB LEGAL HEIR FULL NAME" class="w-full input border p-1 border-white rounded sub-heir-name">
+                    <!-- Address Field (Always Visible) -->
+                    <div class="mt-2">
+                        <label class="text-white text-sm">Address:</label>
+                        <input type="text" placeholder="Enter Address" class="w-full input border p-1 border-white rounded mt-1 sub-heir-address">
+                    </div>
+                    
+                    <div class="flex items-center gap-4 mt-2">
+                        <label class="text-white text-sm">Alive or Died:</label>
+                        <label class="text-white text-sm">
+                            <input type="radio" name="sub_alive_died_${heirId}_${subHeirLetter}" value="alive" class="mr-1 sub-alive-died-radio"> Alive
+                        </label>
+                        <label class="text-white text-sm">
+                            <input type="radio" name="sub_alive_died_${heirId}_${subHeirLetter}" value="died" class="mr-1 sub-alive-died-radio"> Died
+                        </label>
+                    </div>
+                    
+                    <!-- Alive details section -->
+                    <div class="sub-alive-details hidden" id="sub_alive_details_${heirId}_${subHeirLetter}">
+                        <!-- Additional alive-specific fields can go here if needed -->
+                    </div>
+                    <div class="sub-died-details hidden" id="sub_died_details_${heirId}_${subHeirLetter}">
                         <div class="flex items-center gap-4 mt-2">
-                            <label class="text-white text-sm">Alive or Died:</label>
                             <label class="text-white text-sm">
-                                <input type="radio" name="sub_alive_died_${heirId}_${subHeirLetter}" value="alive" class="mr-1 sub-alive-died-radio"> Alive
+                                <input type="radio" name="sub_deceased_type_${heirId}_${subHeirLetter}" value="since_deceased" class="mr-1"> Since deceased
                             </label>
                             <label class="text-white text-sm">
-                                <input type="radio" name="sub_alive_died_${heirId}_${subHeirLetter}" value="died" class="mr-1 sub-alive-died-radio"> Died
+                                <input type="radio" name="sub_deceased_type_${heirId}_${subHeirLetter}" value="predeceased" class="mr-1"> Predeceased
                             </label>
                         </div>
-                        <div class="sub-died-details hidden" id="sub_died_details_${heirId}_${subHeirLetter}">
-                            <div class="flex items-center gap-4 mt-2">
-                                <label class="text-white text-sm">
-                                    <input type="radio" name="sub_deceased_type_${heirId}_${subHeirLetter}" value="since_deceased" class="mr-1"> Since deceased
-                                </label>
-                                <label class="text-white text-sm">
-                                    <input type="radio" name="sub_deceased_type_${heirId}_${subHeirLetter}" value="predeceased" class="mr-1"> Predeceased
-                                </label>
-                            </div>
-                            <div class="mt-2">
-                                <label class="text-white text-sm">Died on:</label>
-                                <input type="date" class="border text-white p-1  bg-[#334155] text-black
-                                  rounded ml-2 " stlye="background: #334155; 
-        color: white;
-    ">
-                            </div>
+                        <!-- Address field removed - now using general address field above -->
+                        <div class="mt-2">
+                            <label class="text-white text-sm">Died on:</label>
+                            <input type="date" class="border text-white p-1  bg-[#334155] text-black
+                              rounded ml-2 " stlye="background: #334155; 
+    color: white;
+">
+                        </div>
                         </div>
                         <button type="button" class="add-sub-sub-heirs-btn bg-green-500 text-white px-2 py-1 rounded text-sm hover:bg-green-600 mt-2 hidden" data-parent-heir-id="${heirId}" data-sub-heir-id="${subHeirLetter}">
                             + Add Sub-Sub Legal Heirs
                         </button>
-                    </div>
-                </td>
-                <td class="border border-white p-2">
-                    <input type="number" placeholder="Age of Sub Legal Heir" class="w-full border p-1 border-white input rounded">
-                </td>
-                <td class="border border-white p-2">
-                    <select class="border p-1 mt-2 border-black bg-[#334155] text-white rounded w-full">
+                </div>
+            </td>
+            <td class="border border-white p-2">
+                <div class="age-field-container text-center">
+                    <input type="number" placeholder="Age of Sub Legal Heir" class="w-full border p-1 border-white input rounded age-input">
+                    <span class="age-dots text-center text-white text-lg hidden">- - -</span>
+                </div>
+            </td>
+            <td class="border border-white p-2">
+                     <select class="border p-1 mt-2 border-black bg-[#334155] text-white rounded w-full">
                                         <option value="">Select Relation to Deceased</option>
                                         <option value="Widow">Widow</option>
                                         <option value="Widower">Widower</option>
@@ -2100,49 +2896,56 @@ select.forEach(select => {
                                         <option value="Nephew">Nephew</option>
                                         <option value="Niece">Niece</option>
                                         <option value="Cousin">Cousin</option>
+                                        <option value="Cousin">Married Daughter</option>
+                                        <option value="Married Granddaughter">Married Granddaughter</option>
+                                        <option value="Married Sister">Married Sister</option>
+                                        <option value="Married Sister">Married Niece</option>
+                                        <option value="Married Sister">Daughter in Law</option>
+                                        <option value="Married Sister">Minor Son</option>
+                                        <option value="Married Sister">Minor Daughter</option>
                                         <option value="Other"> Brother in Law</option>
                                         <option value="Other"> Sister in Law</option>
                                     </select>
-                </td>
-                <td class="border border-white p-2 text-center">
-                    <button type="button" class="remove-row-btn bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600">Remove</button>
-                </td>
-            `;
-            
-            // Insert the sub-heir row after the parent row (and any existing sub-heirs)
-            let insertAfterRow = heirRow;
-            
-            if (isPetitioner) {
-                // For petitioners, find the last sub-heir of this petitioner to insert after
-                const existingSubHeirs = tbody.querySelectorAll(`tr[data-parent-heir-id="${heirId}"][data-is-petitioner="true"]`);
-                if (existingSubHeirs.length > 0) {
-                    insertAfterRow = existingSubHeirs[existingSubHeirs.length - 1];
-                }
-            } else {
-                // For regular legal heirs, find the last sub-heir of this heir
-                const existingSubHeirs = tbody.querySelectorAll(`tr[data-parent-heir-id="${heirId}"]`);
-                if (existingSubHeirs.length > 0) {
-                    insertAfterRow = existingSubHeirs[existingSubHeirs.length - 1];
-                }
+            </td>
+            <td class="border border-white p-2 text-center">
+                <button type="button" class="remove-row-btn bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600">Remove</button>
+            </td>
+        `;
+        
+        // Insert the sub-heir row after the parent row (and any existing sub-heirs)
+        let insertAfterRow = heirRow;
+        
+        if (isPetitioner) {
+            // For petitioners, find the last sub-heir of this petitioner to insert after
+            const existingSubHeirs = tbody.querySelectorAll(`tr[data-parent-heir-id="${heirId}"][data-is-petitioner="true"]`);
+            if (existingSubHeirs.length > 0) {
+                insertAfterRow = existingSubHeirs[existingSubHeirs.length - 1];
             }
-            
-            console.log('Inserting new sub-heir row after:', insertAfterRow);
-            
-            // Insert the new row after the determined position
-            if (insertAfterRow && insertAfterRow.nextSibling) {
-                tbody.insertBefore(newRow, insertAfterRow.nextSibling);
-            } else if (insertAfterRow) {
-                // If no next sibling, append after the parent
-                insertAfterRow.parentNode.insertBefore(newRow, insertAfterRow.nextElementSibling);
-            } else {
-                // Fallback: append to end
-                tbody.appendChild(newRow);
+        } else {
+            // For regular legal heirs, find the last sub-heir of this heir
+            const existingSubHeirs = tbody.querySelectorAll(`tr[data-parent-heir-id="${heirId}"]`);
+            if (existingSubHeirs.length > 0) {
+                insertAfterRow = existingSubHeirs[existingSubHeirs.length - 1];
             }
-            console.log('Sub-heir row added successfully');
-            
-            // Add event listeners for sub-heir row
-            setupSubHeirRowEvents(newRow);
-            console.log('Sub-heir row events set up');
+        }
+        
+        console.log('Inserting new sub-heir row after:', insertAfterRow);
+        
+        // Insert the new row after the determined position
+        if (insertAfterRow && insertAfterRow.nextSibling) {
+            tbody.insertBefore(newRow, insertAfterRow.nextSibling);
+        } else if (insertAfterRow) {
+            // If no next sibling, append after the parent
+            insertAfterRow.parentNode.insertBefore(newRow, insertAfterRow.nextElementSibling);
+        } else {
+            // Fallback: append to end
+            tbody.appendChild(newRow);
+        }
+        console.log('Sub-heir row added successfully');
+        
+        // Add event listeners for sub-heir row
+        setupSubHeirRowEvents(newRow);
+        console.log('Sub-heir row events set up');
     }
 
     function setupSubHeirRowEvents(row) {
@@ -2159,18 +2962,33 @@ select.forEach(select => {
             radio.addEventListener('change', function() {
                 const parentHeirId = row.dataset.parentHeirId;
                 const subHeirId = row.querySelector('.add-sub-sub-heirs-btn').dataset.subHeirId;
+                const aliveDetails = document.getElementById(`sub_alive_details_${parentHeirId}_${subHeirId}`);
                 const diedDetails = document.getElementById(`sub_died_details_${parentHeirId}_${subHeirId}`);
                 const addSubSubHeirsBtn = row.querySelector('.add-sub-sub-heirs-btn');
+                const ageInput = row.querySelector('.age-input');
+                const ageDots = row.querySelector('.age-dots');
                 
-                if (this.value === 'died') {
+                if (this.value === 'alive') {
+                    aliveDetails.classList.remove('hidden');
+                    diedDetails.classList.add('hidden');
+                    addSubSubHeirsBtn.classList.remove('hidden');
+                    // Show age input, hide dots
+                    if (ageInput) ageInput.classList.remove('hidden');
+                    if (ageDots) ageDots.classList.add('hidden');
+                } else if (this.value === 'died') {
+                    aliveDetails.classList.add('hidden');
                     diedDetails.classList.remove('hidden');
                     addSubSubHeirsBtn.classList.remove('hidden');
-                } else if (this.value === 'alive') {
-                    diedDetails.classList.add('hidden');
-                    addSubSubHeirsBtn.classList.remove('hidden');
+                    // Hide age input, show dots
+                    if (ageInput) ageInput.classList.add('hidden');
+                    if (ageDots) ageDots.classList.remove('hidden');
                 } else {
+                    aliveDetails.classList.add('hidden');
                     diedDetails.classList.add('hidden');
                     addSubSubHeirsBtn.classList.add('hidden');
+                    // Hide both age input and dots
+                    if (ageInput) ageInput.classList.add('hidden');
+                    if (ageDots) ageDots.classList.add('hidden');
                 }
             });
         });
@@ -2210,6 +3028,13 @@ select.forEach(select => {
             <td class="border border-white p-2">
                 <div class="space-y-2">
                     <input type="text" placeholder="SUB-SUB LEGAL HEIR FULL NAME" class="w-full input border p-1 border-white rounded sub-sub-heir-name">
+                    
+                    <!-- Address Field (Always Visible) -->
+                    <div class="mt-2">
+                        <label class="text-white text-sm">Address:</label>
+                        <input type="text" placeholder="Enter Address" class="w-full input border p-1 border-white rounded mt-1 sub-sub-heir-address">
+                    </div>
+                    
                     <div class="flex items-center gap-4 mt-2">
                         <label class="text-white text-sm">Alive or Died:</label>
                         <label class="text-white text-sm">
@@ -2218,6 +3043,11 @@ select.forEach(select => {
                         <label class="text-white text-sm">
                             <input type="radio" name="sub_sub_alive_died_${parentHeirId}_${subHeirId}_${subSubHeirNumber}" value="died" class="mr-1 sub-sub-alive-died-radio"> Died
                         </label>
+                    </div>
+                    
+                    <!-- Alive details section -->
+                    <div class="sub-sub-alive-details hidden" id="sub_sub_alive_details_${parentHeirId}_${subHeirId}_${subSubHeirNumber}">
+                        <!-- Additional alive-specific fields can go here if needed -->
                     </div>
                     <div class="sub-sub-died-details hidden" id="sub_sub_died_details_${parentHeirId}_${subHeirId}_${subSubHeirNumber}">
                         <div class="flex items-center gap-4 mt-2">
@@ -2228,18 +3058,25 @@ select.forEach(select => {
                                 <input type="radio" name="sub_sub_deceased_type_${parentHeirId}_${subHeirId}_${subSubHeirNumber}" value="predeceased" class="mr-1"> Predeceased
                             </label>
                         </div>
+                        <!-- Address field removed - now using general address field above -->
                         <div class="mt-2">
                             <label class="text-white text-sm">Died on:</label>
-                            <input type="date" class="border p-1 border-white rounded ml-2 sub-sub-died-date">
+                            <div class="date-field-container">
+                                <input type="date" class="border p-1 border-white rounded ml-2 sub-sub-died-date date-input">
+                                <span class="date-dots text-center text-white text-lg hidden">- - -</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </td>
             <td class="border border-white p-2">
-                <input type="number" placeholder="Age of Sub-Sub Legal Heir" class="w-full border p-1 border-white input rounded">
+                <div class="age-field-container text-center">
+                    <input type="number" placeholder="Age of Sub-Sub Legal Heir" class="w-full border p-1 border-white input rounded age-input">
+                    <span class="age-dots text-center text-white text-lg hidden">- - -</span>
+                </div>
             </td>
             <td class="border border-white p-2">
-<select class="border p-1 mt-2 border-black bg-[#334155] text-white rounded w-full">
+ <select class="border p-1 mt-2 border-black bg-[#334155] text-white rounded w-full">
                                         <option value="">Select Relation to Deceased</option>
                                         <option value="Widow">Widow</option>
                                         <option value="Widower">Widower</option>
@@ -2256,6 +3093,13 @@ select.forEach(select => {
                                         <option value="Nephew">Nephew</option>
                                         <option value="Niece">Niece</option>
                                         <option value="Cousin">Cousin</option>
+                                        <option value="Cousin">Married Daughter</option>
+                                        <option value="Married Granddaughter">Married Granddaughter</option>
+                                        <option value="Married Sister">Married Sister</option>
+                                        <option value="Married Sister">Married Niece</option>
+                                        <option value="Married Sister">Daughter in Law</option>
+                                        <option value="Married Sister">Minor Son</option>
+                                        <option value="Married Sister">Minor Daughter</option>
                                         <option value="Other"> Brother in Law</option>
                                         <option value="Other"> Sister in Law</option>
                                     </select>
@@ -2316,12 +3160,41 @@ select.forEach(select => {
                 const cellText = row.querySelector('td:first-child').textContent;
                 const match = cellText.match(/^(\d+)\(([a-z])\)\(([ivx]+)\)$/);
                 const subSubHeirNumber = match ? match[3] : '1';
+                const aliveDetails = document.getElementById(`sub_sub_alive_details_${parentHeirId}_${subHeirId}_${subSubHeirNumber}`);
                 const diedDetails = document.getElementById(`sub_sub_died_details_${parentHeirId}_${subHeirId}_${subSubHeirNumber}`);
-                if (this.value === 'died') {
-                    diedDetails.classList.remove('hidden');
-                } else {
-                    diedDetails.classList.add('hidden');
-                }
+                                    const ageInput = row.querySelector('.age-input');
+                    const ageDots = row.querySelector('.age-dots');
+                    const dateInput = row.querySelector('.date-input');
+                    const dateDots = row.querySelector('.date-dots');
+                    
+                    if (this.value === 'alive') {
+                        aliveDetails.classList.remove('hidden');
+                        diedDetails.classList.add('hidden');
+                        // Show age input, hide dots
+                        if (ageInput) ageInput.classList.remove('hidden');
+                        if (ageDots) ageDots.classList.add('hidden');
+                        // Show date input, hide dots
+                        if (dateInput) dateInput.classList.remove('hidden');
+                        if (dateDots) dateDots.classList.add('hidden');
+                    } else if (this.value === 'died') {
+                        aliveDetails.classList.add('hidden');
+                        diedDetails.classList.remove('hidden');
+                        // Hide age input, show dots
+                        if (ageInput) ageInput.classList.add('hidden');
+                        if (ageDots) ageDots.classList.remove('hidden');
+                        // Hide date input, show dots
+                        if (dateInput) dateInput.classList.add('hidden');
+                        if (dateDots) dateDots.classList.remove('hidden');
+                    } else {
+                        aliveDetails.classList.add('hidden');
+                        diedDetails.classList.add('hidden');
+                        // Hide both age input and dots
+                        if (ageInput) ageInput.classList.add('hidden');
+                        if (ageDots) ageDots.classList.add('hidden');
+                        // Hide both date input and dots
+                        if (dateInput) dateInput.classList.add('hidden');
+                        if (dateDots) dateDots.classList.add('hidden');
+                    }
             });
         });
     }
@@ -2335,7 +3208,15 @@ select.forEach(select => {
         petitionerRows.forEach((row, index) => {
             const firstCell = row.querySelector('td:first-child');
             if (firstCell) {
-                firstCell.textContent = index + 1;
+                // Check if this petitioner has a parent
+                const hasParent = tbody.querySelector(`tr.parent-row[data-petitioner-index="${index}"]`);
+                if (hasParent) {
+                    // This petitioner has a parent, show (a) suffix
+                    firstCell.textContent = `${index + 1}(a)`;
+                } else {
+                    // This petitioner has no parent, show regular number
+                    firstCell.textContent = index + 1;
+                }
             }
             
             // Update reference text for multiple petitioners
@@ -2357,6 +3238,11 @@ select.forEach(select => {
         otherRows.forEach((row) => {
             const firstCell = row.querySelector('td:first-child');
             const currentText = firstCell.textContent.trim();
+            
+            // Skip parent rows - they should keep their original numbering
+            if (row.classList.contains('parent-row')) {
+                return;
+            }
             
             // Check if this is a main heir (just a number)
             if (/^\d+$/.test(currentText)) {
@@ -2543,14 +3429,48 @@ select.forEach(select => {
     }
 
 function setupPage3Events() {
+        const add_earlier = document.getElementById('add_earlier');
     const show_else_where_in_india = document.getElementById('show_it-when-elsewhereinindia');
     const deceased_property_place = document.getElementById('deceased_property_place');
+        const save_and_except_testamentary_petition_para = document.getElementById('save-and-except-testamentary-petition-para');
     
     deceased_property_place.addEventListener('change',()=>{
         if(deceased_property_place.value === 'State of Maharashtra and elsewhere in India.') {
             show_else_where_in_india.classList.remove('hidden');
+                // Change "State of Maharashtra" to "India" throughout page 3
+                updateStateText('India');
         } else {
             show_else_where_in_india.classList.add('hidden');
+                // Change back to "State of Maharashtra"
+                updateStateText('State of Maharashtra');
+            }
+        })
+        
+        // Function to update "State of Maharashtra" text in page 3 paragraph only
+        function updateStateText(newText) {
+            const maharashtraSpan = document.getElementById('maharashtra-text');
+            const indiaSpan = document.getElementById('india-text');
+            
+            if (maharashtraSpan && indiaSpan) {
+                if (newText === 'India') {
+                    maharashtraSpan.classList.add('hidden');
+                    indiaSpan.classList.remove('hidden');
+                } else {
+                    maharashtraSpan.classList.remove('hidden');
+                    indiaSpan.classList.add('hidden');
+                }
+            }
+        }
+
+        // Call the function initially
+        updatePetitionerSignatureNames();
+
+
+    add_earlier.addEventListener('change',()=>{
+        if(add_earlier.value === 'Yes') {
+            save_and_except_testamentary_petition_para.classList.remove('hidden');
+        } else {
+            save_and_except_testamentary_petition_para.classList.add('hidden');
         }
     })
     
@@ -2564,7 +3484,7 @@ function setupPage3Events() {
     if (schedule_ii_para) {
         schedule_ii_para.addEventListener('change', function() {
             if(this.value === 'Yes') {
-                show_it_when_schedule_ii_para.classList.remove('hidden');
+            show_it_when_schedule_ii_para.classList.remove('hidden');
                 
                 // Check if already added
                 if (document.querySelector('.schedule-ii-para')) {
@@ -2618,14 +3538,14 @@ function setupPage3Events() {
                 // Renumber all paragraphs
                 renumberAllParagraphs();
                 
-            } else {
-                show_it_when_schedule_ii_para.classList.add('hidden');
+        } else {
+            show_it_when_schedule_ii_para.classList.add('hidden');
                 
                 const scheduleIIRow = document.querySelector('.schedule-ii-para');
                 if (scheduleIIRow) {
                     scheduleIIRow.remove();
                     renumberAllParagraphs();
-                }
+        }
             }
         });
     }
@@ -2677,6 +3597,19 @@ function setupParagraphButtons() {
             addParagraph('delay');
         });
     }
+
+    // Tag the original paragraph 8 row so we can always insert before it
+    const table = document.querySelector('#page3 table tbody');
+    if (table && !table.querySelector('tr[data-original-para8="true"]')) {
+        const rows = Array.from(table.querySelectorAll('tr'));
+        const original8 = rows.find(r => {
+            const firstCell = r.querySelector('td:first-child');
+            return firstCell && firstCell.textContent.trim() === '8.';
+        });
+        if (original8) {
+            original8.dataset.originalPara8 = 'true';
+        }
+    }
 }
 
 function setupLegalHeirClassButtons() {
@@ -2714,6 +3647,21 @@ function setupLegalHeirClassButtons() {
         });
     });
 
+    // Search Para button
+    const searchParaBtn = document.getElementById('search-para-btn');
+    if (searchParaBtn) {
+        searchParaBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            openModal('search-para-modal');
+            buildSearchParaList();
+            const input = document.getElementById('search-para-input');
+            if (input) {
+                input.value = '';
+                input.focus();
+            }
+        });
+    }
+
     // Set up modal option buttons
     const modalOptions = document.querySelectorAll('.modal-option');
     modalOptions.forEach(option => {
@@ -2737,13 +3685,65 @@ function setupLegalHeirClassButtons() {
     });
 }
 
+// Build aggregated list of all modal options for Search Para modal
+function buildSearchParaList() {
+    const container = document.getElementById('search-para-list');
+    if (!container) return;
+
+    // Collect all options from existing modals
+    const allOptions = Array.from(document.querySelectorAll('.modal-option')).map((el) => ({
+        element: el,
+        text: el.textContent.trim(),
+        option: el.getAttribute('data-option') || '',
+        modalId: el.closest('[id$="-modal"]').id
+    }));
+
+    // Clear and render list
+    container.innerHTML = '';
+    allOptions.forEach(({ text, option, modalId }) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100 text-black';
+        btn.textContent = text;
+        btn.dataset.option = option;
+        btn.dataset.sourceModal = modalId;
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            addToTextarea(text);
+            closeModal('search-para-modal');
+        });
+        container.appendChild(btn);
+    });
+
+    // Hook up live search
+    const input = document.getElementById('search-para-input');
+    if (input) {
+        input.oninput = function() {
+            const q = input.value.trim().toLowerCase();
+            const items = Array.from(container.children);
+            // Score items: higher score for startsWith, then includes
+            const scored = items.map((node) => {
+                const label = node.textContent.toLowerCase();
+                let score = 0;
+                if (!q) score = 0;
+                else if (label.startsWith(q)) score = 2;
+                else if (label.includes(q)) score = 1;
+                return { node, score };
+            });
+            scored.sort((a, b) => b.score - a.score);
+            // Re-append in new order, hiding non-matches
+            container.innerHTML = '';
+            scored.forEach(({ node, score }) => {
+                node.classList.toggle('hidden', !!q && score === 0);
+                container.appendChild(node);
+            });
+        };
+    }
+}
+
 function addParagraph(type) {
     const table = document.querySelector('#page3 table tbody');
     if (!table) return;
-
-    // Find paragraph 7 row (the second row)
-    const paragraph7Row = table.querySelector('tr:nth-child(2)'); // Paragraph 7 is the second row
-    if (!paragraph7Row) return;
 
     // Get paragraph content based on type (with underscores instead of input fields)
     const paragraphContent = getParagraphContentWithUnderscores(type);
@@ -2763,20 +3763,18 @@ function addParagraph(type) {
             <div class="text-right mt-3">
                 <button type="button" class="remove-para-btn bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700" data-paragraph-number="8">
                     Remove Paragraph
-                </button>
+            </button>
             </div>
         </td>
     `;
 
-    // Insert the new row after paragraph 7, but before paragraph 8
-    const paragraph8Row = table.querySelector('tr:nth-child(3)'); // Original paragraph 8 is the third row
-    
-    if (paragraph8Row) {
-        // Insert between paragraph 7 and paragraph 8
-        paragraph7Row.parentNode.insertBefore(newRow, paragraph8Row);
+    // Always insert just before the row tagged as original paragraph 8
+    const originalPara8Row = table.querySelector('tr[data-original-para8="true"]');
+    if (originalPara8Row) {
+        table.insertBefore(newRow, originalPara8Row);
     } else {
-        // If paragraph 8 doesn't exist, just append after paragraph 7
-        paragraph7Row.parentNode.insertBefore(newRow, paragraph7Row.nextSibling);
+        // Fallback: append at end
+        table.appendChild(newRow);
     }
     
     // Set up event listeners for the new paragraph
@@ -2784,6 +3782,9 @@ function addParagraph(type) {
     
     // Renumber all paragraphs after adding the new one
     renumberParagraphs();
+    
+    // Update paragraph count in declaration
+    updateParagraphCount();
     
     console.log(`Added ${type} paragraph with number 8`);
 }
@@ -2812,6 +3813,9 @@ function removeParagraph(row, paragraphNumber) {
         
         // Renumber all paragraphs after removal
         renumberParagraphs();
+        
+        // Update paragraph count in declaration
+        updateParagraphCount();
         
         console.log(`Paragraph ${paragraphNumber} removed successfully`);
     }
@@ -2849,7 +3853,7 @@ function addToTextarea(text) {
     const textarea = document.getElementById('legal-heir-class-textarea');
     if (textarea) {
         const currentText = textarea.value;
-        const newText = currentText ? currentText + '\n\n' + text : text;
+        const newText = currentText ? currentText + ' ' + text : text;
         textarea.value = newText;
         console.log(`Added text to textarea: ${text}`);
     }
@@ -3118,6 +4122,9 @@ function renumberAllParagraphs() {
             }
         }
     });
+    
+    // Update paragraph count in declaration after renumbering
+    updateParagraphCount();
 }
 
 // Function to update Petitioner text based on count
