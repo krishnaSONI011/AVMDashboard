@@ -1673,8 +1673,22 @@
         const the_proof_selector = document.getElementById('proof_select')
         if (the_proof_selector) {
             the_proof_selector.addEventListener("change",(e)=>{
-                if(e.target.value === "7") document.getElementById("no_proof").classList.remove("hidden")
-                else document.getElementById("no_proof").classList.add("hidden")
+                const uniqueProofInput = document.getElementById("unique_proof_input");
+                const noProofSpan = document.getElementById("no_proof");
+                
+                if(e.target.value === "6") {
+                    // Show unique proof input when UNIQUE is selected
+                    if (uniqueProofInput) uniqueProofInput.classList.remove("hidden");
+                    if (noProofSpan) noProofSpan.classList.add("hidden");
+                } else if(e.target.value === "7") {
+                    // Show no proof span when NO ID PROOF is selected
+                    if (uniqueProofInput) uniqueProofInput.classList.add("hidden");
+                    if (noProofSpan) noProofSpan.classList.remove("hidden");
+                } else {
+                    // Hide both for other options
+                    if (uniqueProofInput) uniqueProofInput.classList.add("hidden");
+                    if (noProofSpan) noProofSpan.classList.add("hidden");
+                }
             })
         }
 
@@ -1866,7 +1880,7 @@
                     </div>
                 </td>
                 <td class="border border-white p-2">
-                    <input type="text" value="${petitionerAge}" placeholder="Enter Age" class="w-full input border p-1 border-white rounded petitioner-age-display">
+                    <input type="text" value="${petitionerAge}" placeholder="Enter Age" class="w-full input border p-1 border-white rounded petitioner-age-display text-center">
                 </td>
                 <td class="border border-white p-2">
                     <select class="w-full input border p-1 border-white rounded petitioner-relationship-display">
@@ -1994,18 +2008,24 @@
             <td class="border border-white p-2 text-center">${petitionerNumber}</td>
             <td class="border border-white p-2">
                 <div class="space-y-2">
-                    <input type="text" placeholder="NAME OF PARENT" class="w-full input border p-1 border-white rounded parent-name-display"> <br>
-                    Residing at <input type="text" placeholder="ADDRESS OF PARENT" class="w-full input border p-1 border-white rounded parent-address-display"> <br>
+                    <input type="text" placeholder="NAME OF PARENT" class="w-full input border p-1 border-white rounded parent-name-display">
+                    
+                    <!-- Address Field (Initially Hidden) -->
+                    <div class="parent-address-container hidden">
+                        <br>
+                        Residing at <input type="text" placeholder="ADDRESS OF PARENT" class="w-full input border p-1 border-white rounded parent-address-display">
+                    </div>
+                    
                     <br>
                     
                     <!-- Death Status Radio Buttons -->
                     <div class="flex space-x-4 text-white">
                         <label class="flex items-center">
-                            <input type="radio" name="death_status_${petitionerIndex}" value="since_deceased" class="mr-2">
+                            <input type="radio" name="death_status_${petitionerIndex}" value="since_deceased" class="mr-2 parent-death-radio">
                             Since Deceased
                         </label>
                         <label class="flex items-center">
-                            <input type="radio" name="death_status_${petitionerIndex}" value="pre_deceased" class="mr-2">
+                            <input type="radio" name="death_status_${petitionerIndex}" value="pre_deceased" class="mr-2 parent-death-radio">
                             Pre Deceased
                         </label>
                     </div>
@@ -2046,6 +2066,23 @@
         
         // Update row numbers to ensure proper numbering
         updateRowNumbers();
+        
+        // Set up event listeners for parent death status radio buttons
+        const parentDeathRadios = parentRow.querySelectorAll('.parent-death-radio');
+        parentDeathRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                const addressContainer = parentRow.querySelector('.parent-address-container');
+                if (addressContainer) {
+                    if (this.value === 'since_deceased' || this.value === 'pre_deceased') {
+                        // Hide address when any death status is selected
+                        addressContainer.classList.add('hidden');
+                    } else {
+                        // Show address when no death status is selected
+                        addressContainer.classList.remove('hidden');
+                    }
+                }
+            });
+        });
         
         // Disable the parent button for this petitioner
         const parentBtn = petitionerRow.querySelector('.add-parent-btn');
@@ -2542,7 +2579,7 @@ select.forEach(select => {
                     <!-- Address Field (Always Visible) -->
                     <div class="mt-2">
                         <label class="text-white text-sm">Address:</label>
-                        <input type="text" placeholder="Enter Address" class="w-full input border p-1 border-white rounded mt-1 legal-heir-address">
+                        <input type="text" placeholder="Enter Address" class="w-full input border p-1 border-white rounded mt-1 legal-heir-address" id="address_input_${legalHeirCounter}">
                     </div>
                     
                     <div class="flex items-center gap-4 mt-2">
@@ -2626,6 +2663,7 @@ select.forEach(select => {
                 const diedDetails = document.getElementById(`died_details_${legalHeirCounter}`);
                 const ageInput = document.getElementById(`age_input_${legalHeirCounter}`);
                 const ageDots = document.getElementById(`age_dots_${legalHeirCounter}`);
+                const addressInput = document.getElementById(`address_input_${legalHeirCounter}`);
                 
                 if (this.value === 'alive') {
                     aliveDetails.classList.remove('hidden');
@@ -2636,6 +2674,7 @@ select.forEach(select => {
                 } else if (this.value === 'died') {
                     aliveDetails.classList.add('hidden');
                     diedDetails.classList.remove('hidden');
+                    addressInput.classList.add('hidden');
                     // Hide age input, show dots
                     if (ageInput) ageInput.classList.add('hidden');
                     if (ageDots) ageDots.classList.remove('hidden');
@@ -2829,8 +2868,8 @@ select.forEach(select => {
                 <br>
                     <input type="text" placeholder="SUB LEGAL HEIR FULL NAME" class="w-full input border p-1 border-white rounded sub-heir-name">
                     
-                    <!-- Address Field (Always Visible) -->
-                    <div class="mt-2">
+                    <!-- Address Field (Initially Visible) -->
+                    <div class="mt-2 sub-address-container">
                         <label class="text-white text-sm">Address:</label>
                         <input type="text" placeholder="Enter Address" class="w-full input border p-1 border-white rounded mt-1 sub-heir-address">
                     </div>
@@ -2975,6 +3014,9 @@ select.forEach(select => {
                     // Show age input, hide dots
                     if (ageInput) ageInput.classList.remove('hidden');
                     if (ageDots) ageDots.classList.add('hidden');
+                    // Show address field when alive
+                    const addressContainer = row.querySelector('.sub-address-container');
+                    if (addressContainer) addressContainer.classList.remove('hidden');
                 } else if (this.value === 'died') {
                     aliveDetails.classList.add('hidden');
                     diedDetails.classList.remove('hidden');
@@ -2982,6 +3024,9 @@ select.forEach(select => {
                     // Hide age input, show dots
                     if (ageInput) ageInput.classList.add('hidden');
                     if (ageDots) ageDots.classList.remove('hidden');
+                    // Hide address field when died
+                    const addressContainer = row.querySelector('.sub-address-container');
+                    if (addressContainer) addressContainer.classList.add('hidden');
                 } else {
                     aliveDetails.classList.add('hidden');
                     diedDetails.classList.add('hidden');
@@ -3029,8 +3074,8 @@ select.forEach(select => {
                 <div class="space-y-2">
                     <input type="text" placeholder="SUB-SUB LEGAL HEIR FULL NAME" class="w-full input border p-1 border-white rounded sub-sub-heir-name">
                     
-                    <!-- Address Field (Always Visible) -->
-                    <div class="mt-2">
+                    <!-- Address Field (Initially Visible) -->
+                    <div class="mt-2 sub-sub-address-container">
                         <label class="text-white text-sm">Address:</label>
                         <input type="text" placeholder="Enter Address" class="w-full input border p-1 border-white rounded mt-1 sub-sub-heir-address">
                     </div>
@@ -3168,26 +3213,32 @@ select.forEach(select => {
                     const dateDots = row.querySelector('.date-dots');
                     
                     if (this.value === 'alive') {
-                        aliveDetails.classList.remove('hidden');
-                        diedDetails.classList.add('hidden');
+                        if (aliveDetails) aliveDetails.classList.remove('hidden');
+                        if (diedDetails) diedDetails.classList.add('hidden');
                         // Show age input, hide dots
                         if (ageInput) ageInput.classList.remove('hidden');
                         if (ageDots) ageDots.classList.add('hidden');
                         // Show date input, hide dots
                         if (dateInput) dateInput.classList.remove('hidden');
                         if (dateDots) dateDots.classList.add('hidden');
+                        // Show address field when alive
+                        const addressContainer = row.querySelector('.sub-sub-address-container');
+                        if (addressContainer) addressContainer.classList.remove('hidden');
                     } else if (this.value === 'died') {
-                        aliveDetails.classList.add('hidden');
-                        diedDetails.classList.remove('hidden');
+                        if (aliveDetails) aliveDetails.classList.add('hidden');
+                        if (diedDetails) diedDetails.classList.remove('hidden');
                         // Hide age input, show dots
                         if (ageInput) ageInput.classList.add('hidden');
                         if (ageDots) ageDots.classList.remove('hidden');
                         // Hide date input, show dots
                         if (dateInput) dateInput.classList.add('hidden');
                         if (dateDots) dateDots.classList.remove('hidden');
+                        // Hide address field when died
+                        const addressContainer = row.querySelector('.sub-sub-address-container');
+                        if (addressContainer) addressContainer.classList.add('hidden');
                     } else {
-                        aliveDetails.classList.add('hidden');
-                        diedDetails.classList.add('hidden');
+                        if (aliveDetails) aliveDetails.classList.add('hidden');
+                        if (diedDetails) diedDetails.classList.add('hidden');
                         // Hide both age input and dots
                         if (ageInput) ageInput.classList.add('hidden');
                         if (ageDots) ageDots.classList.add('hidden');
@@ -3662,6 +3713,15 @@ function setupLegalHeirClassButtons() {
         });
     }
 
+    // Add New Para button
+    const newParaBtn = document.getElementById('new-para');
+    if (newParaBtn) {
+        newParaBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            openModal('add-new-para-modal');
+        });
+    }
+
     // Set up modal option buttons
     const modalOptions = document.querySelectorAll('.modal-option');
     modalOptions.forEach(option => {
@@ -3683,6 +3743,59 @@ function setupLegalHeirClassButtons() {
             }
         });
     });
+
+    // Submit button for Add New Para modal
+    const submitNewParaBtn = document.getElementById('submit-new-para');
+    if (submitNewParaBtn) {
+        submitNewParaBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const titleInput = document.getElementById('new-para-title');
+            const contentInput = document.getElementById('new-para-content');
+            
+            if (titleInput && contentInput) {
+                const title = titleInput.value.trim();
+                const content = contentInput.value.trim();
+                
+                if (title && content) {
+                    // Create a new button for the custom paragraph
+                    const newButton = document.createElement('button');
+                    newButton.type = 'button';
+                    newButton.className = 'bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium transition-colors custom-para-btn';
+                    newButton.textContent = title;
+                    newButton.dataset.paraContent = content;
+                    
+                    // Add click event to insert the paragraph content
+                    newButton.addEventListener('click', function() {
+                        const legalHeirClassTextarea = document.getElementById('legal-heir-class-textarea');
+                        if (legalHeirClassTextarea) {
+                            // Insert the custom paragraph content
+                            if (legalHeirClassTextarea.value.trim()) {
+                                legalHeirClassTextarea.value += '\n\n' + content;
+                            } else {
+                                legalHeirClassTextarea.value = content;
+                            }
+                            console.log('Custom paragraph added:', title);
+                        }
+                    });
+                    
+                    // Insert the new button into the grid
+                    const buttonGrid = document.querySelector('.grid.grid-cols-2.md\\:grid-cols-3.lg\\:grid-cols-4');
+                    if (buttonGrid) {
+                        buttonGrid.appendChild(newButton);
+                    }
+                    
+                    // Close modal and reset form
+                    closeModal('add-new-para-modal');
+                    titleInput.value = '';
+                    contentInput.value = '';
+                    
+                    console.log('New paragraph button created:', title);
+                } else {
+                    alert('Please fill in both title and content fields.');
+                }
+            }
+        });
+    }
 }
 
 // Build aggregated list of all modal options for Search Para modal
@@ -4175,4 +4288,7 @@ function setupSeparateSubHeirsButton() {
         });
     }
 }
+
+
+
 
