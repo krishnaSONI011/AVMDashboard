@@ -1,188 +1,168 @@
 <div class="bg-[#57606c] text-white mt-5">
-    <div class="p-10">
-        <!-- table start -->
-        <table class=" w-full border-2 border-white">
-            <tbody>
-                <!-- heading row -->
+    <div class="p-10"> <!-- table start -->
+        <table class=" w-full border-b-0 border-2 border-white  ">
+            <tbody> <!-- heading row -->
                 <tr class="py-5">
                     <td colspan="4" class="py-5">
-                        <h1 class="text-center text-4xl font-bold underline mb-5">OATH</h1>
                         <p class="text-center ">IN THE HIGH COURT OF JUDICATURE AT BOMBAY</p>
                         <p class="text-center mt-5">TESTAMENTARY AND INTESTATE JURISDICTION</p>
-                        <p class="mt-5 text-center">
-                            PETITION NO. <input type="text" placeholder="Enter Petition Number"
-                                class="border bg-[#334155] text-white p-1 rounded" />
-                            of <input type="text" placeholder="Year" class="bg-[#334155] text-white border p-1 rounded" />
-                        </p>
+                        <p class="mt-5 flex items-center justify-center gap-2"> PETITION NO. <!-- Petition no. input -->
+                            <input type="text" placeholder="Enter Petition Number"
+                                class="border w-[17%] input bg-[#334155] text-white p-1 rounded" /> of
+                            <!-- Petition Year Input --> <input type="text" placeholder="Year"
+                                class="bg-[#334155] w-[8%] text-white input border p-1 rounded" id="year_inputs" /> </p>
                     </td>
                 </tr>
-                <tr class="border  border-white">
-                    <td class=" border-r border-white w-1/2">
-
-                    </td>
+                <tr class="border border-black">
+                    <td class=" border-r border-black w-1/2"> </td>
                     <td class="">
-                        <p class="py-5 px-2 text-justify">Petition for Letters of Administration to the
-                            property and credits of <input type="text" placeholder="Enter Deceased Name"
-                                class="border bg-[#334155] text-white p-1 mt-2 border-white rounded" 
-                                data-deceased-name="page5" /><button
-                                class="bg-blue-600 text-white p-1 rounded mx-1" id="deceased_alias">Alias
-                                Name</button> <span class="hidden" id="alias_container">Alias Name <input
-                                    type="text" placeholder="Enter Deceased Name"
-                                    class="border bg-[#334155] text-white p-1 mt-2 border-white rounded" 
-                                    data-deceased-name="page5-alias" /><button
-                                    class="bg-red-500 text-white p-1 rounded mx-1"
-                                    id="remove_deceased_alias">Remove Alias</button></span>
-                            ,Religion of Deceased<input type="text" placeholder="Enter Religion of Deceased"
-                                class="border bg-[#334155] text-white border-white p-1 w-52 mt-2 rounded" /> CITIZEN <select
-                                name="cars" id="cars" class="border bg-[#334155] text-white border-white mt-1 p-1 rounded">
-                                <option value="volvo">Select citizen</option>
-                                <option value="volvo">Indian</option>
-                                <option value="volvo">NRI</option>
-
-                            </select>, Inhabitant of <input type="text" placeholder="Enter Inhabitent"
-                                class="border bg-[#334155] text-white border-white p-1 mt-2 rounded" />, Marital Status <select
-                                name="marital_status" id="marital_status"
-                                class="border bg-[#334155] text-white border-white mt-1 p-1 rounded">
-                                <option value="">Select Marital Status</option>
-                                <option value="Married">
-                                    Married</option>
-                                <option value="Widow">
-                                    Widow</option>
-                                <option value="Widower">
-                                    Widower</option>
-                                <option value="Bachelor">
-                                    Bachelor</option>
-                                <option value="Spinster">
-                                    Spinster</option>
-                                <option value="Divorcee">
-                                    Divorcee</option>
-                            </select>
-                            , Occupation- <input type="text" placeholder="Enter Occupation"
-                                class="border bg-[#334155] text-white border-white p-1 mt-2 rounded" /> , who <span id="who_died">died at</span>
-                                
-                            <button class="bg-blue-600 mt-2 text-white p-1 rounded mx-1"
-                                id="address_des_button">PLACE OF DEATH: SAME AS RESIDENCE CITY? </button>
-                            was residing at 
-                            
-                            the time of
-                            <input type="radio" id="html" name="fav_language" class="mt-4 mb-10 bg-[#334155] text-white"
-                                value="HTML">
-                            <label for="html"> Male /</label>
-                            <input type="radio" id="css" name="fav_language" value="CSS" class="bg-[#334155] text-white">
-                            <label for="css"> Female</label> Death at
-                            <textarea id="enter_addressProof" class=" hidden border p-3 border-white rounded" rows="2" cols="60" placeholder="Enter the Address as per Address proof"></textarea>
-                            <span
-                                class="">..................................................................................Deceased</span>
-
-                        </p>
+                        <p class="py-5 px-2 text-justify">Petition for Letters of Administration to the property and
+                            credits of <input type="text" placeholder="Enter Deceased Name"
+                                class="border bg-[#334155] w-full text-white p-1 mt-2 border-black rounded deceased-name-main"
+                                data-deceased-name="main" />
+                            ................................................................................................................Deceased
                     </td>
                 </tr>
-                <!-- first page second body -->
-                <tr class="border border-white">
-                    <td class="border-r border-white">
-                      <!-- Container for all petitioners -->
-                     <!-- Inside your <td> -->
-<div id="petitioner_wrapper">
-<div class="petitioner_block">
-<p class="text-justify py-5 px-2">
-<span class="petitioner_number font-bold mr-1">1.</span>
-<input type="text" placeholder="Enter Petitioner Name" class="border bg-[#334155] text-white p-1 mt-2 border-white rounded" />
-<button class="bg-blue-600 text-white p-1 rounded mx-1">Alias Name</button>,
-Age-<input type="text" placeholder="Enter Petitioner Age" class="border bg-[#334155] text-white p-1 mt-2 border-white rounded" /> Years,
-Occupation-<input type="text" placeholder="Enter Petitioner Occupation"
-class="border bg-[#334155] text-white p-1 mt-2 border-white rounded" />,
-<input type="text" placeholder="Enter Religion of Petitioner" class="border p-1 mt-2 border-white bg-[#334155] text-white rounded" />,
-<select class="border bg-[#334155] text-white border-white mt-1 p-1 rounded">
-<option value="">Select citizen</option>
-<option value="Indian">Indian</option>
-<option value="NRI">NRI</option>
-</select>
-Inhabitant of
-<input type="text" placeholder="Enter Inhabitant" class="border bg-[#334155] text-white p-1 mt-2 border-white rounded" />
-residing at
-<button class="bg-red-500 mt-2 text-white p-1 rounded mx-1">Same As Deceased Address</button>
-being the
-<input type="text" placeholder="Relation to Deceased" class="border p-1 mt-2 border-white bg-[#334155] text-white rounded" />
-of the deceased above named.
-</p>
-</div>
-</div>
-
-<!-- Add Button -->
-<button type="button" id="add_petitioner_button"
-class="bg-red-500 mt-4 ml-2 text-white p-2 rounded font-semibold">+ Add Petitioner</button>
-
-                    </td>
-                  
-                    <td class="flex h-[45vh] justify-center items-end">
-                      ..................................................................................…<span data-petitioner-text="possessive">Petitioner</span>
-                    </td>
-                  </tr>
-                  
-                
-                <tr>
-                    <td colspan="4" class="py-5">
-                        <h1 class="text-center text-xl font-bold underline mb-5">PETITIONER’S OATH</h1>
-                        <p>I, <input type="text" placeholder="Enter Petitioner Name" class="border bg-[#334155] text-white p-1 rounded" /> <select class="border bg-[#334155] text-white p-1 rounded">
-                            <option value="">Select Relation</option>
-                            <option value="wife of">wife of</option>
-                            <option value="husband of">husband of</option>
-                            <option value="son of">son of</option>
-                            <option value="daughter of">daughter of</option>
-                            <option value="mother of">mother of</option>
-                            <option value="father of">father of</option>
-                        </select> <input type="text" placeholder="Enter Spouse/Parent Name" class="border bg-[#334155] text-white p-1 rounded" />, Age – <input type="text" placeholder="Enter Age" class="border bg-[#334155] text-white p-1 mt-5 rounded w-16" /> Years, <input type="text" placeholder="Enter Religion" class="border bg-[#334155] text-white p-1 rounded" />, <select class="border bg-[#334155] text-white p-1 rounded">
-                            <option value="">Select citizen</option>
-                            <option value="Indian">Indian</option>
-                            <option value="NRI">NRI</option>
-                        </select>, Inhabitant of <input type="text" placeholder="Enter Inhabitant" class="border bg-[#334155] text-white p-1 rounded" />, residing at <input type="text" placeholder="Enter Address" class="border bg-[#334155] text-white p-1 mt-5 rounded w-64" />, the Petitioner abovenamed</p>
-                        
-                        <p class="mt-5">do hereby solemnly affirm and say that I believe that <input type="text" placeholder="Enter Deceased Name" class="border bg-[#334155] text-white p-1 rounded" /> died without leaving a will and that I am the <select class="border bg-[#334155] text-white p-1 rounded">
-                            <option value="">Select Relation</option>
-                            <option value="Widow">Widow</option>
-                            <option value="Widower">Widower</option>
-                            <option value="Son">Son</option>
-                            <option value="Daughter">Daughter</option>
-                            <option value="Mother">Mother</option>
-                            <option value="Father">Father</option>
-                            <option value="Brother">Brother</option>
-                            <option value="Sister">Sister</option>
-                        </select> of the deceased and that I will well and truly administer his property and credits according to law and pay his debts so far as the said asset will extend and that I will make and exhibit a full and true inventory thereof in this Hon'ble Court within six months from the date of the grant to be made to me or within such further time as the said Court may from time to time appoint and also render a true account of my administration to this Hon'ble Court within one year from the same date or within such further time as the said Court may from time to time appoint.</p>
-                        
-                        <div class="mt-10 flex justify-between">
-                            <div>
-                                <p class="mb-5">Solemnly affirmed at <input type="text" placeholder="Enter Place" class="border bg-[#334155] text-white p-1 rounded" /></p>
-                                <p class="mt-10 text-lg">Dated this <input
-                                    type="text" placeholder="Day"
-                                    class="border p-1 w-[10%]  mt-2 input border-white rounded" > day of <input
-                                    type="text" placeholder="Month"
-                                    class="border p-1 w-[10%]  mt-2 input border-white rounded" >,<input
-                                    type="text" placeholder="Year"
-                                    class="border p-1 w-[10%]  mt-2 input border-white rounded" ></p>
-                                <div class="mt-5 w-52 h-16 border-2 border-dashed border-white flex items-center justify-center">
-
-                                    <span class="text-sm">Signature</span>
-                                </div>
-                                <p>Advocate for the <span data-petitioner-text="singular">Petitioner</span></p>
-
-                            </div>
-                            <div class="text-right">
-                                
-                                <div class="mt-5  h-16 border-2 border-dashed border-white flex items-center justify-center">
-                                    <span class="text-sm">Signature</span>
-                                </div>
-                                <p class="mt-10">Signature of Petitioner</p>
-                                
+                <tr class="border border-black">
+                    <td class="border-r border-black py-5 px-2 "> <!-- Petitioner Names Display -->
+                        <div id="petitioner-names-display" class="">
+                            <div id="petitioner-names-list" class=""> <!-- Petitioner names will be displayed here -->
                             </div>
                         </div>
-                        
+                    </td>
+                    <td> ................................................................................................................<span
+                            data-petitioner-text="possessive">Petitioner</span> </td>
+                </tr> <!-- Dynamic Affidavit Sections for Each Petitioner -->
+                <tr class="border border-white">
+                    <td colspan="4">
+                        <div id="petitioner-affidavits-container">
+                            <!-- Individual affidavit sections will be generated here for each petitioner --> </div>
                     </td>
                 </tr>
-                
-                </tbody>
 
-
+                <!-- Fixed width row -->
+               
+            </tbody>
         </table>
+        <table class="border w-full">
+            <tbody>
+                <tr class="py-5 border-t border-white">
+                    <td class="text-center py-5 border-r w-[10%] border-white">1.</td>
+                    <td colspan="3">
+                        <p class="p-2 text-justify">
+                            I say that the <span
+                            data-petitioner-text="possessive">Petitioner</span> has/have filed above Petition for Letters of Administration to the property and credits of <input type="text" placeholder="Enter Deceased Name"
+                            class="border bg-[#334155]  text-white p-1 mt-2 border-black rounded deceased-name-main"
+                            data-deceased-name="main" /> in the capacity as RELATION WITH DECEASED of the deceased abovenamed, in this Hon’ble Court.
+                        </p>
+                    </td>
+                </tr>
+                <tr class="py-5 border-t border-white">
+                    <td class="text-center py-5 border-r w-[10%] border-white">2.</td>
+                    <td colspan="3">
+                        <p class="p-2 text-justify">
+                            I say the deceased abovenamed died at <button class="bg-blue-600 text-white p-1 rounded mx-1 deceased-address-btn">PLACE OF DEATH</button><span class="hidden deceased-address-container">
+                                <textarea placeholder="Enter Deceased Address" 
+                                    class="border bg-[#334155] text-white p-2 mt-2 border-white rounded w-full" 
+                                    rows="3"></textarea>
+                                <button class="bg-red-500 text-white my-2 p-1 rounded mx-1 remove-deceased-address">Remove Address</button>
+                            </span> on or about <input type="date" class="border p-1 mt-2 border-white rounded input"  placeholder="hy">. I say that I have annexed <select class="border p-1 mt-2 border-white rounded input">
+                                <option>Select His/her/their</option>
+                                <option>His</option>
+                                <option>Her</option>
+                                <option>Their</option>
+                            </select> death certificate as Exhibit-A to the above petition.
+                        </p>
+                    </td>
+                </tr>
+                <tr class="py-5 border-t border-white">
+                    <td class="text-center py-5 border-r w-[10%] border-white">3.</td>
+                    <td colspan="3">
+                        <p class="p-2 text-justify">
+                            I say that as per the office requisition I need to submit identity proof of the deceased abovenamed.  I say that I have not preserved the identify proof of deceased and I have also taken due and diligent search for the same, however not found. I say that I am/are in the possession of <input type="text" placeholder="Enter Name of Document" class="border p-1 mt-2 border-white rounded input">, which is standing in the <input type="text" placeholder="Enter Deceased Name"
+                            class="border bg-[#334155]  text-white p-1 mt-2 border-black rounded deceased-name-main"
+                            data-deceased-name="main" /> abovenamed, hereto annexed and marked as Exhibit-<select class="border input p-1 mt-2 border-white rounded exhibit-select" id="exhibit1">
+                                <option value="">Select Exhibit</option>
+                                <option value="A">A</option>
+                                <option value="A-1">A-1</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="G">G</option>
+                                <option value="H">H</option>
+                                <option value="I">I</option>
+                                <option value="J">J</option>
+                                <option value="custom">Unique</option>
+                            </select><input type="text" placeholder="Enter Custom Exhibit" class="border w-7 input p-1 mt-2 border-white rounded hidden custom-exhibit-input" id="custom-exhibit1">.
+                        </p>
+                    </td>
+                </tr>
+                <tr class="py-5 border-t border-white">
+                    <td class="text-center py-5 border-r w-[10%] border-white">4.</td>
+                    <td colspan="3">
+                        <p class="p-2 text-justify">
+                            I say and submit that I could not preserve the identity proof of the deceased as stated above, and therefore, the office requisition may kindly be dispensed with on the strength of this affidavit.”.
+                        </p>
+                    </td>
+                </tr>
+                <tr class="py-5 border-t border-white">
+                    <td class="text-center py-5 border-r w-[10%] border-white">5.</td>
+                    <td colspan="3">
+                        <p class="p-2 text-justify">
+                            I say that undertake to this Hon’ble Court to produce/submit the identity proof of the deceased immediately, if found.
+                        </p>
+                    </td>
+                </tr>
 
+            </tbody>
+        </table>
+        <div>
+            <p class="p-2 text-justify mt-10 ">Whatever stated above is true to my/our own knowledge and I/we believe the same to be true.</p>
+            <p>
+                Solemnly <select class="border p-1 mt-2 border-white rounded input">
+                    <option>Select Solemn at </option>
+                    <option>Affirmation</option>
+                    <option>Swear</option>
+                </select>
+                at <input type="text" placeholder="Enter Place" class="border p-1 mt-2 border-white rounded input">.
+                <div class="flex mt-10">
+
+           
+                    <p class=" text-lg w-1/2">Dated this <input
+                        type="text" placeholder="Day"
+                        class="border p-1 w-[10%]  mt-2 input border-white rounded" > day of <input
+                        type="text" placeholder="Month"
+                        class="border p-1 w-[20%]  mt-2 input border-white rounded" 
+                        id="declaration-month">,<input
+                        type="text" placeholder="Year"
+                        class="border p-1 w-[10%]  mt-2 input border-white rounded" 
+                        id="declaration-year"></p>
+                       
+                    </div>
+                        <p class="mt-10 text-lg">
+            <button type="button" id="drawn-by-me-btn" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Select Drawn By Text</button>
+            <br>
+            <textarea id="drawn-by-me-textarea" class="border p-2 mt-2 input border-white rounded w-1/3" rows="3" placeholder="Selected text will appear here..."></textarea>
+            </p>
+            <div class="flex gap-5 mt-52" id="advocate-section">
+                <p class="underline">Advocate for the <span data-petitioner-text="singular">Petitioner</span></p>
+                <button type="button" id="hide-advocate-btn" class="bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600">×</button>
+             </div>
+        </div>
+    </div>
+</div>
+<div id="drawn-by-me-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg w-96 max-h-96 overflow-y-auto">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-bold text-gray-800">Select Drawn By Text</h3>
+            <button type="button" class="close-modal text-gray-500 hover:text-gray-700 text-xl" data-modal="drawn-by-me-modal">&times;</button>
+        </div>
+        <div class="space-y-3">
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="drawn-by-me">Drawn by me</button>
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="identified-by-me">Identified by me</button>
+            <button type="button" class="text-black modal-option w-full text-left p-3 border border-gray-300 rounded hover:bg-gray-100" data-option="interpreted-explained">Interpreted, explained in ___ Language & Identified by me</button>
+        </div>
     </div>
 </div>

@@ -206,8 +206,8 @@
                                             class="border bg-[#334155] w-full text-white p-1 mt-2 border-black rounded" />
                                         <button class="bg-red-500 text-white my-4 p-1 rounded mx-1 remove-petitioner-alias">Remove Alias</button>
                                     </span>,
-                                    <input type="text" placeholder="Enter Petitioner Age"
-                                        class="border bg-[#334155] text-white p-1 mt-2 border-black rounded w-full" />  <select name="citizenship" id="citizenship"
+                                    <input type="text" name="petitioner_age" placeholder="Enter Petitioner Age"
+                                        class="border bg-[#334155] text-white p-1 mt-2 border-black rounded w-full" />  <select name="occupation" id="citizenship"
                                         class="border my-2 w-full bg-[#334155] text-white border-black  mt-1 p-1 rounded">
                                         <option value="volvo">Select Petitioner Occupation</option>
                                         <option value="Service">Service </option>
@@ -225,7 +225,7 @@
         
                                     </select> 
 
-                                        <select name="religin" id="petitioner-religin"
+                                        <select name="religion" id="petitioner-religin"
                                         class="border bg-[#334155] text-white my-2 w-full border-black my-2 p-1 rounded">
                                         <option value="">Select Religion of Petitioner</option>
                                         <option value="hindu">Hindu</option>
@@ -235,12 +235,12 @@
                                         <option value="">Parsi Zoroastrian</option>
         
                                     </select>
-                                    <select class="border bg-[#334155] text-white border-black mt-1 p-1 rounded w-full">
+                                    <select class="border bg-[#334155] text-white border-black mt-1 p-1 rounded w-full" name="citizenship">
                                         <option value="">Select Citizen</option>
                                         <option value="Indian">Indian</option>
                                         <option value="NRI">NRI</option>
                                     </select>
-                                    <input type="text" placeholder="Enter Inhabitant Of"
+                                    <input type="text" name="petitioner_inhabitent" placeholder="Enter Inhabitant Of"
                                         class="border bg-[#334155] text-white p-1 mt-2 border-black rounded w-full" />
                                     residing at
                                     <button class="bg-red-500 mt-2 text-white p-1 rounded mx-1 petitioner-address-btn">Same As Deceased
@@ -305,6 +305,8 @@
                         <p class="text-left  mx-2 underline">THE HON’BLE CHIEF JUSTICE AND OTHER</p>
                         <p class="text-left  mx-2 underline">HON’BLE JUDGES OF THE HON’BLE COURT</p>
                         <p class="text-right  mx-2 underline">THE HUMBLE PETITION OF THE</p>
+                        
+                        
                         <p class="text-right  mx-2 underline">PETITIONER ABOVENAMED  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </p>
                         <p class="text-left  mx-2 underline">MOST RESPECTFULLY SHEWETH</p>
                     </td>
