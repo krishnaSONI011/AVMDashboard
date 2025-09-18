@@ -1,66 +1,44 @@
 <div class="bg-[#57606c] text-white mt-5">
-    <div class="p-10">
-        <!-- table start -->
-        <table class=" w-full border-2 border-white">
-            <tbody>
-                <tr>
-                    <td colspan="2" class="border-r w-1/2  border-white">
+  <div class="p-10">
+    <div class="border border-white p-3">
+        <p class="text-center">(FULL TITLE WILL AUTO ADD HERE)</p>
+        <h2 class="text-center mt-5">PETITIONER'S OATH</h2>
+        <p class="text-justify mt-5 space-y-5 text-lg" id="petitioners-oath-text">
+          <!-- data show here with the js -->
+        </p>
+        <div>
+          
+              Solemnly <select class="border p-1 mt-2 border-white rounded input">
+                  <option>Select Solemn at </option>
+                  <option>Affirmation</option>
+                  <option>Swear</option>
+              </select>
+              at <input type="text" placeholder="Enter Place" class="border p-1 mt-2 border-white rounded input">.
+              <div class="flex mt-10">
 
-                    </td>
-                    <td colspan="2" class="text-center">
-                        <p>IN THE HIGH COURT OF JUDICATURE
-                            AT BOMBAY</p>
-                            <p>TESTAMENTARY &INTESTATE JURISDICTION</p>
-                            <p class="mt-5 text-center">
-                                PETITION NO. <input type="text" placeholder="Enter Petition Number"
-                                    class="border bg-[#334155] text-white p-1 rounded" />
-                                of <input type="text" placeholder="Year" class="bg-[#334155] w-32 text-white border p-1 rounded" />
-                            </p>
-                            <p class="mt-5">
-                                Petition for Letters of Administration to the
-            property and credits of <input type="text" placeholder="NAME OF DECEASED"
-            class="border bg-[#334155] text-white p-1 rounded" />
-                            </p>
-                            <p class="mt-5">
-                                ...................................................................................DECEASED
-                            </p>
-                            <p class="mt-5">
-                                <input type="text" placeholder="Enter Petitioner Name" class="border bg-[#334155] text-white p-1 rounded" /> <select class="border bg-[#334155] text-white p-1 rounded">
-                                    <option value="">Select Relation</option>
-                                    <option value="wife of">wife of</option>
-                                    <option value="husband of">husband of</option>
-                                    <option value="son of">son of</option>
-                                    <option value="daughter of">daughter of</option>
-                                    <option value="mother of">mother of</option>
-                                    <option value="father of">father of</option>
-                                </select> <input type="text" placeholder="Enter Spouse/Parent Name" class="border bg-[#334155] text-white p-1 mt-5 rounded" />
-                            </p>
-                            <p class="mt-5">
-                                ...................................................................................PETITIONER
-                            </p>
-                            <p class="mt-14">
-                                <h1 class="text-xl font-bold underline">PETITIONER OATH</h1>
-                                <p class="mt-10 text-lg">Dated this <input
-                                    type="text" placeholder="Day"
-                                    class="border p-1 w-[20%]  mt-2 input border-white rounded" > day of <input
-                                    type="text" placeholder="Month"
-                                    class="border p-1 w-[20%]  mt-2 input border-white rounded" >,<input
-                                    type="text" placeholder="Year"
-                                    class="border p-1 w-[20%]  mt-2 input border-white rounded" ></p>
-                            </p>
-                            <p class="mt-10 px-10"><span class="font-bold text-xl">Vinay Waman Kate &
-                               Seema Hunnurkar & Associates</span><br>
-                                Advocates for the <span data-petitioner-text="singular">Petitioner</span>
-                                Off: 5A, 2nd Floor, 21/23,
-                                Achal Bhavan, Modi Street,
-                                Fort, Mumbai – 400001
-                                Email Id: katevinay 1995@gmail.com
-                                Cell No. 9870870343
-                                MAH/3707/2018</p>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+         
+                  <p class=" text-lg w-1/2">Dated this <input
+                      type="text" placeholder="Day"
+                      class="border p-1 w-[10%]  mt-2 input border-white rounded" > day of <input
+                      type="text" placeholder="Month"
+                      class="border p-1 w-[20%]  mt-2 input border-white rounded" 
+                      id="declaration-month">,<input
+                      type="text" placeholder="Year"
+                      class="border p-1 w-[10%]  mt-2 input border-white rounded" 
+                      id="declaration-year"></p>
+                     
+                  </div>
+                      <p class="mt-10 text-lg">
+          <button type="button" id="drawn-by-me-btn" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">SELECT ROLE AS</button>
+          <br>
+          <textarea id="drawn-by-me-textarea" class="border p-2 mt-2 input border-white rounded w-1/3" rows="3" placeholder="Selected text will appear here..."></textarea>
+          </p>
+          <div class="flex gap-5 mt-52" id="advocate-section">
+              <p class="underline">Advocate for the <span data-petitioner-text="singular">Petitioner</span></p>
+              <button type="button" id="hide-advocate-btn" class="bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600">×</button>
+           </div>
+      </div>
     </div>
+  </div>
 
 </div>

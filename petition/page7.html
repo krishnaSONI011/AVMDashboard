@@ -1,235 +1,153 @@
 <div class="bg-[#57606c] text-white mt-5">
     <div class="p-10">
-        <!-- table start -->
-        <table class=" w-full border-2 border-white">
-            <tbody>
-                <!-- heading row -->
-                <tr class="py-5">
-                    <td colspan="4" class="py-5">
-                        <h1 class="text-center text-4xl font-bold underline mb-5">CONSENT AFFIDAVIT</h1>
-                        <p class="text-center ">IN THE HIGH COURT OF JUDICATURE AT BOMBAY</p>
-                        <p class="text-center mt-5">TESTAMENTARY AND INTESTATE JURISDICTION</p>
-                        <p class="mt-5 text-center">
-                            PETITION NO. <input type="text" placeholder="Enter Petition Number"
-                                class="border bg-[#334155] text-white p-1 rounded" />
-                            of <input type="text" placeholder="Year" class="bg-[#334155] text-white border p-1 rounded" />
-                        </p>
-                    </td>
-                </tr>
-                <tr class="border  border-white">
-                    <td class=" border-r border-white w-1/2">
+       
+      <div class="border border-white">
+        <div class="flex justify-center">
+            <table class="border border-white w-1/2 my-5" >
+                <thead>
+                    <tr class=" border-b border-white">
+                        <td class="border-r border-white " >
+                            Name Of Leagl Heir
+                        </td>
+                        <td colspan="3" class="w-1/2">
+                            Draft Single Or Joint
+                        </td>
+                    </tr>
 
-                    </td>
-                    <td class="">
-                        <p class="py-5 px-2 text-justify">Petition for Letters of Administration to the
-                            property and credits of <input type="text" placeholder="Enter Deceased Name"
-                                class="border bg-[#334155] text-white p-1 mt-2 border-white rounded" 
-                                data-deceased-name="page7" /><button
-                                class="bg-blue-600 text-white p-1 rounded mx-1" id="deceased_alias">Alias
-                                Name</button> <span class="hidden" id="alias_container">Alias Name <input
-                                    type="text" placeholder="Enter Deceased Name"
-                                    class="border bg-[#334155] text-white p-1 mt-2 border-white rounded" 
-                                    data-deceased-name="page7-alias" /><button
-                                    class="bg-red-500 text-white p-1 rounded mx-1"
-                                    id="remove_deceased_alias">Remove Alias</button></span>
-                            ,Religion of Deceased<input type="text" placeholder="Enter Religion of Deceased"
-                                class="border bg-[#334155] text-white border-white p-1 w-52 mt-2 rounded" /> CITIZEN <select
-                                name="cars" id="cars" class="border bg-[#334155] text-white border-white mt-1 p-1 rounded">
-                                <option value="volvo">Select citizen</option>
-                                <option value="volvo">Indian</option>
-                                <option value="volvo">NRI</option>
-
-                            </select>, Inhabitant of <input type="text" placeholder="Enter Inhabitent"
-                                class="border bg-[#334155] text-white border-white p-1 mt-2 rounded" />, Marital Status <select
-                                name="marital_status" id="marital_status"
-                                class="border bg-[#334155] text-white border-white mt-1 p-1 rounded">
-                                <option value="">Select Marital Status</option>
-                                <option value="Married">
-                                    Married</option>
-                                <option value="Widow">
-                                    Widow</option>
-                                <option value="Widower">
-                                    Widower</option>
-                                <option value="Bachelor">
-                                    Bachelor</option>
-                                <option value="Spinster">
-                                    Spinster</option>
-                                <option value="Divorcee">
-                                    Divorcee</option>
-                            </select>
-                            , Occupation- <input type="text" placeholder="Enter Occupation"
-                                class="border bg-[#334155] text-white border-white p-1 mt-2 rounded" /> , who <span id="who_died">died at</span>
-                                
-                            <button class="bg-blue-600 mt-2 text-white p-1 rounded mx-1"
-                                id="address_des_button">PLACE OF DEATH: SAME AS RESIDENCE CITY? </button>
-                            was residing at 
-                            
-                            the time of
-                            <input type="radio" id="html" name="fav_language" class="mt-4 mb-10 bg-[#334155] text-white"
-                                value="HTML">
-                            <label for="html"> Male /</label>
-                            <input type="radio" id="css" name="fav_language" value="CSS" class="bg-[#334155] text-white">
-                            <label for="css"> Female</label> Death at
-                            <textarea id="enter_addressProof" class=" hidden border p-3 border-white rounded" rows="2" cols="60" placeholder="Enter the Address as per Address proof"></textarea>
-                            <span
-                                class="">..................................................................................Deceased</span>
-
-                        </p>
-                    </td>
-                </tr>
-                <!-- first page second body -->
-                <tr class="border border-white">
-                    <td class="border-r border-white">
-                      <!-- Container for all petitioners -->
-                     <!-- Inside your <td> -->
-<div id="petitioner_wrapper">
-<div class="petitioner_block">
-<p class="text-justify py-5 px-2">
-<span class="petitioner_number font-bold mr-1">1.</span>
-<input type="text" placeholder="Enter Petitioner Name" class="border bg-[#334155] text-white p-1 mt-2 border-white rounded" />
-<button class="bg-blue-600 text-white p-1 rounded mx-1">Alias Name</button>,
-Age-<input type="text" placeholder="Enter Petitioner Age" class="border bg-[#334155] text-white p-1 mt-2 border-white rounded" /> Years,
-Occupation-<input type="text" placeholder="Enter Petitioner Occupation"
-class="border bg-[#334155] text-white p-1 mt-2 border-white rounded" />,
-<input type="text" placeholder="Enter Religion of Petitioner" class="border p-1 mt-2 border-white bg-[#334155] text-white rounded" />,
-<select class="border bg-[#334155] text-white border-white mt-1 p-1 rounded">
-<option value="">Select citizen</option>
-<option value="Indian">Indian</option>
-<option value="NRI">NRI</option>
-</select>
-Inhabitant of
-<input type="text" placeholder="Enter Inhabitant" class="border bg-[#334155] text-white p-1 mt-2 border-white rounded" />
-residing at
-<button class="bg-red-500 mt-2 text-white p-1 rounded mx-1">Same As Deceased Address</button>
-being the
-<input type="text" placeholder="Relation to Deceased" class="border p-1 mt-2 border-white bg-[#334155] text-white rounded" />
-of the deceased above named.
-</p>
-</div>
-</div>
-
-<!-- Add Button -->
-<button type="button" id="add_petitioner_button"
-class="bg-red-500 mt-4 ml-2 text-white p-2 rounded font-semibold">+ Add Petitioner</button>
-
-                    </td>
-                  
-                    <td class="flex h-[45vh] justify-center items-end">
-                      ..................................................................................…<span data-petitioner-text="possessive">Petitioner</span>
-                    </td>
-                  </tr>
-                  
-                
-                <tr>
-                    <td colspan="4" class="py-5">
-                        <h1 class="text-center text-xl font-bold underline mb-5">CONSENT AFFIDAVIT</h1>
-                        <p>I, <input type="text" placeholder="Enter Petitioner Name" class="border bg-[#334155] text-white p-1 rounded" /> <select class="border bg-[#334155] text-white p-1 rounded">
-                            <option value="">Select Relation</option>
-                            <option value="wife of">wife of</option>
-                            <option value="husband of">husband of</option>
-                            <option value="son of">son of</option>
-                            <option value="daughter of">daughter of</option>
-                            <option value="mother of">mother of</option>
-                            <option value="father of">father of</option>
-                        </select> <input type="text" placeholder="Enter Spouse/Parent Name" class="border bg-[#334155] text-white p-1 rounded" />, Age – <input type="text" placeholder="Enter Age" class="border bg-[#334155] text-white p-1 mt-5 rounded w-16" /> Years, <input type="text" placeholder="Enter Religion" class="border bg-[#334155] text-white p-1 rounded" />, <select class="border bg-[#334155] text-white p-1 rounded">
-                            <option value="">Select citizen</option>
-                            <option value="Indian">Indian</option>
-                            <option value="NRI">NRI</option>
-                        </select>, Inhabitant of <input type="text" placeholder="Enter Inhabitant" class="border bg-[#334155] text-white p-1 rounded" />, residing at <input type="text" placeholder="Enter Address" class="border bg-[#334155] text-white p-1 mt-5 rounded w-64" />, do'hereby state on solemn affirmation as under:</p>
-                        
-                        <p class="mt-5">
-                          <table>
-                            <tbody>
-                                <tr class="py-5 border-t border-white">
-                                    <td  class=" text-center py-5 border-r border-white w-[10%]">
-                                       1.
-                                    </td>
-                                    <td colspan="3" class="py-3 px-2"> 
-                                        That I know that the abovenamed <input type="text" placeholder="Enter Deceased Name" class="border bg-[#334155] text-white p-1 rounded w-48" 
-                                        data-deceased-name="page7-affidavit" /> deceased died at <input type="text" placeholder="Enter Place of Death" class="border bg-[#334155] text-white p-1 rounded w-48" /> on or about <input type="text" placeholder="Enter Day" class="border bg-[#334155] text-white p-1 rounded w-16" /> day of <input type="text" placeholder="Enter Month" class="border bg-[#334155] text-white p-1 rounded w-24" />, <input type="text" placeholder="Enter Year" class="border bg-[#334155] text-white p-1 rounded w-20" /> as intestate.
-                                          </td>
-                                </tr>
-                                <tr class="py-5 border-t border-b border-white">
-                                    <td  class=" text-center py-5 border-r border-white w-[10%]">
-                                        2.
-                                     </td>
-                                     <td class="py-3 px-2">
-                                        I say that I am aware that the Petitioner abovenamed is filing and/or has filed a Petition for Letters of Administration to the property and credits of the deceased abovenamed in his capacity as the <select class="border bg-[#334155] text-white p-1 rounded">
-                                            <option value="">Select Relation</option>
-                                            <option value="Widow">Widow</option>
-                                            <option value="Widower">Widower</option>
-                                            <option value="Son">Son</option>
-                                            <option value="Daughter">Daughter</option>
-                                            <option value="Mother">Mother</option>
-                                            <option value="Father">Father</option>
-                                            <option value="Brother">Brother</option>
-                                            <option value="Sister">Sister</option>
-                                        </select> of the deceased, in this Hon'ble Court.
-                                     </td>
-                                </tr>
-                                <tr class="py-5 border-t border-b border-white">
-                                    <td  class=" text-center py-5 border-r border-white w-[10%]">
-                                        3.
-                                     </td>
-                                     <td colspan="3" class="py-3 px-2">
-                                        I being the <select class="border bg-[#334155] text-white p-1 rounded">
-                                            <option value="">Select Relation</option>
-                                            <option value="Mother">Mother</option>
-                                            <option value="Father">Father</option>
-                                            <option value="Son">Son</option>
-                                            <option value="Daughter">Daughter</option>
-                                            <option value="Brother">Brother</option>
-                                            <option value="Sister">Sister</option>
-                                            <option value="Wife">Wife</option>
-                                            <option value="Husband">Husband</option>
-                                        </select> of the above named deceased do hereby give my full and free consent in favour of the above named Petitioner and pray that the Letters of Administration may be granted in her favour without service of any Citation/Notice upon me and without any surety being justified in the estate left by the deceased abovenamed.
-                                    
-                                    </td>
-                                </tr>
-                            </tbody>
-                          </table>
-                            
-                            
-                        </p>
-                        
-                       
-                        
-                      
-                        
-                        <div class="mt-10 flex justify-between">
-                            <div>
-                                <p class="mb-5">Solemnly affirmed at <input type="text" placeholder="Enter Place" class="border bg-[#334155] text-white p-1 rounded" /></p>
-                                <p class="mt-10 text-lg">Dated this <input
-                                    type="text" placeholder="Day"
-                                    class="border p-1 w-[10%]  mt-2 input border-white rounded" > day of <input
-                                    type="text" placeholder="Month"
-                                    class="border p-1 w-[10%]  mt-2 input border-white rounded" >,<input
-                                    type="text" placeholder="Year"
-                                    class="border p-1 w-[10%]  mt-2 input border-white rounded" ></p>
-                                <div class="mt-5 w-52 h-16 border-2 border-dashed border-white flex items-center justify-center">
-
-                                    <span class="text-sm">Signature</span>
-                                </div>
-                                <p>Advocate for the <span data-petitioner-text="singular">Petitioner</span></p>
-
+                    
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="border-r border-white w-1/2">
+                          
+                        </td>
+                        <td id="draft-buttons-cell">
+                            <div class="flex gap-2 p-2">
+                                <button type="button" id="single-draft-btn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm font-bold border-2 border-white">Single</button>
+                                <button type="button" id="joint-draft-btn" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm font-bold border-2 border-white">Joint</button>
                             </div>
-                            <div class="text-right">
-                                
-                                <div class="mt-5  h-16 border-2 border-dashed border-white flex items-center justify-center">
-                                    <span class="text-sm">Signature</span>
-                                </div>
-                                <p class="mt-10 flex items-center"><strong class="mr-2">Sign:</strong> <input type="text" placeholder="Name Of  Petitioner" class="border p-1  border-white bg-[#334155] text-white rounded" /></p>
-                                
-                            </div>
-                        </div>
-                        
-                    </td>
-                </tr>
-                
+                        </td>
+                    </tr>
                 </tbody>
+            </table>
 
+        </div>
 
-        </table>
+        <!-- consent -->
+       <!-- <div class="mt-10">
+        <div class="text-center">
+            (ADD FULL TITLE)
+        </div>
+       <h1 class="text-center underline mt-5">CONSENT AFFIDAVIT</h1>
 
+        <p class="px-5 mt-5">I,Name will auto fill (NAME OF LEGAL HEIR), Aged - age will auto fill  YEARS, RELIGION, Indian Inhabitant of address will auto fill ; , residing at ______________,
+            <select class="border p-1 mt-2 border-white rounded input" id="page7_presently_at">
+                <option>SELECT PRESENTLY AT</option>
+                <option>PRESENTLY AT MUMBAI</option>
+                <option>SAME PLACE</option>
+                <option>UNIQUE</option>
+            </select>
+            <input type="text" placeholder="Enter Unique Place" class="border p-1 mt-2 border-white rounded input hidden" id="page7_unique_place">
+            , do hereby state on <select class="border p-1 mt-2 border-white rounded input">
+                <option>SELECT  AFFIRM OR SWEAR</option>
+                <option>AFFIRM</option>
+                <option>SWEAR</option>
+                
+                
+            </select> 
+            <!-- solemn affirmation/ swear  
+            as under:
+        </p>
+        <p class="mt-5">
+            <table class="border border-white my-5" >
+                <tbody>
+                    <tr class="py-5 border-b border-white">
+                        <td class="border-r border-white px-10">
+                            1.
+                        </td>
+                        <td class="text-justify px-5 py-2 text-justify">
+                            That I know that the abovenamed NAME OF DECEASED deceased died at PLACE OF DEATH on or about DATE OF DEATH as intestate.
+
+                        </td>
+                    </tr>
+                    <tr class="py-5 border-b border-white">
+                        <td class="border-r border-white px-10">
+                            2.
+                        </td>
+                        <td class="text-justify px-5 py-2">
+                            I say that I am aware that the Petitioner abovenamed is SELECT filed/ filing = filing and/or has filed / has filed a Petition for Letters of Administration to the property and credits of the deceased abovenamed in his/her/ their capacity as the RELATION WITH DECEASED of the deceased, in this Hon’ble Court.
+
+                        </td>
+                    </tr>
+                    <tr class="py-5 border-b border-white">
+                        <td class="border-r border-white px-10">3.</td>
+                        <td class="text-justify px-5 py-2">
+                            I, being the RELATION WITH DECEASED of the above named deceased do hereby give my/our full and free consent in favour of the above named Petitioner and pray that the Letters of Administration may be granted in his/her/ their favour without service of any Citation/Notice upon me/us and without any surety being justified in the estate left by the deceased abovenamed.
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </p>
+        <div>
+          
+            Solemnly <select class="border p-1 mt-2 border-white rounded input">
+                <option>Select Solemn at </option>
+                <option>Affirmation</option>
+                <option>Swear</option>
+            </select>
+            at <input type="text" placeholder="Enter Place" class="border p-1 mt-2 border-white rounded input">.
+            <div class="flex mt-10">
+
+       
+                <p class=" text-lg w-1/2">Dated this <input
+                    type="text" placeholder="Day"
+                    class="border p-1 w-[10%]  mt-2 input border-white rounded" > day of <input
+                    type="text" placeholder="Month"
+                    class="border p-1 w-[20%]  mt-2 input border-white rounded" 
+                    id="declaration-month">,<input
+                    type="text" placeholder="Year"
+                    class="border p-1 w-[10%]  mt-2 input border-white rounded" 
+                    id="declaration-year"></p>
+                   
+                </div>
+                    <p class="mt-10 text-lg">
+        <button type="button" id="drawn-by-me-btn" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">SELECT ROLE AS</button>
+        <br>
+        <textarea id="drawn-by-me-textarea" class="border p-2 mt-2 input border-white rounded w-1/3" rows="3" placeholder="Selected text will appear here..."></textarea>
+        </p>
+        <div class="flex gap-5 mt-52" id="advocate-section">
+            <p class="underline">Advocate for the <span data-petitioner-text="singular">Petitioner</span></p>
+            <button type="button" id="hide-advocate-btn" class="bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600">×</button>
+         </div>
+    </div>
+       </div> -->
+        
+       <div id="dynamic-content-container">
+        <!--  here are the dynemic content load  -->
+       </div>
+      </div>
+      
+    </div>
+</div>
+
+<!-- Legal Heir Selection Modal -->
+<div id="legal-heir-selection-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg w-[36rem] max-h-[80vh] overflow-y-auto">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-bold text-gray-800">Select Legal Heirs for <span id="modal-draft-type">Single</span> Draft</h3>
+            <button type="button" class="close-modal text-gray-500 hover:text-gray-700 text-xl" data-modal="legal-heir-selection-modal">&times;</button>
+        </div>
+        <div class="mb-4">
+            <p class="text-sm text-gray-600">Click on legal heir names to select them:</p>
+        </div>
+        <div id="legal-heir-chips-container" class="space-y-2 mb-4">
+            <!-- Legal heir chips will be populated here -->
+        </div>
+        <div class="flex justify-end space-x-3 pt-4 border-t">
+            <button type="button" class="close-modal bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600" data-modal="legal-heir-selection-modal">Cancel</button>
+            <button type="button" id="generate-consent-btn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Generate Consent Affidavit</button>
+        </div>
     </div>
 </div>

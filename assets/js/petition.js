@@ -4,48 +4,60 @@ const page_2 = document.getElementById('page2');
 const page_3 = document.getElementById('page3');
 const page_4 = document.getElementById('page4');
 const page_5 = document.getElementById('page5');
-// const page_6 = document.getElementById('page6');
-// const page_7 = document.getElementById('page7');
-// const page_8 = document.getElementById('page8')
+const page_6 = document.getElementById('page6');
+const page_7 = document.getElementById('page7');
+const page_8 = document.getElementById('page8')
 async function getThePage() {
     const res = await fetch('./page1.html');
     const res1 = await fetch('./page2.html')
     const res2 = await fetch('./page3.html')
     const res3 = await fetch('./page4.html')
     const res4 = await fetch('./page5.html')
-    // const res5 = await fetch('./page6.html')
-    // const res6 = await fetch('./page7.html')
-    // const res7 = await fetch('./page8.html')
+    const res5 = await fetch('./page6.html')
+    const res6 = await fetch('./page7.html')
+     const res7 = await fetch('./page8.html')
     
     const html = await res.text();
     const html1 = await res1.text();
     const html2 = await res2.text();
     const html3 = await res3.text();
     const html4 = await res4.text();
-    // const html5 = await res5.text();
-    // const html6 = await res6.text();
-    // const html7 = await res7.text();
+    const html5 = await res5.text();
+    const html6 = await res6.text();
+     const html7 = await res7.text();
     page_1.innerHTML = html;
+    
+    
+    
     page_2.innerHTML = html1
+    
+
+    
     page_3.innerHTML = html2
     page_4.innerHTML = html3
     page_5.innerHTML = html4
-    // page_6.innerHTML = html5
-    // page_7.innerHTML = html6
-    // page_8.innerHTML = html7
+    page_6.innerHTML = html5
+    page_7.innerHTML = html6
+    page_8.innerHTML = html7
+    
+    // Buttons are now directly in the HTML, no need to add them dynamically
     
     setupPage1Events();
     setupPage2Events();
     setupPage3Events();
     setupPage5Events();
-    console.log('About to setup drawn by me modal...');
+    setupPage7Events();
+    
+    // Set up page8 events after all other pages are set up
+    setupPage8Events();
+
     setupDrawnByMeModal(); // Setup immediately
-    console.log('Finished setting up drawn by me modal');
+
     
     // Initialize legal heirs table after page content is loaded
     setTimeout(() => {
         if (typeof initializeLegalHeirsTable === 'function') {
-            console.log('Calling initializeLegalHeirsTable from timeout');
+         
             initializeLegalHeirsTableWithRetry();
         } else {
             console.log('initializeLegalHeirsTable function not found');
@@ -65,20 +77,22 @@ async function getThePage() {
         
         // Setup drawn by me modal
         setupDrawnByMeModal();
+        // Setup page 6 oath population
+        setupPage6OathPopulation();
     }, 500);
 }
 
 function initializeLegalHeirsTableWithRetry() {
     // Check if petitioner blocks are available
     const petitionerBlocks = document.querySelectorAll('.petitioner_block');
-    console.log('Petitioner blocks found:', petitionerBlocks.length);
+   
     
     if (petitionerBlocks.length > 0) {
         initializeLegalHeirsTable();
         // Update signature names after legal heirs table is initialized
         updatePetitionerSignatureNames();
     } else {
-        console.log('No petitioner blocks found, retrying in 1 second...');
+    //    'No petitioner blocks found, retrying in 1 second...'
         setTimeout(() => {
             initializeLegalHeirsTableWithRetry();
         }, 1000);
@@ -122,7 +136,7 @@ function updatePetitionerSignatureNames() {
     }
 
     const petitionerBlocks = document.querySelectorAll('.petitioner_block');
-    console.log('Found petitioner blocks:', petitionerBlocks.length);
+   
     const petitionerNames = [];
 
     petitionerBlocks.forEach((block, index) => {
@@ -155,6 +169,19 @@ function updatePetitionerSignatureNames() {
 
     // Also update the declaration section
     updateDeclarationSection(petitionerNames);
+    
+    // Update petitioner names in bond section (page 8)
+    updatePetitionerNamesInBond();
+}
+// global function to update the leagle heair names 
+function getAllTheLeagleHeirName(){
+    let nameArray = []; 
+
+    let leagleHeairBlock ;
+    setTimeout(() => {
+        leagleHeairBlock = document.querySelectorAll(".legal-heir-row")
+    }, 1000,);
+    console.log(leagleHeairBlock ,"as")
 }
 
 // Function to update declaration section on page 4
@@ -205,6 +232,9 @@ function updateDeclarationSection(petitionerNames) {
     
     // Also update signature section
     updateSignatureSection(petitionerNames);
+    
+    // Update petitioner names in bond section (page 8)
+    updatePetitionerNamesInBond();
 }
 
 // Function to update declaration date with today's date
@@ -362,6 +392,118 @@ function setupDrawnByMeModal() {
     }
 }
 
+// Populate Page 6 oath paragraph with petitioner details from Page 1
+function setupPage6OathPopulation() {
+    const oathEl = document.querySelector('#page6 #petitioners-oath-text');
+    if (!oathEl) {
+        setTimeout(setupPage6OathPopulation, 500);
+        return;
+    }
+
+    function buildPetitionerEntry(block) {
+        const name = (block.querySelector('input[placeholder="Enter Petitioner Name"]')?.value || '').trim();
+        const age = (block.querySelector('input[name="petitioner_age"]')?.value || '').trim();
+        const religionSel = block.querySelector('select[name="religion"]');
+        const religion = religionSel ? religionSel.options[religionSel.selectedIndex].text : '';
+        const citizenshipSel = block.querySelector('select[name="citizenship"]');
+        const citizenship = citizenshipSel ? citizenshipSel.options[citizenshipSel.selectedIndex].text : '';
+        const inhabitant = (block.querySelector('input[name="petitioner_inhabitent"]')?.value || '').trim();
+        const address = (block.querySelector('input[placeholder="Enter Petitioner Address"]')?.value || '').trim();
+
+        if (!name) return null; // skip empty petitioner rows
+
+        const safeName = name || 'NAME OF PETITIONER';
+        const safeAge = age || '__';
+        const safeReligion = religion || 'RELIGION';
+        const safeCitizenship = citizenship || 'Indian';
+        const safeInhabitant = inhabitant || '____________';
+        const safeAddress = address || 'ADDRESS OF PETITIONER';
+
+        return `
+<span class="font-bold text-white">${safeName}</span>, Age - <span class="font-bold text-white">${safeAge}</span> YEARS, <span class="font-bold text-white">${safeReligion}</span>, <span class="font-bold text-white">${safeCitizenship}</span> Inhabitant of <span class="font-bold text-white">${safeInhabitant}</span>, residing at <span class="font-bold text-white">${safeAddress}</span>`;
+    }
+
+    function updateOath() {
+        const petitionerBlocks = document.querySelectorAll('.petitioner_block');
+        const entries = Array.from(petitionerBlocks)
+            .map(buildPetitionerEntry)
+            .filter(Boolean);
+    
+        const isPlural = entries.length > 1;
+        const pronoun = isPlural ? 'We' : 'I';
+        const abovenamed = isPlural ? 'the Petitioners abovenamed' : 'the Petitioner abovenamed';
+        
+        const combined = entries.join('; ');
+        
+        
+       
+        
+        // Build dynamic oath template
+        oathEl.innerHTML = `${pronoun}, ${combined}, ${abovenamed}, 
+            <select class="border bg-red-500 text-white p-1 mt-2 border-white rounded" id="presently">
+                <option value="">Select Presently At</option>
+                <option value="Presently At Mumbai">Presently At Mumbai</option>
+                <option value="Same Place">Same Place</option>
+                <option value="Unique">Unique</option>
+            </select>
+            <input type="text" id="document_unique" class=" input hidden border rounded mt-2" placeholder="Enter Unique Place">
+            , do hereby solemnly 
+               <select class="border bg-red-500 text-white p-1 mt-2 border-white rounded">
+                <option value="">SELECT  AFFIRM OR SWEAR</option>
+                <option value="Presently At Mumbai">Affirmed</option>
+                <option value="Same Place">Sworn</option>
+                
+            </select>
+            and say that I believe that 
+            <input type="text" placeholder="Enter Deceased Name"
+                class="border bg-[#334155] text-white p-1 mt-2 border-black rounded deceased-name-main"
+                data-deceased-name="main" /> 
+            died without leaving a will and that I am the RELATION WITH DECEASED of the deceased and that I will well and truly administer 
+            <input type="radio" name="heir_gender" value="Male"> his /
+            <input type="radio" name="heir_gender" value="Female"> her property and credits according to law and pay 
+            <input type="radio" name="heir_gender2" value="Male"> his /
+            <input type="radio" name="heir_gender2" value="Female"> her debts so far as the said asset will extend and that I will make and exhibit a full and true inventory thereof in this Hon'ble Court within six months from the date of the grant to be made to me/us or within such further time as the said Court may from time to time appoint and also render a true account of my/our administration to this Hon'ble Court within one year from the same date or within such further time as the said Court may from time to time appoint.`;
+    
+        // Add listener AFTER element is created
+        const presentlyAt = document.getElementById("presently");
+        const documentUnique = document.getElementById("document_unique");
+        console.log(documentUnique)
+        presentlyAt.addEventListener("change",(e)=>{
+            if(e.target.value === "Unique") documentUnique.classList.remove("hidden")
+            else documentUnique.classList.add("hidden")
+        })
+    }
+    
+
+
+    // Initial population
+    updateOath();
+
+    function attachInputListeners() {
+        const blocks = document.querySelectorAll('.petitioner_block');
+        blocks.forEach(block => {
+            const inputs = block.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                input.removeEventListener('input', updateOath);
+                input.removeEventListener('change', updateOath);
+                input.addEventListener('input', updateOath);
+                input.addEventListener('change', updateOath);
+            });
+        });
+    }
+
+    // Attach now and on add/remove of petitioners
+    attachInputListeners();
+    document.addEventListener('click', (e) => {
+        if (e.target && (e.target.id === 'add_petitioner_button' || e.target.classList?.contains('remove_petitioner_btn'))) {
+            setTimeout(() => {
+                attachInputListeners();
+                updateOath();
+            }, 100);
+        }
+    });
+}
+
 // Function to count and update paragraph numbers
 function updateParagraphCount() {
     const paragraphCountElement = document.getElementById('paragraph-count');
@@ -407,6 +549,18 @@ function updateParagraphCount() {
 
 
 function setupPage1Events() {
+    const relationSelect = document.getElementById('relationSelect');
+    const uniqueRelationInput = document.getElementById('uniqueRelationInput');
+    
+    if (relationSelect && uniqueRelationInput) {
+        relationSelect.addEventListener('change', function() {
+            if (this.value === 'Unique') {
+                uniqueRelationInput.classList.remove('hidden');
+            } else {
+                uniqueRelationInput.classList.add('hidden');
+            }
+        });
+    }
    // get the current yaer
    const yearInput = document.getElementById('year_inputs');
    yearInput.value = new Date().getFullYear();
@@ -822,6 +976,7 @@ function setupPage1Events() {
                     if (input !== mainDeceasedInput) {
                         input.value = deceasedName;
                     }
+                   
                 });
             });
         }
@@ -1205,9 +1360,9 @@ function setupPage1Events() {
         let newText = "being";
         
         if (petitionerCount === 2) {
-            newText = "both";
+            newText = "being";
         } else if (petitionerCount > 2) {
-            newText = "all";
+            newText = "being";
         }
         
         beingTextElements.forEach(element => {
@@ -1224,24 +1379,20 @@ function setupPage1Events() {
     const enter_addressProof_text = document.getElementById("enter_addressProof")
     const toast = document.getElementById("toast")
         
-        console.log('Copy elements found:', {
-            button: !!dc_address_copy_button,
-            textarea: !!enter_addressProof_text,
-            toast: !!toast
-        });
+       
     
     if (dc_address_copy_button && enter_addressProof_text && toast) {
-            console.log('Setting up DC address copy button');
+           
         dc_address_copy_button.addEventListener("click",(e)=>{
             e.preventDefault()
-                console.log('DC address copy button clicked');
+             
             
             const dc_address = enter_addressProof_text.value
-                console.log('Text to copy:', dc_address);
+              
             
                 if (navigator.clipboard && navigator.clipboard.writeText) {
                     navigator.clipboard.writeText(dc_address).then(()=>{
-                        console.log('Text copied successfully');
+                        
             toast.innerText = "DC ADDRESS COPY !"
             toast.classList.remove("hidden")
 
@@ -1274,7 +1425,7 @@ function setupPage1Events() {
                 }
             })
         } else {
-            console.log('Some copy elements not found, retrying in 1 second...');
+           
             setTimeout(setupCopyButtons, 1000);
         }
     }
@@ -1289,17 +1440,17 @@ function setupPage1Events() {
         const toast = document.getElementById("toast")
         
     if (address_proof_copy_button && address_proof_input && toast) {
-            console.log('Setting up address proof copy button');
+           
         address_proof_copy_button.addEventListener("click",(e)=>{
             e.preventDefault()
-                console.log('Address proof copy button clicked');
+               
                 
                 const address_text = address_proof_input.value
-                console.log('Text to copy:', address_text);
+               
                 
                 if (navigator.clipboard && navigator.clipboard.writeText) {
                     navigator.clipboard.writeText(address_text).then(()=>{
-                        console.log('Address text copied successfully');
+                       
             toast.innerText = "Address Proof Copy"
             toast.classList.remove("hidden")
 
@@ -1642,10 +1793,10 @@ function setupPage1Events() {
     
     // Setup auto-scroll functionality
     setupAutoScrollForParagraphs();
-        
-        // Check if any radio buttons are found
-        const anyRadioFound = hisRadioPage1 || herRadioPage1 || hisRadioPage2 || herRadioPage2 || 
-                             himRadioPage2 || herSurvivingRadioPage2 || hisHeirRadioPage2 || herHeirRadioPage2;
+    
+    // Check if any radio buttons are found
+    const anyRadioFound = hisRadioPage1 || herRadioPage1 || hisRadioPage2 || herRadioPage2 || 
+                         himRadioPage2 || herSurvivingRadioPage2 || hisHeirRadioPage2 || herHeirRadioPage2;
         
         if (anyRadioFound) {
             console.log('Setting up his/her radio button listeners');
@@ -1668,6 +1819,22 @@ function setupPage1Events() {
         setupHisHerRadioButtons();
         setupLegalHeirButtons();
     }
+
+    // Add event listener for relation select dropdown
+    const relationSelect = document.getElementById('relationSelect');
+    const uniqueRelationInput = document.getElementById('uniqueRelationInput');
+    
+    if (relationSelect && uniqueRelationInput) {
+        relationSelect.addEventListener('change', function() {
+            if (this.value === 'Unique') {
+                uniqueRelationInput.classList.remove('hidden');
+            } else {
+                uniqueRelationInput.classList.add('hidden');
+            }
+        });
+    }
+
+
 
 
 // Legal Heir functionality for page 2 - Global variables
@@ -1709,6 +1876,9 @@ function setupPage2Events() {
     
     // Setup remove buttons for existing sons
     setupSonRemoveButtons();
+    
+    // Setup modal buttons for legal heir class paragraphs
+    setupLegalHeirClassButtons();
 }
 
 function setupLegalHeirButtons() {
@@ -2494,6 +2664,728 @@ window.testPetitionerButton = function(petitionerIndex = 0) {
         console.log('Petitioner row not found at index:', petitionerIndex);
     }
 };
+
+// Function to collect legal heir names from page 2 (excluding petitioners, including all sub-heirs)
+function getLegalHeirNames() {
+    const legalHeirNames = [];
+    const tbody = document.querySelector('#legal-heirs-table tbody');
+    
+    if (!tbody) {
+        console.log('Legal heirs table not found');
+        return legalHeirNames;
+    }
+    
+    // Get all legal heir rows (main legal heirs, sub legal heirs, and sub-sub legal heirs)
+    // Exclude petitioner rows but include all other heir rows
+    const allRows = tbody.querySelectorAll('tr');
+    
+    allRows.forEach((row, index) => {
+        // Skip petitioner rows
+        if (row.classList.contains('petitioner-row')) {
+            return;
+        }
+        
+        // Check if this is a legal heir row (main, sub, or sub-sub)
+        const isLegalHeirRow = row.classList.contains('legal-heir-row') || 
+                              row.classList.contains('sub-heir-row') || 
+                              row.classList.contains('sub-sub-heir-row');
+        
+        if (isLegalHeirRow) {
+            // Get the name input field from any legal heir row (main, sub, or sub-sub)
+            // Main legal heirs use .legal-heir-name, sub heirs use .sub-heir-name, sub-sub heirs use .sub-sub-heir-name
+            const nameInput = row.querySelector('.legal-heir-name, .sub-heir-name, .sub-sub-heir-name');
+            if (nameInput && nameInput.value.trim()) {
+                // Get the age input field
+                const ageInput = row.querySelector('.age-input');
+                const age = ageInput && ageInput.value.trim() ? ageInput.value.trim() : '';
+                
+                legalHeirNames.push({
+                    number: legalHeirNames.length + 1, // Use sequential numbering
+                    name: nameInput.value.trim(),
+                    age: age
+                });
+            }
+        }
+    });
+    
+    console.log('Collected all legal heir names (main, sub, sub-sub):', legalHeirNames);
+    return legalHeirNames;
+}
+
+// Function to populate page 7 table with legal heir names
+function populatePage7LegalHeirs() {
+    const page7Table = document.querySelector('#page7 table tbody');
+    if (!page7Table) {
+        console.log('Page 7 table not found');
+        return;
+    }
+    
+    const legalHeirNames = getLegalHeirNames();
+    
+    // Find the first row (where buttons are located)
+    const firstRow = page7Table.querySelector('tr');
+    if (!firstRow) {
+        console.log('First row not found');
+        return;
+    }
+    
+    // Update the first cell with legal heir names
+    const firstCell = firstRow.querySelector('td:first-child');
+    if (firstCell) {
+        if (legalHeirNames.length === 0) {
+            firstCell.textContent = 'No legal heir names entered yet';
+        } else {
+            // Show all legal heir names in the first cell
+            const namesList = legalHeirNames.map(heir => `${heir.number}) ${heir.name}`).join(', ');
+            firstCell.textContent = namesList;
+        }
+    }
+    
+    // The buttons are already in the HTML and will remain in the second cell
+    // No need to recreate them
+    
+    console.log('Page 7 populated with legal heir names');
+}
+
+// Function to set up page 7 population
+function setupPage7Population() {
+    console.log('Setting up page 7 population...');
+    
+    // Initial population
+    populatePage7LegalHeirs();
+    
+    // Set up event listeners to update when legal heirs change
+    const tbody = document.querySelector('#legal-heirs-table tbody');
+    if (tbody) {
+        // Use event delegation to listen for changes in legal heir name inputs only
+        tbody.addEventListener('input', function(e) {
+            if (e.target.classList.contains('legal-heir-name') || 
+                e.target.classList.contains('sub-heir-name') ||
+                e.target.classList.contains('sub-sub-heir-name')) {
+                console.log('Legal heir name changed, updating page 7...');
+                setTimeout(populatePage7LegalHeirs, 100); // Small delay to ensure value is updated
+            }
+        });
+        
+        // Also listen for when new rows are added
+        tbody.addEventListener('DOMNodeInserted', function(e) {
+            if (e.target.tagName === 'TR') {
+                console.log('New legal heir row added, updating page 7...');
+                setTimeout(populatePage7LegalHeirs, 100);
+            }
+        });
+    }
+    
+    // Also listen for when rows are removed
+    const table = document.querySelector('#legal-heirs-table');
+    if (table) {
+        table.addEventListener('DOMNodeRemoved', function(e) {
+            if (e.target.tagName === 'TR') {
+                console.log('Legal heir row removed, updating page 7...');
+                setTimeout(populatePage7LegalHeirs, 100);
+            }
+        });
+    }
+}
+
+// Function to set up page 7 presently at dropdown functionality
+function setupPage7PresentlyAt() {
+    const presentlyAtSelect = document.getElementById('page7_presently_at');
+    const uniquePlaceInput = document.getElementById('page7_unique_place');
+    
+    if (presentlyAtSelect && uniquePlaceInput) {
+        presentlyAtSelect.addEventListener('change', function() {
+            if (this.value === 'UNIQUE') {
+                uniquePlaceInput.classList.remove('hidden');
+            } else {
+                uniquePlaceInput.classList.add('hidden');
+            }
+        });
+        console.log('Page 7 presently at dropdown setup completed');
+    } else {
+        console.log('Page 7 presently at elements not found, retrying in 1 second...');
+       
+    }
+}
+
+// Function to add Single/Joint buttons to page 7 after HTML is loaded
+function addPage7Buttons() {
+    console.log('Adding Single/Joint buttons to page 7...');
+    
+    // Wait a bit for the HTML to be fully loaded
+    setTimeout(() => {
+        // Try multiple selectors to find the table cell
+        let draftCell = document.querySelector('#page7 table tbody tr td:last-child');
+        
+        if (!draftCell) {
+            // Try alternative selectors
+            draftCell = document.querySelector('#page7 table tbody tr td:nth-child(2)');
+        }
+        
+        if (!draftCell) {
+            // Try finding any table cell in page 7
+            draftCell = document.querySelector('#page7 table tbody tr td');
+        }
+        
+        console.log('Draft cell found:', !!draftCell);
+        console.log('Page 7 element found:', !!document.querySelector('#page7'));
+        console.log('Table found:', !!document.querySelector('#page7 table'));
+        console.log('Table body found:', !!document.querySelector('#page7 table tbody'));
+        console.log('Table row found:', !!document.querySelector('#page7 table tbody tr'));
+        
+        if (draftCell) {
+            console.log('Adding buttons to cell:', draftCell);
+            // Add the buttons to the cell
+            draftCell.innerHTML = `
+                <div class="flex gap-2 p-2">
+                    <button type="button" id="single-draft-btn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm font-bold border-2 border-white" style="display: block !important; visibility: visible !important;">Single</button>
+                    <button type="button" id="joint-draft-btn" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm font-bold border-2 border-white" style="display: block !important; visibility: visible !important;">Joint</button>
+                </div>
+            `;
+            console.log('Single/Joint buttons added successfully');
+        } else {
+            console.log('Draft cell not found in page 7 table');
+            console.log('Available elements in page 7:', document.querySelector('#page7')?.innerHTML?.substring(0, 200));
+        }
+    }, 100);
+}
+
+// Function to set up legal heir selection modal
+function setupLegalHeirSelectionModal() {
+    console.log('Setting up legal heir selection modal...');
+    const singleDraftBtn = document.getElementById('single-draft-btn');
+    const jointDraftBtn = document.getElementById('joint-draft-btn');
+    const modal = document.getElementById('legal-heir-selection-modal');
+    const modalDraftType = document.getElementById('modal-draft-type');
+    const generateConsentBtn = document.getElementById('generate-consent-btn');
+    
+    console.log('Elements found:', {
+        singleDraftBtn: !!singleDraftBtn,
+        jointDraftBtn: !!jointDraftBtn,
+        modal: !!modal,
+        modalDraftType: !!modalDraftType,
+        generateConsentBtn: !!generateConsentBtn
+    });
+    
+    if (singleDraftBtn && jointDraftBtn && modal) {
+        // Single draft button
+        singleDraftBtn.addEventListener('click', function() {
+            modalDraftType.textContent = 'Single';
+            openLegalHeirModal('single');
+        });
+        
+        // Joint draft button
+        jointDraftBtn.addEventListener('click', function() {
+            modalDraftType.textContent = 'Joint';
+            openLegalHeirModal('joint');
+        });
+        
+        // Generate consent button event listener will be set up when modal opens
+        
+        // Close modal functionality
+        setupModalCloseFunctionality();
+        
+        console.log('Legal heir selection modal setup completed');
+    } else {
+        console.log('Legal heir selection modal elements not found, retrying in 1 second...');
+        setTimeout(setupLegalHeirSelectionModal, 1000);
+    }
+}
+
+// Debug function to test button visibility
+window.testPage7Buttons = function() {
+    console.log('=== TESTING PAGE 7 BUTTONS ===');
+    const singleBtn = document.getElementById('single-draft-btn');
+    const jointBtn = document.getElementById('joint-draft-btn');
+    
+    console.log('Single button found:', !!singleBtn);
+    console.log('Joint button found:', !!jointBtn);
+    
+    if (singleBtn) {
+        console.log('Single button styles:', window.getComputedStyle(singleBtn));
+        console.log('Single button display:', window.getComputedStyle(singleBtn).display);
+        console.log('Single button visibility:', window.getComputedStyle(singleBtn).visibility);
+    }
+    
+    if (jointBtn) {
+        console.log('Joint button styles:', window.getComputedStyle(jointBtn));
+        console.log('Joint button display:', window.getComputedStyle(jointBtn).display);
+        console.log('Joint button visibility:', window.getComputedStyle(jointBtn).visibility);
+    }
+    
+    // Try to make buttons visible
+    if (singleBtn) {
+        singleBtn.style.display = 'block';
+        singleBtn.style.visibility = 'visible';
+        singleBtn.style.opacity = '1';
+    }
+    
+    if (jointBtn) {
+        jointBtn.style.display = 'block';
+        jointBtn.style.visibility = 'visible';
+        jointBtn.style.opacity = '1';
+    }
+    
+    console.log('=== END TEST ===');
+};
+
+// Debug function to manually add buttons to page 7
+window.manualAddPage7Buttons = function() {
+    console.log('=== MANUALLY ADDING PAGE 7 BUTTONS ===');
+    
+    // Check if page 7 exists
+    const page7 = document.querySelector('#page7');
+    console.log('Page 7 found:', !!page7);
+    
+    if (!page7) {
+        console.log('Page 7 not found!');
+        return;
+    }
+    
+    // Check table structure
+    const table = page7.querySelector('table');
+    console.log('Table found:', !!table);
+    
+    if (!table) {
+        console.log('Table not found in page 7!');
+        return;
+    }
+    
+    const tbody = table.querySelector('tbody');
+    console.log('Table body found:', !!tbody);
+    
+    if (!tbody) {
+        console.log('Table body not found!');
+        return;
+    }
+    
+    const row = tbody.querySelector('tr');
+    console.log('Table row found:', !!row);
+    
+    if (!row) {
+        console.log('Table row not found!');
+        return;
+    }
+    
+    const cells = row.querySelectorAll('td');
+    console.log('Number of cells found:', cells.length);
+    
+    if (cells.length < 2) {
+        console.log('Not enough cells found!');
+        return;
+    }
+    
+    // Add buttons to the second cell (Draft column)
+    const draftCell = cells[1]; // Second cell (index 1)
+    console.log('Adding buttons to cell:', draftCell);
+    
+    draftCell.innerHTML = `
+        <div class="flex gap-2 p-2">
+            <button type="button" id="single-draft-btn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm font-bold border-2 border-white" style="display: block !important; visibility: visible !important;">Single</button>
+            <button type="button" id="joint-draft-btn" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm font-bold border-2 border-white" style="display: block !important; visibility: visible !important;">Joint</button>
+        </div>
+    `;
+    
+    console.log('Buttons added manually!');
+    console.log('=== END MANUAL ADD ===');
+};
+
+// Debug function to manually close modal
+window.closeModal = function() {
+    console.log('Manually closing modal...');
+    const modal = document.getElementById('legal-heir-selection-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+        console.log('Modal closed');
+    } else {
+        console.log('Modal not found');
+    }
+};
+
+// Debug function to test generate consent button
+window.testGenerateConsent = function() {
+    console.log('=== TESTING GENERATE CONSENT BUTTON ===');
+    const generateBtn = document.getElementById('generate-consent-btn');
+    console.log('Generate button found:', !!generateBtn);
+    
+    if (generateBtn) {
+        console.log('Manually clicking generate button...');
+        generateBtn.click();
+    } else {
+        console.log('Generate button not found');
+    }
+    
+    console.log('=== END TEST ===');
+};
+
+// Function to open legal heir selection modal
+function openLegalHeirModal(draftType) {
+    const modal = document.getElementById('legal-heir-selection-modal');
+    const chipsContainer = document.getElementById('legal-heir-chips-container');
+    
+    if (!modal || !chipsContainer) return;
+    
+    // Store the draft type for later use
+    modal.dataset.draftType = draftType;
+    
+    // Get all legal heir names
+    const legalHeirNames = getLegalHeirNames();
+    
+    // Clear previous chips
+    chipsContainer.innerHTML = '';
+    
+    if (legalHeirNames.length === 0) {
+        chipsContainer.innerHTML = '<p class="text-gray-500 text-center py-4">No legal heir names entered yet</p>';
+    } else {
+        // Create chips for each legal heir
+        legalHeirNames.forEach((heir, index) => {
+            const chip = document.createElement('div');
+            chip.className = 'legal-heir-chip inline-block bg-gray-200 text-gray-800 px-3 py-2 rounded-full cursor-pointer hover:bg-gray-300 transition-colors mr-2 mb-2';
+            chip.textContent = heir.name;
+            chip.dataset.heirIndex = index;
+            chip.dataset.heirName = heir.name;
+            chip.dataset.heirAge = heir.age || '';
+            chip.dataset.selected = 'false';
+            
+            // Add click event to toggle selection
+            chip.addEventListener('click', function() {
+                toggleHeirSelection(chip, draftType);
+            });
+            
+            chipsContainer.appendChild(chip);
+        });
+    }
+    
+    // Set up the generate button event listener when modal opens
+    const generateConsentBtn = document.getElementById('generate-consent-btn');
+    if (generateConsentBtn) {
+        // Remove any existing event listeners
+        generateConsentBtn.replaceWith(generateConsentBtn.cloneNode(true));
+        const newGenerateBtn = document.getElementById('generate-consent-btn');
+        
+        newGenerateBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Generate consent button clicked');
+            generateConsentAffidavit();
+        });
+        console.log('Generate button event listener attached');
+    } else {
+        console.log('Generate button not found when opening modal');
+    }
+    
+    // Show modal
+    modal.classList.remove('hidden');
+}
+
+// Function to toggle legal heir selection
+function toggleHeirSelection(chip, draftType) {
+    const isSelected = chip.dataset.selected === 'true';
+    
+    if (isSelected) {
+        // Deselect
+        chip.dataset.selected = 'false';
+        chip.classList.remove('bg-blue-500', 'text-white');
+        chip.classList.add('bg-gray-200', 'text-gray-800');
+    } else {
+        // For Single draft, deselect all other chips first
+        if (draftType === 'single') {
+            const allChips = document.querySelectorAll('.legal-heir-chip');
+            allChips.forEach(otherChip => {
+                if (otherChip !== chip) {
+                    otherChip.dataset.selected = 'false';
+                    otherChip.classList.remove('bg-blue-500', 'text-white');
+                    otherChip.classList.add('bg-gray-200', 'text-gray-800');
+                }
+            });
+        }
+        
+        // Select current chip
+        chip.dataset.selected = 'true';
+        chip.classList.remove('bg-gray-200', 'text-gray-800');
+        chip.classList.add('bg-blue-500', 'text-white');
+    }
+}
+
+// Function to generate consent affidavit
+function generateConsentAffidavit() {
+    console.log('=== GENERATING CONSENT AFFIDAVIT ===');
+    
+    const modal = document.getElementById('legal-heir-selection-modal');
+    if (!modal) {
+        console.log('Modal not found');
+        return;
+    }
+    
+    const draftType = modal.dataset.draftType;
+    console.log('Draft type:', draftType);
+    
+    const selectedChips = document.querySelectorAll('.legal-heir-chip[data-selected="true"]');
+    console.log('Selected chips count:', selectedChips.length);
+    
+    if (selectedChips.length === 0) {
+        alert('Please select at least one legal heir');
+        return;
+    }
+    
+    const selectedHeirs = Array.from(selectedChips).map(chip => ({
+        name: chip.dataset.heirName,
+        age: chip.dataset.heirAge || ''
+    }));
+    console.log('Selected heirs:', selectedHeirs);
+    
+    if (draftType === 'single') {
+        console.log('Creating single consent affidavit');
+        // For single draft, create one consent affidavit with the selected heir
+        createConsentAffidavitForHeir(selectedHeirs[0], 0);
+    } else if (draftType === 'joint') {
+        console.log('Creating joint consent affidavit');
+        // For joint draft, create one consent affidavit with all selected heirs
+        createJointConsentAffidavit(selectedHeirs);
+    }
+    
+    console.log('Closing modal');
+    // Close modal
+    modal.classList.add('hidden');
+    console.log('=== CONSENT AFFIDAVIT GENERATED ===');
+}
+
+// Function to create consent affidavit for a specific heir
+function createConsentAffidavitForHeir(heir, index) {
+    // Find where to append the new consent affidavit (after the existing consent section)
+    const consentSection = document.querySelector('.mt-10');
+    if (!consentSection) return;
+    
+    // Create a new consent affidavit div
+    const newConsentDiv = document.createElement('div');
+    newConsentDiv.className = 'mt-10';
+    newConsentDiv.id = `consent-affidavit-${index}`;
+    
+    // Create the consent affidavit content
+    newConsentDiv.innerHTML = `
+        <div class="text-center">
+            (ADD FULL TITLE)
+        </div>
+        <h1 class="text-center underline mt-5">CONSENT AFFIDAVIT <button type="button" class="bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600 ml-4">Remove</button></h1>
+
+        <p class="px-5 mt-5">I, ${heir.name}, Aged - ${heir.age || '_______'} YEARS, <input type="text" placeholder="Enter Religion" class="border p-1 mt-2 border-white rounded input" style="width: 150px;">, Indian Inhabitant of <input type="text" placeholder="Enter Place" class="border p-1 mt-2 border-white rounded input" style="width: 150px;">, residing at <textarea class="border p-1 mt-2 border-white rounded input" style="width: 150px;"></textarea>,
+            <select class="border p-1 mt-2 border-white rounded input">
+                <option>SELECT PRESENTLY AT</option>
+                <option>PRESENTLY AT MUMBAI</option>
+                <option>SAME PLACE</option>
+                <option>UNIQUE</option>
+            </select>
+            <input type="text" placeholder="Enter Unique Place" class="border p-1 mt-2 border-white rounded input hidden">
+            , do hereby state on <select class="border p-1 mt-2 border-white rounded input">
+                <option>SELECT  AFFIRM OR SWEAR</option>
+                <option>AFFIRM</option>
+                <option>SWEAR</option>
+            </select> 
+            as under:
+        </p>
+        <p class="mt-5">
+            <table class="border border-white my-5">
+                <tbody>
+                    <tr class="py-5 border-b border-white">
+                        <td class="border-r border-white px-10">1.</td>
+                        <td class="text-justify px-5 py-2 text-justify">
+                            That I know that the abovenamed <input type="text" placeholder="Enter Deceased Name"
+                            class="border bg-[#334155]  text-white p-1 mt-2 border-black rounded deceased-name-main"
+                            data-deceased-name="main" /> deceased died at PLACE OF DEATH on or about DATE OF DEATH as intestate.
+                        </td>
+                    </tr>
+                    <tr class="py-5 border-b border-white">
+                        <td class="border-r border-white px-10">2.</td>
+                        <td class="text-justify px-5 py-2">
+                            I say that I am aware that the Petitioner abovenamed is
+                            <select class="border p-1 mt-2 border-white rounded input">
+                            <option>SELECT</option>
+                            <option>is filing</option>
+                            <option>has/have filed</option>
+                            </select>
+
+                               a Petition for Letters of Administration to the property and credits of the deceased abovenamed in his/her/ their capacity as the RELATION WITH DECEASED of the deceased, in this Hon'ble Court.
+                        </td>
+                    </tr>
+                    <tr class="py-5 border-b border-white">
+                        <td class="border-r border-white px-10">3.</td>
+                        <td class="text-justify px-5 py-2">
+                            I, being the RELATION WITH DECEASED of the above named deceased do hereby give my/our full and free consent in favour of the above named Petitioner and pray that the Letters of Administration may be granted in his/her/ their favour without service of any Citation/Notice upon me/us and without any surety being justified in the estate left by the deceased abovenamed.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </p>
+        <div>
+            Solemnly <select class="border p-1 mt-2 border-white rounded input">
+                <option>Select Solemn at </option>
+                <option>Affirmation</option>
+                <option>Swear</option>
+            </select>
+            at <input type="text" placeholder="Enter Place" class="border p-1 mt-2 border-white rounded input">.
+            <div class="flex mt-10">
+                <p class=" text-lg w-1/2">Dated this <input type="text" placeholder="Day" class="border p-1 w-[10%]  mt-2 input border-white rounded"> day of <input type="text" placeholder="Month" class="border p-1 w-[20%]  mt-2 input border-white rounded">,<input type="text" placeholder="Year" class="border p-1 w-[10%]  mt-2 input border-white rounded"></p>
+            </div>
+        </div>
+    `;
+    
+    // Add remove button functionality
+    const removeBtn = newConsentDiv.querySelector('button');
+    removeBtn.addEventListener('click', function() {
+        newConsentDiv.remove();
+    });
+    
+    // Append to the dynamic content container on page 7
+    const dynamicContentDiv = document.getElementById('dynamic-content-container');
+    if (dynamicContentDiv) {
+        dynamicContentDiv.appendChild(newConsentDiv);
+    } else {
+        // Fallback: append at the end of the page
+        document.body.appendChild(newConsentDiv);
+    }
+}
+
+// Function to create joint consent affidavit for multiple heirs
+function createJointConsentAffidavit(selectedHeirs) {
+    // Find where to append the new consent affidavit (after the existing consent section)
+    const consentSection = document.querySelector('.mt-10');
+    if (!consentSection) return;
+    
+    // Create a new consent affidavit div
+    const newConsentDiv = document.createElement('div');
+    newConsentDiv.className = 'mt-10';
+    newConsentDiv.id = `joint-consent-affidavit-${Date.now()}`;
+    
+    // Create the names list for joint affidavit
+    const namesList = selectedHeirs.map(heir => heir.name).join(', ');
+    
+    // Create the ages list for joint affidavit (comma separated)
+    const agesList = selectedHeirs.map(heir => heir.age || '_______').join(', ');
+    
+    // Create the consent affidavit content
+    newConsentDiv.innerHTML = `
+        <div class="text-center">
+            (ADD FULL TITLE)
+        </div>
+        <h1 class="text-center underline mt-5">CONSENT AFFIDAVIT <button type="button" class="bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600 ml-4">Remove</button></h1>
+
+        <p class="px-5 mt-5">We, ${namesList}, Aged - ${agesList} YEARS, RELIGION, Indian Inhabitant of <input type="text" placeholder="Enter Place" class="border p-1 mt-2 border-white rounded input" style="width: 150px;">, residing at <textarea class="border p-1 mt-2 border-white rounded input" style="width: 150px;"></textarea>,
+            <select class="border p-1 mt-2 border-white rounded input">
+                <option>SELECT PRESENTLY AT</option>
+                <option>PRESENTLY AT MUMBAI</option>
+                <option>SAME PLACE</option>
+                <option>UNIQUE</option>
+            </select>
+            <input type="text" placeholder="Enter Unique Place" class="border p-1 mt-2 border-white rounded input hidden">
+            , do hereby state on <select class="border p-1 mt-2 border-white rounded input">
+                <option>SELECT  AFFIRM OR SWEAR</option>
+                <option>AFFIRM</option>
+                <option>SWEAR</option>
+            </select> 
+            as under:
+        </p>
+        <p class="mt-5">
+            <table class="border border-white my-5">
+                <tbody>
+                    <tr class="py-5 border-b border-white">
+                        <td class="border-r border-white px-10">1.</td>
+                        <td class="text-justify px-5 py-2 text-justify">
+                            That We know that the abovenamed NAME OF DECEASED deceased died at PLACE OF DEATH on or about DATE OF DEATH as intestate.
+                        </td>
+                    </tr>
+                    <tr class="py-5 border-b border-white">
+                        <td class="border-r border-white px-10">2.</td>
+                        <td class="text-justify px-5 py-2">
+                            We say that We are aware that the Petitioner abovenamed is filing and/or has filed a Petition for Letters of Administration to the property and credits of the deceased abovenamed in his/her/ their capacity as the RELATION WITH DECEASED of the deceased, in this Hon'ble Court.
+                        </td>
+                    </tr>
+                    <tr class="py-5 border-b border-white">
+                        <td class="border-r border-white px-10">3.</td>
+                        <td class="text-justify px-5 py-2">
+                            We, being the RELATION WITH DECEASED of the above named deceased do hereby give our full and free consent in favour of the above named Petitioner and pray that the Letters of Administration may be granted in his/her/ their favour without service of any Citation/Notice upon us and without any surety being justified in the estate left by the deceased abovenamed.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </p>
+        <div>
+            Solemnly <select class="border p-1 mt-2 border-white rounded input">
+                <option>Select Solemn at </option>
+                <option>Affirmation</option>
+                <option>Swear</option>
+            </select>
+            at <input type="text" placeholder="Enter Place" class="border p-1 mt-2 border-white rounded input">.
+            <div class="flex mt-10">
+                <p class=" text-lg w-1/2">Dated this <input type="text" placeholder="Day" class="border p-1 w-[10%]  mt-2 input border-white rounded"> day of <input type="text" placeholder="Month" class="border p-1 w-[20%]  mt-2 input border-white rounded">,<input type="text" placeholder="Year" class="border p-1 w-[10%]  mt-2 input border-white rounded"></p>
+            </div>
+        </div>
+    `;
+    
+    // Add remove button functionality
+    const removeBtn = newConsentDiv.querySelector('button');
+    removeBtn.addEventListener('click', function() {
+        newConsentDiv.remove();
+    });
+    
+    // Append to the dynamic content container on page 7
+    const dynamicContentDiv = document.getElementById('dynamic-content-container');
+    if (dynamicContentDiv) {
+        dynamicContentDiv.appendChild(newConsentDiv);
+    } else {
+        // Fallback: append at the end of the page
+        document.body.appendChild(newConsentDiv);
+    }
+}
+
+// Function to set up modal close functionality
+function setupModalCloseFunctionality() {
+    const modal = document.getElementById('legal-heir-selection-modal');
+    
+    if (!modal) {
+        console.log('Modal not found for close functionality setup');
+        return;
+    }
+    
+    // Close on X button click
+    const closeButtons = modal.querySelectorAll('.close-modal');
+    closeButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Close button clicked');
+            modal.classList.add('hidden');
+        });
+    });
+    
+    // Close on Cancel button click
+    const cancelButton = modal.querySelector('button[data-modal="legal-heir-selection-modal"]');
+    if (cancelButton) {
+        cancelButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Cancel button clicked');
+            modal.classList.add('hidden');
+        });
+    }
+    
+    // Close on backdrop click
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            console.log('Backdrop clicked');
+            modal.classList.add('hidden');
+        }
+    });
+    
+    // Close on Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+            console.log('Escape key pressed');
+            modal.classList.add('hidden');
+        }
+    });
+    
+    console.log('Modal close functionality setup completed');
+}
 
 // Debug function to manually test sub-heir creation
 window.testSubHeirCreation = function(heirId = 1, isPetitioner = true) {
@@ -3406,89 +4298,355 @@ function updateSonNumbers() {
     });
     sonCounter = sonEntries.length;
 }
-
+getAllTheLeagleHeirName()
 // Consent Affidavit functionality for page 7
 function setupPage7Events() {
     console.log('Setting up page 7 events...');
-    const appendButton = document.getElementById('append_consent_affidavit');
-    const affidavitsContainer = document.getElementById('consent_affidavits_container');
-    let affidavitCounter = 1;
+    
+    // Set up legal heir population for page 7
+    setupPage7Population();
+    
+    // Set up presently at dropdown functionality
+    setupPage7PresentlyAt();
+    
+    // Set up legal heir selection modal
+    setupLegalHeirSelectionModal();
+    
+    console.log('Page 7 events setup completed successfully');
+}
 
-    console.log('Append button found:', appendButton);
-    console.log('Affidavits container found:', affidavitsContainer);
-
-    if (appendButton && affidavitsContainer) {
-        console.log('Adding click event listener to append button');
-        appendButton.addEventListener('click', function() {
-            console.log('Append button clicked!');
-            const newAffidavit = document.createElement('div');
-            newAffidavit.className = 'bg-[#334155] text-white p-6 rounded-lg border border-white mb-6';
-            newAffidavit.innerHTML = `
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-lg font-bold">Consent Affidavit #${affidavitCounter}</h3>
-                    <button type="button" class="remove-affidavit bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
-                        <i class="fas fa-trash"></i> Remove
-                    </button>
-                </div>
-                
-                <div class="bg-[#334155] text-white p-6 rounded-lg border border-white">
-                    <div class="text-justify space-y-4">
-                        <p><strong>1.</strong> That I know that the abovenamed <input type="text" placeholder="Enter Deceased Name" class="border bg-[#334155] text-white p-1 rounded w-48" /> deceased died at <input type="text" placeholder="Enter Place of Death" class="border bg-[#334155] text-white p-1 rounded w-48" /> on or about <input type="text" placeholder="Enter Day" class="border bg-[#334155] text-white p-1 rounded w-16" /> day of <input type="text" placeholder="Enter Month" class="border bg-[#334155] text-white p-1 rounded w-24" />, <input type="text" placeholder="Enter Year" class="border bg-[#334155] text-white p-1 rounded w-20" /> as intestate.</p>
-                        
-                        <p><strong>2.</strong> I say that I am aware that the Petitioner abovenamed is filing and/or has filed a Petition for Letters of Administration to the property and credits of the deceased abovenamed in his capacity as the <select class="border bg-[#334155] text-white p-1 rounded">
-                            <option value="">Select Relation</option>
-                            <option value="Widow">Widow</option>
-                            <option value="Widower">Widower</option>
-                            <option value="Son">Son</option>
-                            <option value="Daughter">Daughter</option>
-                            <option value="Mother">Mother</option>
-                            <option value="Father">Father</option>
-                            <option value="Brother">Brother</option>
-                            <option value="Sister">Sister</option>
-                        </select> of the deceased, in this Hon'ble Court.</p>
-                        
-                        <p><strong>3.</strong> I being the <select class="border bg-[#334155] text-white p-1 rounded">
-                            <option value="">Select Relation</option>
-                            <option value="Mother">Mother</option>
-                            <option value="Father">Father</option>
-                            <option value="Son">Son</option>
-                            <option value="Daughter">Daughter</option>
-                            <option value="Brother">Brother</option>
-                            <option value="Sister">Sister</option>
-                            <option value="Wife">Wife</option>
-                            <option value="Husband">Husband</option>
-                        </select> of the above named deceased do hereby give my full and free consent in favour of the above named Petitioner and pray that the Letters of Administration may be granted in her favour without service of any Citation/Notice upon me and without any surety being justified in the estate left by the deceased abovenamed.</p>
-                    </div>
-                    
-                    <div class="mt-8 flex justify-between">
-                        <div>
-                            <p class="mb-4">Solemnly affirmed at <input type="text" placeholder="Enter Place" class="border bg-[#334155] text-white p-1 rounded" /></p>
-                            <p>Dated this <input type="text" placeholder="Day" class="border bg-[#334155] text-white p-1 rounded w-16" /> day of <input type="text" placeholder="Month" class="border bg-[#334155] text-white p-1 rounded w-24" />, <input type="text" placeholder="Year" class="border bg-[#334155] text-white p-1 rounded w-20" /></p>
-                        </div>
-                        <div class="text-right">
-                            <div class="w-48 h-16 border-2 border-dashed border-white flex items-center justify-center mb-2">
-                                <span class="text-sm">Signature</span>
-                            </div>
-                            <p class="text-sm">Consenting Party</p>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            affidavitsContainer.appendChild(newAffidavit);
-            affidavitCounter++;
-            
-            // Add event listener to the remove button
-            const removeBtn = newAffidavit.querySelector('.remove-affidavit');
-            removeBtn.addEventListener('click', function() {
-                newAffidavit.remove();
-            });
+function setupPage8Events() {
+    console.log('Setting up page 8 events...');
+    
+    // Set up petitioner names display for page 8
+    setupPage8PetitionerDisplay();
+    
+    // Set up petitioner affidavits display
+    console.log('About to call setupPetitionerAffidavits');
+    setupPetitionerAffidavits();
+    
+    // Set up petitioner names in bond section
+    updatePetitionerNamesInBond();
+    
+    // Set up prothonotary select functionality
+    const prothonotarySelect = document.getElementById('prothonotary-select');
+    const uniqueProthonotaryInput = document.getElementById('unique-prothonotary-input');
+    const prothonotaryNameDisplay = document.getElementById('prothonotary-name-display');
+    
+    if (prothonotarySelect && uniqueProthonotaryInput && prothonotaryNameDisplay) {
+        prothonotarySelect.addEventListener('change', function() {
+            if (this.value === 'Unique') {
+                uniqueProthonotaryInput.classList.remove('hidden');
+                prothonotaryNameDisplay.textContent = '';
+            } else if (this.value === 'Anil H. Laddhad') {
+                uniqueProthonotaryInput.classList.add('hidden');
+                prothonotaryNameDisplay.textContent = 'Anil H. Laddhad';
+            } else {
+                uniqueProthonotaryInput.classList.add('hidden');
+                prothonotaryNameDisplay.textContent = 'SELECT';
+            }
         });
-    } else {
-        console.log('Elements not found, will retry in 1 second...');
-        // Retry after a short delay
-        setTimeout(setupPage7Events, 1000);
+        
+        // Update display when unique input changes
+        uniqueProthonotaryInput.addEventListener('input', function() {
+            if (prothonotarySelect.value === 'Unique') {
+                prothonotaryNameDisplay.textContent = this.value || 'SELECT';
+            }
+        });
     }
+    
+    // Set up bond date with current date
+    const bondDay = document.getElementById('bond-day');
+    const bondMonth = document.getElementById('bond-month');
+    const bondYear = document.getElementById('bond-year');
+    
+    if (bondDay && bondMonth && bondYear) {
+        const today = new Date();
+        bondDay.value = today.getDate();
+        bondMonth.value = today.toLocaleString('default', { month: 'long' });
+        bondYear.value = today.getFullYear();
+        
+        // Set up cascading 6-month gap functionality
+        function updateObligationDates() {
+            const day = parseInt(bondDay.value) || 1;
+            const monthName = bondMonth.value;
+            const year = parseInt(bondYear.value) || new Date().getFullYear();
+            
+            // Convert month name to number
+            const monthNames = ['january', 'february', 'march', 'april', 'may', 'june',
+                              'july', 'august', 'september', 'october', 'november', 'december'];
+            const monthIndex = monthNames.indexOf(monthName.toLowerCase());
+            
+            if (monthIndex !== -1) {
+                // Create date object for bond date
+                const bondDate = new Date(year, monthIndex, day);
+                
+                // Calculate second date (6 months after bond date)
+                const secondDate = new Date(bondDate);
+                secondDate.setMonth(secondDate.getMonth() + 6);
+                
+                // Calculate third date (6 months after second date)
+                const thirdDate = new Date(secondDate);
+                thirdDate.setMonth(thirdDate.getMonth() + 6);
+                
+                // Update first obligation date fields (second date)
+                const obligationDay1 = document.getElementById('obligation-day1');
+                const obligationMonth1 = document.getElementById('obligation-month1');
+                const obligationYear1 = document.getElementById('obligation-year1');
+                
+                if (obligationDay1 && obligationMonth1 && obligationYear1) {
+                    obligationDay1.value = secondDate.getDate();
+                    obligationMonth1.value = secondDate.toLocaleString('default', { month: 'long' });
+                    obligationYear1.value = secondDate.getFullYear();
+                }
+                
+                // Update second obligation date fields (third date)
+                const obligationDay2 = document.getElementById('obligation-day2');
+                const obligationMonth2 = document.getElementById('obligation-month2');
+                const obligationYear2 = document.getElementById('obligation-year2');
+                
+                if (obligationDay2 && obligationMonth2 && obligationYear2) {
+                    obligationDay2.value = thirdDate.getDate();
+                    obligationMonth2.value = thirdDate.toLocaleString('default', { month: 'long' });
+                    obligationYear2.value = thirdDate.getFullYear();
+                }
+                
+                console.log('Date calculation:', {
+                    bondDate: bondDate.toDateString(),
+                    secondDate: secondDate.toDateString(),
+                    thirdDate: thirdDate.toDateString()
+                });
+            }
+        }
+        
+        // Add event listeners to bond date fields
+        bondDay.addEventListener('input', updateObligationDates);
+        bondMonth.addEventListener('input', updateObligationDates);
+        bondYear.addEventListener('input', updateObligationDates);
+        
+        // Initial update
+        updateObligationDates();
+    }
+    
+    // Obligation dates are now automatically set based on bond date + 6 months
+    
+    // Set up deceased name sync from page 1
+    const deceasedNameObligation = document.getElementById('deceased-name-obligation');
+    if (deceasedNameObligation) {
+        // Get deceased name from page 1 and populate it
+        const deceasedNameMain = document.querySelector('input[data-deceased-name="main"]');
+        if (deceasedNameMain && deceasedNameMain.value) {
+            deceasedNameObligation.value = deceasedNameMain.value;
+        }
+        
+        // Listen for changes to deceased name on page 1
+        if (deceasedNameMain) {
+            deceasedNameMain.addEventListener('input', function() {
+                deceasedNameObligation.value = this.value;
+            });
+        }
+    }
+    
+    // Set up pronoun synchronization across all three selects
+    const pronounSelects = [
+        document.getElementById('pronoun-select1'),
+        document.getElementById('pronoun-select2'),
+        document.getElementById('pronoun-select3')
+    ];
+    
+    pronounSelects.forEach(select => {
+        if (select) {
+            select.addEventListener('change', function() {
+                // Sync all pronoun selects to the same value
+                pronounSelects.forEach(otherSelect => {
+                    if (otherSelect && otherSelect !== this) {
+                        otherSelect.value = this.value;
+                    }
+                });
+            });
+        }
+    });
+    
+    console.log('Page 8 events setup completed successfully');
+}
+
+/**
+ * Sets up petitioner names display specifically for page 8
+ * Handles both the petitioner-names-list and page8-petitioner-affidavits-container
+ */
+function setupPage8PetitionerDisplay() {
+    console.log('setupPage8PetitionerDisplay called');
+    
+    const petitionerNamesList = document.getElementById('petitioner-names-list');
+    const page8AffidavitsContainer = document.getElementById('page8-petitioner-affidavits-container');
+    
+    console.log('Page 8 petitioner-names-list found:', petitionerNamesList);
+    console.log('Page 8 affidavits container found:', page8AffidavitsContainer);
+    
+    // Function to update petitioner names display
+    function updatePage8PetitionerNames() {
+        console.log('updatePage8PetitionerNames called');
+        
+        // Try multiple ways to find petitioner names
+        const petitionerBlocks = document.querySelectorAll('.petitioner_block');
+        console.log('Found petitioner blocks for page 8:', petitionerBlocks.length);
+        
+        // Also try to find any input with petitioner name placeholder
+        const allPetitionerInputs = document.querySelectorAll('input[placeholder*="Petitioner Name"], input[placeholder*="petitioner name"]');
+        console.log('Found all petitioner name inputs:', allPetitionerInputs.length);
+        
+        const names = [];
+        
+        // Method 1: Look in petitioner blocks
+        petitionerBlocks.forEach((block, index) => {
+            const nameInput = block.querySelector('input[placeholder="Enter Petitioner Name"]');
+            if (nameInput && nameInput.value.trim()) {
+                names.push(`${index + 1}) ${nameInput.value.trim()}`);
+                console.log(`Found name in block ${index}:`, nameInput.value.trim());
+            }
+        });
+        
+        // Method 2: Look in all petitioner name inputs
+        allPetitionerInputs.forEach((input, index) => {
+            if (input.value.trim() && !names.some(name => name.includes(input.value.trim()))) {
+                names.push(`${names.length + 1}) ${input.value.trim()}`);
+                console.log(`Found name in input ${index}:`, input.value.trim());
+            }
+        });
+        
+        console.log('Page 8 - Final petitioner names:', names);
+        
+        // Update the simple list (petitioner-names-list) - just show names
+        if (petitionerNamesList) {
+            if (names.length > 0) {
+                petitionerNamesList.innerHTML = names.join(' ');
+                console.log('Updated petitioner-names-list with:', names.join(' '));
+            } else {
+                petitionerNamesList.innerHTML = 'no data enter yet';
+                console.log('No names found, showing placeholder');
+            }
+        } else {
+            console.log('petitioner-names-list element not found!');
+        }
+        
+        // Update the affidavits container (page8-petitioner-affidavits-container) - just show names
+        if (page8AffidavitsContainer) {
+            if (names.length > 0) {
+                page8AffidavitsContainer.innerHTML = names.join(' ');
+                console.log('Updated page8-petitioner-affidavits-container with:', names.join(' '));
+            } else {
+                page8AffidavitsContainer.innerHTML = 'no data enter yet';
+                console.log('No names found for affidavits container, showing placeholder');
+            }
+        } else {
+            console.log('page8-petitioner-affidavits-container element not found!');
+        }
+    }
+    
+    // Set up event listeners for petitioner name changes
+    function setupPage8NameListeners() {
+        const petitionerBlocks = document.querySelectorAll('.petitioner_block');
+        
+        petitionerBlocks.forEach(block => {
+            const nameInput = block.querySelector('input[placeholder="Enter Petitioner Name"]');
+            if (nameInput) {
+                nameInput.removeEventListener('input', updatePage8PetitionerNames);
+                nameInput.addEventListener('input', updatePage8PetitionerNames);
+            }
+        });
+    }
+    
+    // Initial setup
+    setupPage8NameListeners();
+    updatePage8PetitionerNames();
+    
+    // Force update after a short delay to ensure page 1 is loaded
+    setTimeout(() => {
+        console.log('Force updating page 8 petitioner names after delay');
+        updatePage8PetitionerNames();
+    }, 500);
+    
+    // Also try updating after a longer delay
+    setTimeout(() => {
+        console.log('Second force update after longer delay');
+        updatePage8PetitionerNames();
+    }, 2000);
+    
+    // Make the function globally accessible for manual testing
+    window.updatePage8PetitionerNames = updatePage8PetitionerNames;
+    
+    // Re-setup when petitioners are added/removed
+    document.addEventListener('click', (e) => {
+        if (e.target.id === 'add_petitioner_button' || e.target.classList.contains('remove_petitioner_btn')) {
+            setTimeout(() => {
+                setupPage8NameListeners();
+                updatePage8PetitionerNames();
+            }, 100);
+        }
+    });
+}
+
+// Function to update petitioner names in bond section
+function updatePetitionerNamesInBond() {
+    const petitionerNamesBond = document.getElementById('petitioner-names-bond');
+    if (!petitionerNamesBond) return;
+    
+    // Get petitioner names from page 1
+    const petitionerBlocks = document.querySelectorAll('.petitioner_block');
+    const petitionerNames = [];
+    
+    petitionerBlocks.forEach((block, index) => {
+        const nameInput = block.querySelector('input[placeholder*="Name"]');
+        if (nameInput && nameInput.value.trim()) {
+            petitionerNames.push(nameInput.value.trim());
+        }
+    });
+    
+    // Update petitioner names in bond paragraph with numbering
+    if (petitionerNames.length > 0) {
+        const numberedNames = petitionerNames.map((name, index) => `${index + 1}) ${name}`).join(', ');
+        petitionerNamesBond.textContent = numberedNames;
+    } else {
+        petitionerNamesBond.textContent = '1) NAME OF PETITIONER';
+    }
+    
+    // Update witness section in bond paragraph
+    const witnessSection = document.getElementById('witness-section');
+    if (witnessSection) {
+        const witnessNumber = petitionerNames.length + 1;
+        witnessSection.innerHTML = `, ${witnessNumber}) <input type="text" placeholder="Enter Name of Witness" class="border p-1 mt-2 border-white rounded input w-48" id="witness-name-input" />`;
+    }
+    
+    // Update signature section with numbered petitioner names
+    const petitionerNamesSignature = document.getElementById('petitioner-names-signature');
+    if (petitionerNamesSignature) {
+        let signatureHtml = '';
+        if (petitionerNames.length > 0) {
+            petitionerNames.forEach((name, index) => {
+                signatureHtml += `${index + 1}) ${name}<br>`;
+            });
+        } else {
+            signatureHtml = '1) NAME OF PETITIONER';
+        }
+        petitionerNamesSignature.innerHTML = signatureHtml;
+    }
+    
+    // Update witness and address section
+    const witnessAndAddressSection = document.getElementById('witness-and-address-section');
+    if (witnessAndAddressSection) {
+        const witnessNumber = petitionerNames.length + 1;
+        witnessAndAddressSection.innerHTML = `${witnessNumber}) <input type="text" placeholder="Enter Name of Witness" class="border p-1 mt-2 border-white rounded input w-48" id="witness-name-input" /><br><br><textarea type="text" placeholder="Enter Address" class="border p-1 mt-2 border-white rounded input w-full" id="petitioner-address-input" rows="3" ></textarea>`;
+    }
+    
+    // Also update petitioner name in obligation section
+    const petitionerNameObligation = document.getElementById('petitioner-name-obligation');
+    if (petitionerNameObligation && petitionerNames.length > 0) {
+        // Join all petitioner names with "and"
+        const allNames = petitionerNames.join(' and ');
+        petitionerNameObligation.textContent = allNames;
+    }
+    
+    console.log('Updated petitioner names in bond section:', petitionerNames);
 }
 
 function setupPage3Events() {
@@ -3625,9 +4783,6 @@ if (schedule_ii_para) {
 
 // Paragraph button functionality
 setupParagraphButtons();
-
-// Legal heir class wise paragraph buttons
-setupLegalHeirClassButtons();
 }
 
 // Global variable to track paragraph numbers
@@ -4396,15 +5551,39 @@ function setupPage5Events() {
  * Fills in details from page 1 petitioner information
  */
 function setupPetitionerAffidavits() {
+    console.log('setupPetitionerAffidavits called');
     const affidavitsContainer = document.getElementById('petitioner-affidavits-container');
-    if (!affidavitsContainer) return;
+    console.log('affidavitsContainer found:', affidavitsContainer);
+    if (!affidavitsContainer) {
+        console.log('No affidavits container found, returning');
+        return;
+    }
 
     // Function to update the affidavits display
     function updatePetitionerAffidavits() {
+        console.log('updatePetitionerAffidavits called');
         const petitionerBlocks = document.querySelectorAll('.petitioner_block');
+        console.log('Found petitioner blocks:', petitionerBlocks.length);
         
         if (petitionerBlocks.length === 0) {
+            console.log('No petitioner blocks found, showing placeholder');
             affidavitsContainer.innerHTML = '<p class="text-center text-gray-400 italic">No petitioners found</p>';
+            return;
+        }
+        
+        // Simple test - just show the petitioner names first
+        const simpleNames = [];
+        petitionerBlocks.forEach((block, index) => {
+            const nameInput = block.querySelector('input[placeholder="Enter Petitioner Name"]');
+            if (nameInput && nameInput.value.trim()) {
+                simpleNames.push(`${index + 1}. ${nameInput.value.trim()}`);
+            }
+        });
+        
+        if (simpleNames.length > 0) {
+            console.log('Found petitioner names:', simpleNames);
+            // Temporarily show just the names for testing
+            affidavitsContainer.innerHTML = `<div class="p-4"><h3 class="text-white font-bold mb-2">Petitioner Names:</h3><p class="text-white">${simpleNames.join(', ')}</p></div>`;
             return;
         }
 
@@ -4431,7 +5610,7 @@ function setupPetitionerAffidavits() {
 
             const safeName = name || 'NAME OF PETITIONER';
             const aliasPart = alias ? `, alias <span class="font-bold text-white">${alias}</span>` : '';
-            const agePart = `, <span class="font-bold text-white">${age || '__'}</span> YEARS`;
+            const agePart = `, <span class="font-bold text-white">${"age " +  age || '__'}</span> YEARS`;
             const occupationPart = `, <span class="font-bold text-white">${occupation || 'OCCUPATION'}</span>`;
             const religionPart = `, <span class="font-bold text-white">${religion || 'RELIGION'}</span>`;
             const citizenshipPart = `, <span class="font-bold text-white">${citizenship || 'CITIZEN'}</span>`;
@@ -4439,7 +5618,7 @@ function setupPetitionerAffidavits() {
             const addressPart = address ? `, <span class="font-bold text-white">${address}</span>` : '';
 
             petitionerEntries.push(
-                `<span class=\"font-bold text-white\">${safeName}</span>${aliasPart}${agePart}${occupationPart}${religionPart}${citizenshipPart}${inhabitantPart}${addressPart}`
+                `<span class=\"font-bold text-white\">${safeName}</span>${aliasPart}${agePart}${religionPart}${citizenshipPart}${inhabitantPart}${addressPart}`
             );
         });
 
@@ -4459,18 +5638,18 @@ function setupPetitionerAffidavits() {
                 
                 <div class="mt-6 p-4  rounded">
                     <p class="text-justify leading-relaxed">
-                        ${pronoun}, ${detailsMarkup}, ${abovenamedLabel} abovenamed, do hereby state on solemn
-                        <select class="input border rounded">
-                        <option>
+                        ${pronoun}, ${detailsMarkup}, ${abovenamedLabel} abovenamed, do hereby <span id="asUnderText"> state on solemn </span> 
+                        <select class="input border rounded" id="solemnSelect">
+                        <option value="">
                         Select Solemn
                         </option>
-                        <option>
+                        <option value="affirmation">
                         Affirmation
                         </option>
-                        <option>
+                        <option value="swear">
                         Swear
                         </option>
-                        <select> 
+                        </select> 
                          as under:
                     </p>
                 </div>
@@ -4484,7 +5663,22 @@ function setupPetitionerAffidavits() {
               
         `;
         
+        console.log('Generated affidavits HTML:', affidavitsHTML);
         affidavitsContainer.innerHTML = affidavitsHTML;
+        
+        // Add event listener for solemn select dropdown
+        const solemnSelect = document.getElementById('solemnSelect');
+        const asUnderText = document.getElementById('asUnderText');
+        
+        if (solemnSelect && asUnderText) {
+            solemnSelect.addEventListener('change', function() {
+                if (this.value === 'swear') {
+                    asUnderText.style.display = 'none';
+                } else {
+                    asUnderText.style.display = 'inline';
+                }
+            });
+        }
     }
 
     // Set up event listeners for all petitioner inputs
