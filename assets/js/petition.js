@@ -7,6 +7,7 @@ const page_5 = document.getElementById('page5');
 const page_6 = document.getElementById('page6');
 const page_7 = document.getElementById('page7');
 const page_8 = document.getElementById('page8')
+const page_9 = document.getElementById('page9')
 async function getThePage() {
     const res = await fetch('./page1.html');
     const res1 = await fetch('./page2.html')
@@ -16,6 +17,7 @@ async function getThePage() {
     const res5 = await fetch('./page6.html')
     const res6 = await fetch('./page7.html')
      const res7 = await fetch('./page8.html')
+     const res8 = await fetch('./page9.html')
     
     const html = await res.text();
     const html1 = await res1.text();
@@ -25,6 +27,7 @@ async function getThePage() {
     const html5 = await res5.text();
     const html6 = await res6.text();
      const html7 = await res7.text();
+     const html8 = await res8.text();
     page_1.innerHTML = html;
     
     
@@ -39,7 +42,7 @@ async function getThePage() {
     page_6.innerHTML = html5
     page_7.innerHTML = html6
     page_8.innerHTML = html7
-    
+    page_9.innerHTML = html8
     // Buttons are now directly in the HTML, no need to add them dynamically
     
     setupPage1Events();
@@ -47,10 +50,11 @@ async function getThePage() {
     setupPage3Events();
     setupPage5Events();
     setupPage7Events();
-    
+    setupPage5Events()
     // Set up page8 events after all other pages are set up
     setupPage8Events();
-
+    setupPage9Events();
+   
     setupDrawnByMeModal(); // Setup immediately
 
     
@@ -2691,24 +2695,48 @@ function getLegalHeirNames() {
                               row.classList.contains('sub-sub-heir-row');
         
         if (isLegalHeirRow) {
-            // Get the name input field from any legal heir row (main, sub, or sub-sub)
-            // Main legal heirs use .legal-heir-name, sub heirs use .sub-heir-name, sub-sub heirs use .sub-sub-heir-name
-            const nameInput = row.querySelector('.legal-heir-name, .sub-heir-name, .sub-sub-heir-name');
-            if (nameInput && nameInput.value.trim()) {
-                // Get the age input field
-                const ageInput = row.querySelector('.age-input');
-                const age = ageInput && ageInput.value.trim() ? ageInput.value.trim() : '';
-                
-                legalHeirNames.push({
-                    number: legalHeirNames.length + 1, // Use sequential numbering
-                    name: nameInput.value.trim(),
-                    age: age
-                });
+            // Check if this legal heir is alive (only include alive legal heirs)
+            // Check for main legal heirs, sub legal heirs, and sub-sub legal heirs
+            let aliveRadio = null;
+            let isAlive = false;
+            
+            // Check for main legal heir alive/died radio
+            if (row.classList.contains('legal-heir-row')) {
+                aliveRadio = row.querySelector('input[name*="alive_died"][value="alive"]');
+                isAlive = aliveRadio && aliveRadio.checked;
+            }
+            // Check for sub legal heir alive/died radio
+            else if (row.classList.contains('sub-heir-row')) {
+                aliveRadio = row.querySelector('input[name*="sub_alive_died"][value="alive"]');
+                isAlive = aliveRadio && aliveRadio.checked;
+            }
+            // Check for sub-sub legal heir alive/died radio
+            else if (row.classList.contains('sub-sub-heir-row')) {
+                aliveRadio = row.querySelector('input[name*="sub_sub_alive_died"][value="alive"]');
+                isAlive = aliveRadio && aliveRadio.checked;
+            }
+            
+            // Only include if alive radio is checked (not died)
+            if (isAlive) {
+                // Get the name input field from any legal heir row (main, sub, or sub-sub)
+                // Main legal heirs use .legal-heir-name, sub heirs use .sub-heir-name, sub-sub heirs use .sub-sub-heir-name
+                const nameInput = row.querySelector('.legal-heir-name, .sub-heir-name, .sub-sub-heir-name');
+                if (nameInput && nameInput.value.trim()) {
+                    // Get the age input field
+                    const ageInput = row.querySelector('.age-input');
+                    const age = ageInput && ageInput.value.trim() ? ageInput.value.trim() : '';
+                    
+                    legalHeirNames.push({
+                        number: legalHeirNames.length + 1, // Use sequential numbering
+                        name: nameInput.value.trim(),
+                        age: age
+                    });
+                }
             }
         }
     });
     
-    console.log('Collected all legal heir names (main, sub, sub-sub):', legalHeirNames);
+    console.log('Collected alive legal heir names only (main, sub, sub-sub):', legalHeirNames);
     return legalHeirNames;
 }
 
@@ -3279,8 +3307,8 @@ function createJointConsentAffidavit(selectedHeirs) {
             <input type="text" placeholder="Enter Unique Place" class="border p-1 mt-2 border-white rounded input hidden">
             , do hereby state on <select class="border p-1 mt-2 border-white rounded input">
                 <option>SELECT  AFFIRM OR SWEAR</option>
-                <option>AFFIRM</option>
-                <option>SWEAR</option>
+                <option>Affirm</option>
+                <option>Swear</option>
             </select> 
             as under:
         </p>
@@ -4543,6 +4571,199 @@ function setupPage8PetitionerDisplay() {
         }
     }
     
+    // Function to create petitioner details paragraph dynamically
+    function createPetitionerDetailsParagraph() {
+        console.log('Creating petitioner details paragraph...');
+        
+        const container = document.getElementById('petitioner-details-container');
+        console.log('Container found:', !!container);
+        if (!container) {
+            console.log('petitioner-details-container not found!');
+            return;
+        }
+        
+        // Get all petitioner details from page 1
+        const petitionerBlocks = document.querySelectorAll('.petitioner_block');
+        const names = [];
+        const ages = [];
+        const religions = [];
+        const citizens = [];
+        const addresses = [];
+        
+        petitionerBlocks.forEach((block, index) => {
+            // Get petitioner name
+            const nameInput = block.querySelector('input[placeholder="Enter Petitioner Name"]');
+            if (nameInput && nameInput.value.trim()) {
+                names.push(nameInput.value.trim());
+            }
+            
+            // Get petitioner age
+            const ageInput = block.querySelector('input[placeholder="Enter Petitioner Age"]');
+            if (ageInput && ageInput.value.trim()) {
+                ages.push(ageInput.value.trim());
+            }
+            
+            // Get petitioner religion
+            const religionSelect = block.querySelector('select[name="religion"]');
+            if (religionSelect && religionSelect.value) {
+                religions.push(religionSelect.options[religionSelect.selectedIndex].text);
+            }
+            
+            // Get petitioner citizenship
+            const citizenSelect = block.querySelector('select[name="citizenship"]');
+            if (citizenSelect && citizenSelect.value) {
+                citizens.push(citizenSelect.options[citizenSelect.selectedIndex].text);
+            }
+            
+            // Get petitioner inhabitant address
+            const addressInput = block.querySelector('input[placeholder="Enter Inhabitant Of"]');
+            if (addressInput && addressInput.value.trim()) {
+                addresses.push(addressInput.value.trim());
+            }
+        });
+        
+        console.log('Page 5 - Found petitioner details:', { names, ages, religions, citizens, addresses });
+        
+        // Determine pronoun
+        const pronoun = names.length > 1 ? 'We' : 'I';
+        const petitionerName = names.length > 0 ? names.join(' and ') : names.length;
+        
+        // Create the paragraph HTML
+        const paragraphHTML = `
+            <span id="pronoun-i-we">${pronoun}</span>, <span id="petitioner-name-details">${petitionerName}</span>, Age <input type="text" placeholder="Age" class="border p-1 mt-2 border-white rounded input w-16" id="petitioner-age" value="${ages.length > 0 ? ages[0] : ''}" /> YEARS, <input type="text" placeholder="Religion" class="border p-1 mt-2 border-white rounded input w-24" id="petitioner-religion" value="${religions.length > 0 ? religions[0] : ''}" />, <input type="text" placeholder="Citizen" class="border p-1 mt-2 border-white rounded input w-24" id="petitioner-citizen" value="${citizens.length > 0 ? citizens[0] : ''}" />, Inhabitant of <input type="text" placeholder="Address" class="border p-1 mt-2 border-white rounded input w-48" id="petitioner-address" value="${addresses.length > 0 ? addresses[0] : ''}" />, the Petitioner abovenamed, <select class="border p-1 mt-2 border-white rounded input" id="presently-at-select">
+                <option value="">SELECT PRESENTLY AT</option>
+                <option value="mumbai">PRESENTLY AT MUMBAI</option>
+                <option value="same-place">SAME PLACE</option>
+                <option value="unique">Unique</option>
+            </select> <input type="text" placeholder="Enter custom location" class="border p-1 mt-2 border-white rounded input w-32 hidden" id="custom-location-input" />, do hereby state on <select class="border p-1 mt-2 border-white rounded input" id="affirm-swear-select">
+                <option value="">SELECT AFFIRM OR SWEAR</option>
+                <option value="affirmation">Affirm</option>
+                <option value="swear">Swear</option>
+            </select> as under:
+        `;
+        
+        // Update the container
+        container.innerHTML = paragraphHTML;
+        console.log('Created petitioner details paragraph with:', petitionerName);
+        console.log('Container innerHTML length:', container.innerHTML.length);
+        console.log('Container visible:', container.offsetHeight > 0);
+        
+        // Test if content is actually there
+        const testSpan = container.querySelector('#petitioner-name-details');
+        console.log('Petitioner name span found:', !!testSpan);
+        if (testSpan) {
+            console.log('Petitioner name span content:', testSpan.textContent);
+        }
+        
+        // Fallback: if nothing shows, add a simple test
+        if (container.innerHTML.length < 100) {
+            console.log('Content seems too short, adding fallback...');
+            container.innerHTML = `<p style="color: white; background: red; padding: 10px;">FALLBACK: ${petitionerName} - Age: ${ages.length > 0 ? ages[0] : 'N/A'}</p>`;
+        }
+        
+        // Set up event listeners for the new elements
+        setupPage5EventListeners();
+    }
+    
+    // Function to update petitioner details in page 5
+    function updatePage5PetitionerDetails() {
+        console.log('Updating page 5 petitioner details...');
+        createPetitionerDetailsParagraph();
+    }
+    
+    // Make the functions globally accessible for testing
+    window.updatePage5PetitionerDetails = updatePage5PetitionerDetails;
+    window.createPetitionerDetailsParagraph = createPetitionerDetailsParagraph;
+    
+    // Function to run when page 5 becomes visible
+  
+    
+    // Make it globally accessible
+
+    
+    // Set up event listeners for the dynamically created elements
+    function setupPage5EventListeners() {
+        console.log('Setting up page 5 event listeners...');
+        
+        // Set up event listener for "Unique" location selection
+        const presentlyAtSelect = document.getElementById('presently-at-select');
+        const customLocationInput = document.getElementById('custom-location-input');
+        
+        if (presentlyAtSelect && customLocationInput) {
+            presentlyAtSelect.addEventListener('change', function() {
+                if (this.value === 'unique') {
+                    customLocationInput.classList.remove('hidden');
+                } else {
+                    customLocationInput.classList.add('hidden');
+                }
+            });
+        }
+    }
+    
+    // Set up event listeners for page 5 petitioner details
+    function setupPage5Events() {
+        console.log('Setting up page 5 events...');
+        
+        // Set up petitioner affidavits display
+        setupPetitionerAffidavits();
+        
+        // Update petitioner details when page loads (with delay to ensure page 1 is loaded)
+        setTimeout(() => {
+            console.log('Calling updatePage5PetitionerDetails after delay...');
+            updatePage5PetitionerDetails();
+        }, 1000);
+        
+        // Also try immediately to see if it works
+        console.log('Calling updatePage5PetitionerDetails immediately...');
+        updatePage5PetitionerDetails();
+        
+        // Try multiple times to ensure it works
+        setTimeout(() => {
+            console.log('Second attempt after 2 seconds...');
+            updatePage5PetitionerDetails();
+        }, 2000);
+        
+        setTimeout(() => {
+            console.log('Third attempt after 3 seconds...');
+            updatePage5PetitionerDetails();
+        }, 3000);
+        
+        // Set up event listeners for all petitioner field changes
+        const petitionerBlocks = document.querySelectorAll('.petitioner_block');
+        petitionerBlocks.forEach((block, index) => {
+            // Name input
+            const nameInput = block.querySelector('input[placeholder="Enter Petitioner Name"]');
+            if (nameInput) {
+                nameInput.addEventListener('input', updatePage5PetitionerDetails);
+            }
+            
+            // Age input
+            const ageInput = block.querySelector('input[placeholder="Enter Petitioner Age"]');
+            if (ageInput) {
+                ageInput.addEventListener('input', updatePage5PetitionerDetails);
+            }
+            
+            // Religion select
+            const religionSelect = block.querySelector('select[name="religion"]');
+            if (religionSelect) {
+                religionSelect.addEventListener('change', updatePage5PetitionerDetails);
+            }
+            
+            // Citizenship select
+            const citizenSelect = block.querySelector('select[name="citizenship"]');
+            if (citizenSelect) {
+                citizenSelect.addEventListener('change', updatePage5PetitionerDetails);
+            }
+            
+            // Address input
+            const addressInput = block.querySelector('input[placeholder="Enter Inhabitant Of"]');
+            if (addressInput) {
+                addressInput.addEventListener('input', updatePage5PetitionerDetails);
+            }
+        });
+    }
+    setupPage5Events();
+    
     // Set up event listeners for petitioner name changes
     function setupPage8NameListeners() {
         const petitionerBlocks = document.querySelectorAll('.petitioner_block');
@@ -4568,7 +4789,7 @@ function setupPage8PetitionerDisplay() {
     
     // Also try updating after a longer delay
     setTimeout(() => {
-        console.log('Second force update after longer delay');
+      
         updatePage8PetitionerNames();
     }, 2000);
     
@@ -5711,3 +5932,219 @@ function setupPetitionerAffidavits() {
         }
     });
 }
+
+/**
+ * Sets up page 9 events and functionality
+ * Handles property table and content management
+ */
+function setupPage9Events() {
+    console.log('Setting up page 9 events...');
+    
+    // Set up Flat/Room button
+    const flatRoomBtn = document.getElementById('flat-room-btn');
+    const tenantedRoomBtn = document.getElementById('tenanted-room-btn');
+    const plotOfLandBtn = document.getElementById('plot-of-land-btn');
+    const partnershipPropertyBtn = document.getElementById('partnership-property-btn');
+    const partnershipBusinessBtn = document.getElementById('partnership-business-btn');
+    const propertyContentSection = document.getElementById('property-content-section');
+    const addPropertyBtn = document.getElementById('add-property-btn');
+    const propertyTableBody = document.getElementById('property-table-body');
+    
+    if (flatRoomBtn && propertyContentSection) {
+        flatRoomBtn.addEventListener('click', function() {
+           
+            showPropertyContent('flat-room');
+        });
+    }
+    
+    if (tenantedRoomBtn && propertyContentSection) {
+        tenantedRoomBtn.addEventListener('click', function() {
+            showPropertyContent('tenanted-room');
+        });
+    }
+    
+    if (plotOfLandBtn && propertyContentSection) {
+        plotOfLandBtn.addEventListener('click', function() {
+            showPropertyContent('plot-of-land');
+        });
+    }
+    
+    if (partnershipPropertyBtn && propertyContentSection) {
+        partnershipPropertyBtn.addEventListener('click', function() {
+            showPropertyContent('partnership-property');
+        });
+    }
+    
+    if (partnershipBusinessBtn && propertyContentSection) {
+        partnershipBusinessBtn.addEventListener('click', function() {
+            showPropertyContent('partnership-business');
+        });
+    }
+    
+    if (addPropertyBtn && propertyTableBody) {
+        addPropertyBtn.addEventListener('click', function() {
+            console.log('Add property button clicked');
+            addPropertyToTable();
+        });
+    }
+}
+
+/**
+ * Adds property details to the table
+ */
+function addPropertyToTable() {
+    const propertyContentTextarea = document.getElementById('property-content-textarea');
+    const propertyAmount = document.getElementById('property-amount');
+    const propertyTableBody = document.getElementById('property-table-body');
+    
+    
+    if (!propertyContentTextarea || !propertyAmount || !propertyTableBody) {
+        console.log('Required elements not found');
+        return;
+    }
+    
+    const content = propertyContentTextarea.value.trim();
+    const amount = propertyAmount.value.trim();
+    
+    if (!content || !amount) {
+        alert('Please fill in both property details and amount');
+        return;
+    }
+    
+    // Create new table row
+    const newRow = document.createElement('tr');
+    newRow.className = 'border border-white';
+    
+    newRow.innerHTML = `
+        <td class="border border-white p-3 text-justify">
+            <textarea class="w-full h-32 p-2 border border-gray-300 rounded text-black resize-none" 
+                      onblur="updatePropertyContent(this)">${content}</textarea>
+        </td>
+        <td class="border border-white p-3 text-center">
+            <input type="text" value="${amount}" 
+                   class="w-full p-2 border border-gray-300 rounded text-black text-center font-semibold" 
+                   onblur="updatePropertyAmount(this)"
+                   placeholder="Enter amount">
+        </td>
+        <td class="border border-white p-3 text-center">
+            <button type="button" class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded text-sm font-medium transition-colors" 
+                    onclick="removePropertyRow(this)">
+                Remove
+            </button>
+        </td>
+    `;
+    
+    // Add to table
+    propertyTableBody.appendChild(newRow);
+    
+    // Clear inputs
+    propertyContentTextarea.value = '';
+    propertyAmount.value = '';
+    
+    // Hide the content section
+    const propertyContentSection = document.getElementById('property-content-section');
+    if (propertyContentSection) {
+        propertyContentSection.classList.add('hidden');
+    }
+    
+    console.log('Property added to table');
+}
+
+/**
+ * Shows property content based on property type
+ */
+function showPropertyContent(propertyType) {
+    const propertyContentSection = document.getElementById('property-content-section');
+    const propertyContentTextarea = document.getElementById('property-content-textarea');
+    
+    if (!propertyContentSection || !propertyContentTextarea) {
+        console.log('Property content elements not found');
+        return;
+    }
+    
+    let content = '';
+    
+    if (propertyType === 'flat-room') {
+        content = `Immovable property consisting of Flat/Room No._____,   ____Floor, Bldg. No.____, ____-Wing,  ______________(Building or society name), ________Road, Near_________, Andheri, East/West, Mumbai-4000______, admeasuring area about _____ sq. ft., standing in the name of the deceased abovenamed and of the present market value is  
+
+Self –occupied and fetching no rent.
+OWNERSHIP OPTION- 
+--The remaining 50% share belongs to ___
+--The remaining share belongs to 
+1) __% of ___
+2) __% of ___
+3) __% of ___
+The remaining undivided share belongs to 
+1) __% of ___
+2) __% of ___
+3) __% of ___
+OCCUPATION RIGHT
+The said Flat/Room is occupied by the tenant and rent receivable is  `;
+    } else if (propertyType === 'tenanted-room') {
+        content = `Transfer of Tenancy Right in respect of Immovable property consisting of Room No._____, ____Floor, Bldg. No.____, ____-Wing,  ______________(Building or society name), ________Road,  Near_________, Andheri, East/West, Mumbai-4000______, admeasuring area _____ sq. ft., standing in the name of the deceased abovenamed and valued at
+(monthly Rent Rs.__/- p.m. X 150 times), which comes to 
+Self-occupied & fetching no rent.
+NO RENT
+and of the present market value is`;
+    }
+    else if(propertyType === 'plot-of-land') {
+        content = `Immovable property consisting of Plot of Land bearing Plot No. ____________, C.T.S. No. ______, Hissa No.____, admeasuring area _____ sq. mtrs., standing in the name of the deceased abovenamed and of the present market value is  
+Self-occupied & fetching no rent.
+OWNERSHIP OPTION- 
+--The remaining 50% share belongs to ___
+--The remaining share belongs to 
+1) __% of ___
+2) __% of ___
+3) __% of ___
+The remaining undivided share belongs to 
+1) __% of ___
+2) __% of ___
+3) __% of ___
+OCCUPATION RIGHT`;
+    } else if(propertyType === 'partnership-property') {
+        content = `Partnership Property bearing ______ No. ______, ____ Floor, ________________________, admeasuring area _____ sq. ft. and of the present market value is 
+The other partners are
+1)
+2)
+Self-occupied & Fetching no rent.`;
+    } else if(propertyType === 'partnership-business') {
+        content = `Partnership Business known as __________________, situated at ___________________ (FULL ADDRESS WITH PINCODE), alongwith stock in trade, Goodwill etc., and valued at ,,,for the PARTNERSHIP BUSINESS`;
+    }
+    
+    propertyContentTextarea.value = content;
+    propertyContentSection.classList.remove('hidden');
+}
+
+/**
+ * Updates property content when textarea is edited
+ */
+function updatePropertyContent(textarea) {
+    console.log('Property content updated:', textarea.value);
+    // You can add additional logic here if needed
+}
+
+/**
+ * Updates property amount when input is edited
+ */
+function updatePropertyAmount(input) {
+    console.log('Property amount updated:', input.value);
+    // You can add additional logic here if needed
+}
+
+/**
+ * Removes a property row from the table
+ */
+function removePropertyRow(button) {
+    if (confirm('Are you sure you want to remove this property?')) {
+        const row = button.closest('tr');
+        if (row) {
+            row.remove();
+            console.log('Property row removed');
+        }
+    }
+}
+
+// Make functions globally accessible
+window.updatePropertyContent = updatePropertyContent;
+window.updatePropertyAmount = updatePropertyAmount;
+window.removePropertyRow = removePropertyRow;
