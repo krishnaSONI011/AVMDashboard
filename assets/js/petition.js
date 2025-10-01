@@ -454,8 +454,8 @@ function setupPage6OathPopulation() {
             , do hereby solemnly 
                <select class="border bg-red-500 text-white p-1 mt-2 border-white rounded">
                 <option value="">SELECT  AFFIRM OR SWEAR</option>
-                <option value="Presently At Mumbai">Affirmed</option>
-                <option value="Same Place">Sworn</option>
+                <option value="Presently At Mumbai">AFFIRM</option>
+                <option value="Same Place">SWEAR</option>
                 
             </select>
             and say that I believe that 
@@ -4856,7 +4856,7 @@ function updatePetitionerNamesInBond() {
     const witnessAndAddressSection = document.getElementById('witness-and-address-section');
     if (witnessAndAddressSection) {
         const witnessNumber = petitionerNames.length + 1;
-        witnessAndAddressSection.innerHTML = `${witnessNumber}) <input type="text" placeholder="Enter Name of Witness" class="border p-1 mt-2 border-white rounded input w-48" id="witness-name-input" /><br><br><textarea type="text" placeholder="Enter Address" class="border p-1 mt-2 border-white rounded input w-full" id="petitioner-address-input" rows="3" ></textarea>`;
+        witnessAndAddressSection.innerHTML = `${witnessNumber}) <input type="text" placeholder="Enter Name of Witness" class="border p-1 mt-2 border-white rounded input w-48" id="witness-name-input" /><br><br><textarea type="text" placeholder="Enter Address" class="border p-1 mt-2 border-white rounded input w-2/3" id="petitioner-address-input" rows="3" ></textarea>`;
     }
     
     // Also update petitioner name in obligation section
@@ -5987,6 +5987,99 @@ function setupPage9Events() {
             addPropertyToTable();
         });
     }
+    
+    // Schedule-II toggle button
+    const addScheduleIIBtn = document.getElementById('add-schedule-ii-btn');
+    if (addScheduleIIBtn) {
+        addScheduleIIBtn.addEventListener('click', toggleScheduleII);
+    }
+    
+    // Schedule-III toggle button
+    const addScheduleIIIBtn = document.getElementById('add-schedule-iii-btn');
+    if (addScheduleIIIBtn) {
+        addScheduleIIIBtn.addEventListener('click', toggleScheduleIII);
+    }
+    
+    // Schedule-II property type buttons
+    const scheduleIIFuneralExpensesBtn = document.getElementById('schedule-ii-funeral-expenses-btn');
+    const scheduleIILoanBtn = document.getElementById('schedule-ii-loan-btn');
+    
+    if (scheduleIIFuneralExpensesBtn) {
+        scheduleIIFuneralExpensesBtn.addEventListener('click', () => showScheduleIIContent('funeral-expenses'));
+    }
+    
+    if (scheduleIILoanBtn) {
+        scheduleIILoanBtn.addEventListener('click', () => showScheduleIIContent('loan'));
+    }
+    
+    // Add property button for Schedule-II
+    const addScheduleIIPropertyBtn = document.getElementById('add-schedule-ii-property-btn');
+    if (addScheduleIIPropertyBtn) {
+        addScheduleIIPropertyBtn.addEventListener('click', addScheduleIIPropertyToTable);
+    }
+    
+    // Schedule-III property type buttons (same as Schedule-I)
+    const scheduleIIIFlatRoomBtn = document.getElementById('schedule-iii-flat-room-btn');
+    const scheduleIIITenantedRoomBtn = document.getElementById('schedule-iii-tenanted-room-btn');
+    const scheduleIIIPlotOfLandBtn = document.getElementById('schedule-iii-plot-of-land-btn');
+    const scheduleIIIPartnershipPropertyBtn = document.getElementById('schedule-iii-partnership-property-btn');
+    const scheduleIIIPartnershipBusinessBtn = document.getElementById('schedule-iii-partnership-business-btn');
+    const scheduleIIIShopGalaBtn = document.getElementById('schedule-iii-shop-gala-btn');
+    const scheduleIIIBungalowBtn = document.getElementById('schedule-iii-bungalow-btn');
+    const scheduleIIIBondsBtn = document.getElementById('schedule-iii-bonds-btn');
+    const scheduleIIIUtensilsBtn = document.getElementById('schedule-iii-utensils-btn');
+    const scheduleIIIFurnitureBtn = document.getElementById('schedule-iii-furniture-btn');
+    const scheduleIIILoanBtn = document.getElementById('schedule-iii-loan-btn');
+    
+    if (scheduleIIIFlatRoomBtn) {
+        scheduleIIIFlatRoomBtn.addEventListener('click', () => showScheduleIIIContent('flat-room'));
+    }
+    
+    if (scheduleIIITenantedRoomBtn) {
+        scheduleIIITenantedRoomBtn.addEventListener('click', () => showScheduleIIIContent('tenanted-room'));
+    }
+    
+    if (scheduleIIIPlotOfLandBtn) {
+        scheduleIIIPlotOfLandBtn.addEventListener('click', () => showScheduleIIIContent('plot-of-land'));
+    }
+    
+    if (scheduleIIIPartnershipPropertyBtn) {
+        scheduleIIIPartnershipPropertyBtn.addEventListener('click', () => showScheduleIIIContent('partnership-property'));
+    }
+    
+    if (scheduleIIIPartnershipBusinessBtn) {
+        scheduleIIIPartnershipBusinessBtn.addEventListener('click', () => showScheduleIIIContent('partnership-business'));
+    }
+    
+    if (scheduleIIIShopGalaBtn) {
+        scheduleIIIShopGalaBtn.addEventListener('click', () => showScheduleIIIContent('shop-gala'));
+    }
+    
+    if (scheduleIIIBungalowBtn) {
+        scheduleIIIBungalowBtn.addEventListener('click', () => showScheduleIIIContent('bungalow'));
+    }
+    
+    if (scheduleIIIBondsBtn) {
+        scheduleIIIBondsBtn.addEventListener('click', () => showScheduleIIIContent('bonds'));
+    }
+    
+    if (scheduleIIIUtensilsBtn) {
+        scheduleIIIUtensilsBtn.addEventListener('click', () => showScheduleIIIContent('utensils'));
+    }
+    
+    if (scheduleIIIFurnitureBtn) {
+        scheduleIIIFurnitureBtn.addEventListener('click', () => showScheduleIIIContent('furniture'));
+    }
+    
+    if (scheduleIIILoanBtn) {
+        scheduleIIILoanBtn.addEventListener('click', () => showScheduleIIIContent('loan'));
+    }
+    
+    // Add property button for Schedule-III
+    const addScheduleIIIPropertyBtn = document.getElementById('add-schedule-iii-property-btn');
+    if (addScheduleIIIPropertyBtn) {
+        addScheduleIIIPropertyBtn.addEventListener('click', addScheduleIIIPropertyToTable);
+    }
 }
 
 /**
@@ -6046,6 +6139,9 @@ function addPropertyToTable() {
     if (propertyContentSection) {
         propertyContentSection.classList.add('hidden');
     }
+    
+    // Recalculate total after adding new property
+    calculateScheduleITotal();
     
     console.log('Property added to table');
 }
@@ -6128,7 +6224,8 @@ function updatePropertyContent(textarea) {
  */
 function updatePropertyAmount(input) {
     console.log('Property amount updated:', input.value);
-    // You can add additional logic here if needed
+    // Recalculate total when amount is updated
+    calculateScheduleITotal();
 }
 
 /**
@@ -6140,6 +6237,143 @@ function removePropertyRow(button) {
         if (row) {
             row.remove();
             console.log('Property row removed');
+            // Recalculate total after removal
+            calculateScheduleITotal();
+        }
+    }
+}
+
+/**
+ * Toggles Schedule-II visibility
+ */
+function toggleScheduleII(e) {
+    e.preventDefault();
+    const scheduleIISection = document.getElementById('schedule-ii-section');
+    const addScheduleIIBtn = document.getElementById('add-schedule-ii-btn');
+    
+    if (scheduleIISection && addScheduleIIBtn) {
+        if (scheduleIISection.classList.contains('hidden')) {
+            scheduleIISection.classList.remove('hidden');
+            addScheduleIIBtn.textContent = 'Hide SCHEDULE-II';
+            console.log('Schedule-II shown');
+        } else {
+            scheduleIISection.classList.add('hidden');
+            addScheduleIIBtn.textContent = 'Add SCHEDULE-II';
+            console.log('Schedule-II hidden');
+        }
+    }
+}
+
+/**
+ * Shows content for Schedule-II property types
+ */
+function showScheduleIIContent(propertyType) {
+    const contentSection = document.getElementById('schedule-ii-content-section');
+    const textarea = document.getElementById('schedule-ii-content-textarea');
+    
+    if (!contentSection || !textarea) {
+        console.log('Schedule-II content elements not found');
+        return;
+    }
+    
+    let content = '';
+    
+    switch (propertyType) {
+        case 'funeral-expenses':
+            content = `Amount of Funeral Expenses`;
+            break;
+        case 'loan':
+            content = `Loan to be repaid of ___________(Name of Person), having his/her address at __________________________ (FULL ADDRESS WITH PINCODE).`;
+            break;
+        default:
+            content = 'Enter property details here...';
+    }
+    
+    textarea.value = content;
+    contentSection.classList.remove('hidden');
+    console.log(`Schedule-II content shown for: ${propertyType}`);
+}
+
+/**
+ * Adds property to Schedule-II table
+ */
+function addScheduleIIPropertyToTable() {
+    const contentTextarea = document.getElementById('schedule-ii-content-textarea');
+    const amountInput = document.getElementById('schedule-ii-amount');
+    const tableBody = document.getElementById('schedule-ii-table-body');
+    
+    if (!contentTextarea || !amountInput || !tableBody) {
+        console.log('Schedule-II required elements not found');
+        return;
+    }
+    
+    const content = contentTextarea.value.trim();
+    const amount = amountInput.value.trim();
+    
+    if (!content || !amount) {
+        alert('Please enter both property details and amount');
+        return;
+    }
+    
+    const newRow = document.createElement('tr');
+    newRow.className = 'border border-white';
+    newRow.innerHTML = `
+        <td class="border border-white p-2">
+            <div contenteditable="true" onblur="updateScheduleIIContent(this)" class="min-h-[50px] p-2">${content}</div>
+        </td>
+        <td class="border border-white p-2">
+            <input type="text" value="${amount}" onblur="updateScheduleIIAmount(this)" class="w-full p-2 border border-gray-300 rounded text-black">
+        </td>
+        <td class="border border-white p-2 text-center">
+            <button type="button" onclick="removeScheduleIIPropertyRow(this)" class="bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600">Remove</button>
+        </td>
+    `;
+    
+    tableBody.appendChild(newRow);
+    
+    // Clear the form
+    contentTextarea.value = '';
+    amountInput.value = '';
+    
+    // Hide the content section
+    const contentSection = document.getElementById('schedule-ii-content-section');
+    if (contentSection) {
+        contentSection.classList.add('hidden');
+    }
+    
+    // Recalculate total after adding new property
+    calculateScheduleIITotal();
+    
+    console.log('Property added to Schedule-II table');
+}
+
+/**
+ * Updates Schedule-II property content when edited
+ */
+function updateScheduleIIContent(element) {
+    console.log('Schedule-II property content updated:', element.textContent);
+}
+
+/**
+ * Updates Schedule-II property amount when edited
+ */
+function updateScheduleIIAmount(input) {
+    console.log('Schedule-II property amount updated:', input.value);
+    // Recalculate total when amount is updated
+    calculateScheduleIITotal();
+}
+
+/**
+ * Removes a property row from Schedule-II table
+ */
+function removeScheduleIIPropertyRow(button) {
+    if (confirm('Are you sure you want to remove this property from Schedule-II?')) {
+        const row = button.closest('tr');
+        if (row) {
+            row.remove();
+            console.log('Schedule-II property row removed');
+            // Recalculate total after removal
+            calculateScheduleIITotal();
         }
     }
 }
@@ -6148,3 +6382,282 @@ function removePropertyRow(button) {
 window.updatePropertyContent = updatePropertyContent;
 window.updatePropertyAmount = updatePropertyAmount;
 window.removePropertyRow = removePropertyRow;
+window.toggleScheduleII = toggleScheduleII;
+window.showScheduleIIContent = showScheduleIIContent;
+window.addScheduleIIPropertyToTable = addScheduleIIPropertyToTable;
+window.updateScheduleIIContent = updateScheduleIIContent;
+window.updateScheduleIIAmount = updateScheduleIIAmount;
+window.removeScheduleIIPropertyRow = removeScheduleIIPropertyRow;
+
+/**
+ * Calculates and updates the total for Schedule-I
+ */
+function calculateScheduleITotal() {
+    const tableBody = document.getElementById('property-table-body');
+    const totalElement = document.getElementById('schedule-i-total');
+    
+    if (!tableBody || !totalElement) {
+        console.log('Schedule-I total calculation elements not found');
+        return;
+    }
+    
+    let total = 0;
+    const amountInputs = tableBody.querySelectorAll('input[type="text"]');
+    
+    amountInputs.forEach(input => {
+        const value = input.value.trim();
+        if (value) {
+            // Remove currency symbols and commas, then parse
+            const numericValue = parseFloat(value.replace(/[₹,]/g, ''));
+            if (!isNaN(numericValue)) {
+                total += numericValue;
+            }
+        }
+    });
+    
+    // Format the total with currency symbol
+    totalElement.textContent = `₹ ${total.toLocaleString('en-IN')}`;
+    console.log('Schedule-I total calculated:', total);
+}
+
+/**
+ * Calculates and updates the total for Schedule-II
+ */
+function calculateScheduleIITotal() {
+    const tableBody = document.getElementById('schedule-ii-table-body');
+    const totalElement = document.getElementById('schedule-ii-total');
+    
+    if (!tableBody || !totalElement) {
+        console.log('Schedule-II total calculation elements not found');
+        return;
+    }
+    
+    let total = 0;
+    const amountInputs = tableBody.querySelectorAll('input[type="text"]');
+    
+    amountInputs.forEach(input => {
+        const value = input.value.trim();
+        if (value) {
+            // Remove currency symbols and commas, then parse
+            const numericValue = parseFloat(value.replace(/[₹,]/g, ''));
+            if (!isNaN(numericValue)) {
+                total += numericValue;
+            }
+        }
+    });
+    
+    // Format the total with currency symbol
+    totalElement.textContent = `₹ ${total.toLocaleString('en-IN')}`;
+    console.log('Schedule-II total calculated:', total);
+}
+
+/**
+ * Toggles Schedule-III visibility
+ */
+function toggleScheduleIII(e) {
+    e.preventDefault();
+    const scheduleIIISection = document.getElementById('schedule-iii-section');
+    const addScheduleIIIBtn = document.getElementById('add-schedule-iii-btn');
+    
+    if (scheduleIIISection && addScheduleIIIBtn) {
+        if (scheduleIIISection.classList.contains('hidden')) {
+            scheduleIIISection.classList.remove('hidden');
+            addScheduleIIIBtn.textContent = 'Hide SCHEDULE-III';
+            console.log('Schedule-III shown');
+        } else {
+            scheduleIIISection.classList.add('hidden');
+            addScheduleIIIBtn.textContent = 'Add SCHEDULE-III';
+            console.log('Schedule-III hidden');
+        }
+    }
+}
+
+/**
+ * Shows content for Schedule-III property types (same as Schedule-I)
+ */
+function showScheduleIIIContent(propertyType) {
+    const contentSection = document.getElementById('schedule-iii-content-section');
+    const textarea = document.getElementById('schedule-iii-content-textarea');
+    
+    if (!contentSection || !textarea) {
+        console.log('Schedule-III content elements not found');
+        return;
+    }
+    
+    let content = '';
+    
+    switch (propertyType) {
+        case 'flat-room':
+            content = `Immovable property consisting of Flat/Room No._____, ____Floor, Bldg. No.____, ____-Wing, ______________(Building or society name), ________Road, Near_________, Andheri, East/West, Mumbai-4000______, admeasuring area about _____ sq. ft., standing in the name of the deceased abovenamed and of the present market value is Self –occupied and fetching no rent. OWNERSHIP OPTION- --The remaining 50% share belongs to ___ --The remaining share belongs to 1) __% of ___ 2) __% of ___ 3) __% of ___ The remaining undivided share belongs to 1) __% of ___ 2) __% of ___ 3) __% of ___ OCCUPATION RIGHT The said Flat/Room is occupied by the tenant and rent receivable is`;
+            break;
+        case 'tenanted-room':
+            content = `Transfer of Tenancy Right in respect of Immovable property consisting of Room No._____, ____Floor, Bldg. No.____, ____-Wing, ______________(Building or society name), ________Road, Near_________, Andheri, East/West, Mumbai-4000______, admeasuring area _____ sq. ft., standing in the name of the deceased abovenamed and valued at (monthly Rent Rs.__/- p.m. X 150 times), which comes to Self-occupied & fetching no rent. NO RENT and of the present market value is`;
+            break;
+        case 'plot-of-land':
+            content = `Plot of Land bearing Survey No._____, Hissa No._____, situated at ________________________, admeasuring area _____ sq. ft. and of the present market value is Self-occupied & Fetching no rent.`;
+            break;
+        case 'partnership-property':
+            content = `Partnership Property bearing ______ No. ______, ____ Floor, ________________________, admeasuring area _____ sq. ft. and of the present market value is The other partners are 1) 2) Self-occupied & Fetching no rent.`;
+            break;
+        case 'partnership-business':
+            content = `Partnership Business known as __________________, situated at ___________________ (FULL ADDRESS WITH PINCODE), alongwith stock in trade, Goodwill etc., and valued at`;
+            break;
+        case 'shop-gala':
+            content = `Shop/Gala bearing No._____, situated at ________________________, admeasuring area _____ sq. ft. and of the present market value is Self-occupied & Fetching no rent.`;
+            break;
+        case 'bungalow':
+            content = `Bungalow bearing No._____, situated at ________________________, admeasuring area _____ sq. ft. and of the present market value is Self-occupied & Fetching no rent.`;
+            break;
+        case 'bonds':
+            content = `Bonds and Securities of the deceased including Government Bonds, Corporate Bonds, and other investment securities valued at`;
+            break;
+        case 'utensils':
+            content = `Household utensils and kitchenware of the deceased including cookware, cutlery, and other domestic items valued at`;
+            break;
+        case 'furniture':
+            content = `Furniture and fixtures of the deceased including beds, chairs, tables, and other household furniture valued at`;
+            break;
+        case 'loan':
+            content = `Outstanding loans and debts of the deceased including personal loans, bank loans, and other financial obligations valued at`;
+            break;
+        default:
+            content = 'Enter property details here...';
+    }
+    
+    textarea.value = content;
+    contentSection.classList.remove('hidden');
+    console.log(`Schedule-III content shown for: ${propertyType}`);
+}
+
+/**
+ * Adds property to Schedule-III table
+ */
+function addScheduleIIIPropertyToTable() {
+    const contentTextarea = document.getElementById('schedule-iii-content-textarea');
+    const amountInput = document.getElementById('schedule-iii-amount');
+    const tableBody = document.getElementById('schedule-iii-table-body');
+    
+    if (!contentTextarea || !amountInput || !tableBody) {
+        console.log('Schedule-III required elements not found');
+        return;
+    }
+    
+    const content = contentTextarea.value.trim();
+    const amount = amountInput.value.trim();
+    
+    if (!content || !amount) {
+        alert('Please enter both property details and amount');
+        return;
+    }
+    
+    const newRow = document.createElement('tr');
+    newRow.className = 'border border-white';
+    newRow.innerHTML = `
+        <td class="border border-white p-3 text-justify">
+            <textarea class="w-full h-32 p-2 border border-gray-300 rounded text-black resize-none" 
+                      onblur="updateScheduleIIIContent(this)">${content}</textarea>
+        </td>
+        <td class="border border-white p-3 text-center">
+            <input type="text" value="${amount}" 
+                   class="w-full p-2 border border-gray-300 rounded text-black text-center font-semibold" 
+                   onblur="updateScheduleIIIAmount(this)"
+                   placeholder="Enter amount">
+        </td>
+        <td class="border border-white p-3 text-center">
+            <button type="button" class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded text-sm font-medium transition-colors" 
+                    onclick="removeScheduleIIIPropertyRow(this)">
+                Remove
+            </button>
+        </td>
+    `;
+    
+    tableBody.appendChild(newRow);
+    
+    // Clear the form
+    contentTextarea.value = '';
+    amountInput.value = '';
+    
+    // Hide the content section
+    const contentSection = document.getElementById('schedule-iii-content-section');
+    if (contentSection) {
+        contentSection.classList.add('hidden');
+    }
+    
+    // Recalculate total after adding new property
+    calculateScheduleIIITotal();
+    
+    console.log('Property added to Schedule-III table');
+}
+
+/**
+ * Updates Schedule-III property content when edited
+ */
+function updateScheduleIIIContent(element) {
+    console.log('Schedule-III property content updated:', element.value);
+}
+
+/**
+ * Updates Schedule-III property amount when edited
+ */
+function updateScheduleIIIAmount(input) {
+    console.log('Schedule-III property amount updated:', input.value);
+    // Recalculate total when amount is updated
+    calculateScheduleIIITotal();
+}
+
+/**
+ * Removes a property row from Schedule-III table
+ */
+function removeScheduleIIIPropertyRow(button) {
+    if (confirm('Are you sure you want to remove this property from Schedule-III?')) {
+        const row = button.closest('tr');
+        if (row) {
+            row.remove();
+            console.log('Schedule-III property row removed');
+            // Recalculate total after removal
+            calculateScheduleIIITotal();
+        }
+    }
+}
+
+/**
+ * Calculates and updates the total for Schedule-III
+ */
+function calculateScheduleIIITotal() {
+    const tableBody = document.getElementById('schedule-iii-table-body');
+    const totalElement = document.getElementById('schedule-iii-total');
+    
+    if (!tableBody || !totalElement) {
+        console.log('Schedule-III total calculation elements not found');
+        return;
+    }
+    
+    let total = 0;
+    const amountInputs = tableBody.querySelectorAll('input[type="text"]');
+    
+    amountInputs.forEach(input => {
+        const value = input.value.trim();
+        if (value) {
+            // Remove currency symbols and commas, then parse
+            const numericValue = parseFloat(value.replace(/[₹,]/g, ''));
+            if (!isNaN(numericValue)) {
+                total += numericValue;
+            }
+        }
+    });
+    
+    // Format the total with currency symbol
+    totalElement.textContent = `₹ ${total.toLocaleString('en-IN')}`;
+    console.log('Schedule-III total calculated:', total);
+}
+
+// Make calculation functions globally accessible
+window.calculateScheduleITotal = calculateScheduleITotal;
+window.calculateScheduleIITotal = calculateScheduleIITotal;
+window.calculateScheduleIIITotal = calculateScheduleIIITotal;
+window.toggleScheduleIII = toggleScheduleIII;
+window.showScheduleIIIContent = showScheduleIIIContent;
+window.addScheduleIIIPropertyToTable = addScheduleIIIPropertyToTable;
+window.updateScheduleIIIContent = updateScheduleIIIContent;
+window.updateScheduleIIIAmount = updateScheduleIIIAmount;
+window.removeScheduleIIIPropertyRow = removeScheduleIIIPropertyRow;
