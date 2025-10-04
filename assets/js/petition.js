@@ -5959,13 +5959,13 @@ function setupPage9Events() {
     
     if (tenantedRoomBtn && propertyContentSection) {
         tenantedRoomBtn.addEventListener('click', function() {
-            showPropertyContent('tenanted-room');
+            showTenantedRoomOptions();
         });
     }
     
     if (plotOfLandBtn && propertyContentSection) {
         plotOfLandBtn.addEventListener('click', function() {
-            showPropertyContent('plot-of-land');
+            showPlotOfLandOptions();
         });
     }
     
@@ -5980,6 +5980,116 @@ function setupPage9Events() {
             showPropertyContent('partnership-business');
         });
     }
+    
+    // Additional property type buttons
+    const shopGalaBtn = document.getElementById('shop-gala-btn');
+    const bungalowBtn = document.getElementById('bungalow-btn');
+    const bondsBtn = document.getElementById('bonds-btn');
+    const utensilsBtn = document.getElementById('utensils-btn');
+    const furnitureBtn = document.getElementById('furniture-btn');
+    const loanBtn = document.getElementById('loan-btn');
+    
+    if (shopGalaBtn && propertyContentSection) {
+        shopGalaBtn.addEventListener('click', function() {
+            showPropertyContent('shop-gala');
+        });
+    }
+    
+    if (bungalowBtn && propertyContentSection) {
+        bungalowBtn.addEventListener('click', function() {
+            showPropertyContent('bungalow');
+        });
+    }
+    
+    if (bondsBtn && propertyContentSection) {
+        bondsBtn.addEventListener('click', function() {
+            showPropertyContent('bonds');
+        });
+    }
+    
+    if (utensilsBtn && propertyContentSection) {
+        utensilsBtn.addEventListener('click', function() {
+            showPropertyContent('utensils');
+        });
+    }
+    
+    // Gold/Jewellery button
+    const goldJewelleryBtn = document.getElementById('gold-jewellery-btn');
+    if (goldJewelleryBtn && propertyContentSection) {
+        goldJewelleryBtn.addEventListener('click', function() {
+            showPropertyContent('gold-jewellery');
+        });
+    }
+    
+    if (furnitureBtn && propertyContentSection) {
+        furnitureBtn.addEventListener('click', function() {
+            showPropertyContent('furniture');
+        });
+    }
+    
+    if (loanBtn && propertyContentSection) {
+        loanBtn.addEventListener('click', function() {
+            showPropertyContent('loan');
+        });
+    }
+    
+    // Account buttons with modals
+    const savingAccountBtn = document.getElementById('saving-account-btn');
+    if (savingAccountBtn) {
+        savingAccountBtn.addEventListener('click', function() {
+            showSavingAccountOptions();
+        });
+    }
+    
+    const currentAccountBtn = document.getElementById('current-account-btn');
+    if (currentAccountBtn) {
+        currentAccountBtn.addEventListener('click', function() {
+            showCurrentAccountOptions();
+        });
+    }
+    
+    const fixedDepositBtn = document.getElementById('fixed-deposit-btn');
+    if (fixedDepositBtn) {
+        fixedDepositBtn.addEventListener('click', function() {
+            showFixedDepositOptions();
+        });
+    }
+    
+    const mutualFundsBtn = document.getElementById('mutual-funds-btn');
+    if (mutualFundsBtn) {
+        mutualFundsBtn.addEventListener('click', function() {
+            showMutualFundsOptions();
+        });
+    }
+    
+    const sharesStocksBtn = document.getElementById('shares-stocks-btn');
+    if (sharesStocksBtn) {
+        sharesStocksBtn.addEventListener('click', function() {
+            showSharesStocksOptions();
+        });
+    }
+    
+    const dematAccountBtn = document.getElementById('demat-account-btn');
+    if (dematAccountBtn) {
+        dematAccountBtn.addEventListener('click', function() {
+            showDematAccountOptions();
+        });
+    }
+    
+    // Direct account buttons (no modals needed)
+    const directAccountButtons = [
+        'recurring-deposit-btn', 'ppf-account-btn', 'lic-btn'
+    ];
+    
+    directAccountButtons.forEach(buttonId => {
+        const accountBtn = document.getElementById(buttonId);
+        if (accountBtn && propertyContentSection) {
+            accountBtn.addEventListener('click', function() {
+                const accountType = buttonId.replace('-btn', '');
+                showPropertyContent(accountType);
+            });
+        }
+    });
     
     if (addPropertyBtn && propertyTableBody) {
         addPropertyBtn.addEventListener('click', function() {
@@ -6025,9 +6135,18 @@ function setupPage9Events() {
     const scheduleIIIPartnershipPropertyBtn = document.getElementById('schedule-iii-partnership-property-btn');
     const scheduleIIIPartnershipBusinessBtn = document.getElementById('schedule-iii-partnership-business-btn');
     const scheduleIIIShopGalaBtn = document.getElementById('schedule-iii-shop-gala-btn');
+    const scheduleIIISavingAccountBtn = document.getElementById('schedule-iii-saving-account-btn');
+    const scheduleIIICurrentAccountBtn = document.getElementById('schedule-iii-current-account-btn');
+    const scheduleIIIFixedDepositBtn = document.getElementById('schedule-iii-fixed-deposit-btn');
+    const scheduleIIIPPFAccountBtn = document.getElementById('schedule-iii-ppf-account-btn');
+    const scheduleIIILicBtn = document.getElementById('schedule-iii-lic-btn');
+    const scheduleIIIDematAccountBtn = document.getElementById('schedule-iii-demat-account-btn');
+    const scheduleIIIMutualFundsBtn = document.getElementById('schedule-iii-mutual-funds-btn');
+    const scheduleIIISharesStocksBtn = document.getElementById('schedule-iii-shares-stocks-btn');
     const scheduleIIIBungalowBtn = document.getElementById('schedule-iii-bungalow-btn');
     const scheduleIIIBondsBtn = document.getElementById('schedule-iii-bonds-btn');
     const scheduleIIIUtensilsBtn = document.getElementById('schedule-iii-utensils-btn');
+    const scheduleIIIGoldJewelleryBtn = document.getElementById('schedule-iii-gold-jewellery-btn');
     const scheduleIIIFurnitureBtn = document.getElementById('schedule-iii-furniture-btn');
     const scheduleIIILoanBtn = document.getElementById('schedule-iii-loan-btn');
     
@@ -6071,6 +6190,42 @@ function setupPage9Events() {
         scheduleIIIFurnitureBtn.addEventListener('click', () => showScheduleIIIContent('furniture'));
     }
     
+    if (scheduleIIISavingAccountBtn) {
+        scheduleIIISavingAccountBtn.addEventListener('click', () => showScheduleIIIContent('saving-account'));
+    }
+    
+    if (scheduleIIICurrentAccountBtn) {
+        scheduleIIICurrentAccountBtn.addEventListener('click', () => showScheduleIIIContent('current-account'));
+    }
+    
+    if (scheduleIIIFixedDepositBtn) {
+        scheduleIIIFixedDepositBtn.addEventListener('click', () => showScheduleIIIContent('fixed-deposit'));
+    }
+    
+    if (scheduleIIIPPFAccountBtn) {
+        scheduleIIIPPFAccountBtn.addEventListener('click', () => showScheduleIIIContent('ppf-account'));
+    }
+    
+    if (scheduleIIILicBtn) {
+        scheduleIIILicBtn.addEventListener('click', () => showScheduleIIIContent('lic'));
+    }
+    
+    if (scheduleIIIDematAccountBtn) {
+        scheduleIIIDematAccountBtn.addEventListener('click', () => showScheduleIIIContent('demat-account'));
+    }
+    
+    if (scheduleIIIMutualFundsBtn) {
+        scheduleIIIMutualFundsBtn.addEventListener('click', () => showScheduleIIIContent('mutual-funds'));
+    }
+    
+    if (scheduleIIISharesStocksBtn) {
+        scheduleIIISharesStocksBtn.addEventListener('click', () => showScheduleIIIContent('shares-stocks'));
+    }
+    
+    if (scheduleIIIGoldJewelleryBtn) {
+        scheduleIIIGoldJewelleryBtn.addEventListener('click', () => showScheduleIIIContent('gold-jewellery'));
+    }
+    
     if (scheduleIIILoanBtn) {
         scheduleIIILoanBtn.addEventListener('click', () => showScheduleIIIContent('loan'));
     }
@@ -6080,6 +6235,31 @@ function setupPage9Events() {
     if (addScheduleIIIPropertyBtn) {
         addScheduleIIIPropertyBtn.addEventListener('click', addScheduleIIIPropertyToTable);
     }
+    
+    // Setup state change functionality
+    setupStateChangeFunctionality();
+    
+    // Setup tenanted room options functionality
+    setupTenantedRoomOptions();
+    
+    // Setup plot of land options functionality
+    setupPlotOfLandOptions();
+    
+    // Setup account options modals
+    setupAccountOptionsModals();
+    
+    // Setup amount warning functionality
+    setupAmountWarningFunctionality();
+    
+    // Setup Schedule-II less toggle functionality
+    setupScheduleIILessToggle();
+    
+    // Setup Schedule-II and Schedule-III state selection
+    setupScheduleIIStateSelection();
+    setupScheduleIIIStateSelection();
+    
+    // Setup Schedule-III HUF Property toggle functionality
+    setupScheduleIIIHUFPropertyToggle();
 }
 
 /**
@@ -6099,25 +6279,39 @@ function addPropertyToTable() {
     const content = propertyContentTextarea.value.trim();
     const amount = propertyAmount.value.trim();
     
-    if (!content || !amount) {
-        alert('Please fill in both property details and amount');
+    if (!content) {
+        alert('Please fill in property details');
         return;
     }
+    
+    // Allow adding without amount, but show warning in table if amount is empty
+    
+    // Get position input
+    const positionInput = document.getElementById('row-position-input');
+    const selectedPosition = positionInput.value.trim();
     
     // Create new table row
     const newRow = document.createElement('tr');
     newRow.className = 'border border-white';
     
+    // Get current row count for Sr. No.
+    const rowCount = propertyTableBody.children.length;
+    
     newRow.innerHTML = `
+        <td class="border border-white p-3 text-center">${rowCount + 1}</td>
         <td class="border border-white p-3 text-justify">
-            <textarea class="w-full h-32 p-2 border border-gray-300 rounded text-black resize-none" 
-                      onblur="updatePropertyContent(this)">${content}</textarea>
+            <textarea class="w-full h-32 p-2 border border-gray-300 rounded text-white bg-[#334155]" 
+                      onblur="updatePropertyContent(this)"  >${content}</textarea>
         </td>
         <td class="border border-white p-3 text-center">
-            <input type="text" value="${amount}" 
-                   class="w-full p-2 border border-gray-300 rounded text-black text-center font-semibold" 
-                   onblur="updatePropertyAmount(this)"
-                   placeholder="Enter amount">
+            <div class="flex items-center justify-center">
+                <span class="text-black font-semibold mr-1">Rs</span>
+                <input type="text" value="${amount}" 
+                       class="flex-1 p-2 border border-gray-300 rounded text-white text-center font-semibold bg-[#334155]" 
+                       onblur="updatePropertyAmount(this)"
+                       placeholder="Enter amount">
+            </div>
+            ${!amount ? '<div class="text-red-500 text-xs mt-1 font-medium">Please fill the price</div>' : ''}
         </td>
         <td class="border border-white p-3 text-center">
             <button type="button" class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded text-sm font-medium transition-colors" 
@@ -6128,11 +6322,32 @@ function addPropertyToTable() {
     `;
     
     // Add to table
-    propertyTableBody.appendChild(newRow);
+    // Insert the new row at the selected position
+    if (selectedPosition === '') {
+        // Empty input - add at end
+        propertyTableBody.appendChild(newRow);
+    } else {
+        const position = parseInt(selectedPosition) - 1; // Convert to 0-based index
+        const existingRows = propertyTableBody.children;
+        if (position >= 0 && position <= existingRows.length) {
+            if (position < existingRows.length) {
+                propertyTableBody.insertBefore(newRow, existingRows[position]);
+            } else {
+                propertyTableBody.appendChild(newRow);
+            }
+        } else {
+            // Invalid position - add at end
+            propertyTableBody.appendChild(newRow);
+        }
+    }
+    
+    // Renumber all rows after insertion
+    renumberTableRows(propertyTableBody);
     
     // Clear inputs
     propertyContentTextarea.value = '';
     propertyAmount.value = '';
+    positionInput.value = '';
     
     // Hide the content section
     const propertyContentSection = document.getElementById('property-content-section');
@@ -6144,6 +6359,100 @@ function addPropertyToTable() {
     calculateScheduleITotal();
     
     console.log('Property added to table');
+}
+
+/**
+ * Renumbers all rows in a table body
+ */
+function renumberTableRows(tableBody) {
+    const rows = tableBody.children;
+    for (let i = 0; i < rows.length; i++) {
+        const srNoCell = rows[i].querySelector('td:first-child');
+        if (srNoCell) {
+            srNoCell.textContent = i + 1;
+        }
+    }
+}
+
+/**
+ * Updates the position input placeholder based on current table rows
+ */
+function updatePositionInput() {
+    const positionInput = document.getElementById('row-position-input');
+    const positionInfo = document.getElementById('position-info');
+    const propertyTableBody = document.getElementById('property-table-body');
+    
+    if (!positionInput || !propertyTableBody) return;
+    
+    // Update placeholder to show available positions and current default position
+    const rowCount = propertyTableBody.children.length;
+    const defaultPosition = rowCount + 1;
+    
+    if (rowCount === 0) {
+        positionInput.placeholder = "Position (or leave empty for end)";
+        if (positionInfo) {
+            positionInfo.textContent = "Will add at position 1 if left empty";
+        }
+    } else {
+        positionInput.placeholder = "Position (or leave empty for end)";
+        if (positionInfo) {
+            positionInfo.textContent = `Will add at position ${defaultPosition} if left empty (current table has ${rowCount} rows)`;
+        }
+    }
+}
+
+/**
+ * Updates the Schedule-II position input placeholder based on current table rows
+ */
+function updateScheduleIIPositionInput() {
+    const positionInput = document.getElementById('schedule-ii-row-position-input');
+    const positionInfo = document.getElementById('schedule-ii-position-info');
+    const tableBody = document.getElementById('schedule-ii-table-body');
+    
+    if (!positionInput || !tableBody) return;
+    
+    // Update placeholder to show available positions and current default position
+    const rowCount = tableBody.children.length;
+    const defaultPosition = rowCount + 1;
+    
+    if (rowCount === 0) {
+        positionInput.placeholder = "Position (or leave empty for end)";
+        if (positionInfo) {
+            positionInfo.textContent = "Will add at position 1 if left empty";
+        }
+    } else {
+        positionInput.placeholder = "Position (or leave empty for end)";
+        if (positionInfo) {
+            positionInfo.textContent = `Will add at position ${defaultPosition} if left empty (current table has ${rowCount} rows)`;
+        }
+    }
+}
+
+/**
+ * Updates the Schedule-III position input placeholder based on current table rows
+ */
+function updateScheduleIIIPositionInput() {
+    const positionInput = document.getElementById('schedule-iii-row-position-input');
+    const positionInfo = document.getElementById('schedule-iii-position-info');
+    const tableBody = document.getElementById('schedule-iii-table-body');
+    
+    if (!positionInput || !tableBody) return;
+    
+    // Update placeholder to show available positions and current default position
+    const rowCount = tableBody.children.length;
+    const defaultPosition = rowCount + 1;
+    
+    if (rowCount === 0) {
+        positionInput.placeholder = "Position (or leave empty for end)";
+        if (positionInfo) {
+            positionInfo.textContent = "Will add at position 1 if left empty";
+        }
+    } else {
+        positionInput.placeholder = "Position (or leave empty for end)";
+        if (positionInfo) {
+            positionInfo.textContent = `Will add at position ${defaultPosition} if left empty (current table has ${rowCount} rows)`;
+        }
+    }
 }
 
 /**
@@ -6161,29 +6470,20 @@ function showPropertyContent(propertyType) {
     let content = '';
     
     if (propertyType === 'flat-room') {
-        content = `Immovable property consisting of Flat/Room No._____,   ____Floor, Bldg. No.____, ____-Wing,  ______________(Building or society name), ________Road, Near_________, Andheri, East/West, Mumbai-4000______, admeasuring area about _____ sq. ft., standing in the name of the deceased abovenamed and of the present market value is  
+        content = `Immovable property consisting of Flat/Room No._____, ____Floor, Bldg. No.____, ____-Wing,  ______________(Building or society name), ________Road, Near_________, Andheri, East/West, Mumbai-4000______, admeasuring area about _____ sq. ft., standing in the name of the deceased abovenamed and of the present market value is  
 
-Self –occupied and fetching no rent.
-OWNERSHIP OPTION- 
---The remaining 50% share belongs to ___
---The remaining share belongs to 
-1) __% of ___
-2) __% of ___
-3) __% of ___
-The remaining undivided share belongs to 
-1) __% of ___
-2) __% of ___
-3) __% of ___
 OCCUPATION RIGHT
+Self –occupied and fetching no rent.
 The said Flat/Room is occupied by the tenant and rent receivable is  `;
-    } else if (propertyType === 'tenanted-room') {
-        content = `Transfer of Tenancy Right in respect of Immovable property consisting of Room No._____, ____Floor, Bldg. No.____, ____-Wing,  ______________(Building or society name), ________Road,  Near_________, Andheri, East/West, Mumbai-4000______, admeasuring area _____ sq. ft., standing in the name of the deceased abovenamed and valued at
-(monthly Rent Rs.__/- p.m. X 150 times), which comes to 
-Self-occupied & fetching no rent.
-NO RENT
-and of the present market value is`;
+    } else if (propertyType === 'tenanted-room-with-rent') {
+        content = `Transfer of Tenancy Right in respect of Immovable property consisting of Room No._____, ____Floor, Bldg. No.____, ____-Wing,  ______________ (Building or society name), ________Road,  Near_________, Andheri, East/West, Mumbai-4000______, admeasuring area _____ sq. ft.,  standing in the name of the deceased abovenamed.
+(monthly Rent Rs.__/- p.m. X 150 times), which comes to & valued at
+Self-occupied & fetching no rent.`;
+    } else if (propertyType === 'tenanted-room-without-rent') {
+        content = `Transfer of Tenancy Right in respect of Immovable property consisting of Room No._____, ____Floor, Bldg. No.____, ____-Wing,  ______________ (Building or society name), ________Road,  Near_________, Andheri, East/West, Mumbai-4000______, admeasuring area _____ sq. ft.,  standing in the name of the deceased abovenamed  and of the present market value is
+Self-occupied & fetching no rent.`;
     }
-    else if(propertyType === 'plot-of-land') {
+    else if(propertyType === 'plot-of-land-option1') {
         content = `Immovable property consisting of Plot of Land bearing Plot No. ____________, C.T.S. No. ______, Hissa No.____, admeasuring area _____ sq. mtrs., standing in the name of the deceased abovenamed and of the present market value is  
 Self-occupied & fetching no rent.
 OWNERSHIP OPTION- 
@@ -6197,6 +6497,17 @@ The remaining undivided share belongs to
 2) __% of ___
 3) __% of ___
 OCCUPATION RIGHT`;
+    } else if(propertyType === 'plot-of-land-option2') {
+        content = `Immovable property consisting of Plot of Land bearing Survey No. ____________, Hissa No.____, situated at ________________________, admeasuring area _____ sq. ft. and of the present market value is 
+Self-occupied & Fetching no rent.
+OWNERSHIP DETAILS:
+--Plot is jointly owned with ___
+--Plot is solely owned by deceased
+--Plot has multiple owners: 1) ___ 2) ___ 3) ___
+VALUATION METHOD:
+--Based on market rate of Rs.__/- per sq. ft.
+--Based on government valuation of Rs.__/- per sq. ft.
+--Based on recent sale in area of Rs.__/- per sq. ft.`;
     } else if(propertyType === 'partnership-property') {
         content = `Partnership Property bearing ______ No. ______, ____ Floor, ________________________, admeasuring area _____ sq. ft. and of the present market value is 
 The other partners are
@@ -6204,11 +6515,99 @@ The other partners are
 2)
 Self-occupied & Fetching no rent.`;
     } else if(propertyType === 'partnership-business') {
-        content = `Partnership Business known as __________________, situated at ___________________ (FULL ADDRESS WITH PINCODE), alongwith stock in trade, Goodwill etc., and valued at ,,,for the PARTNERSHIP BUSINESS`;
+        content = `Partnership Business known as __________________, situated at ___________________ (FULL ADDRESS WITH PINCODE), alongwith stock in trade, Goodwill etc., and valued at `;
+    } else if(propertyType === 'shop-gala') {
+        content = `Immovable property consisting of Shop/Gala No._____, ____Floor, Bldg. No.____, ____-Wing, ______________(Building or society name), ________Road, Near_________, Andheri, East/West, Mumbai-4000______, admeasuring area about _____ sq. ft., standing in the name of the deceased abovenamed and of the present market value is Self-occupied and fetching no rent.`;
+    } else if(propertyType === 'bungalow') {
+        content = `Immovable property consisting of Bungalow bearing No._____, ________Road, Near_________, Andheri, East/West, Mumbai-4000______, admeasuring area about _____ sq. ft., standing in the name of the deceased abovenamed and of the present market value is Self-occupied and fetching no rent.`;
+    } else if(propertyType === 'bonds') {
+        content = `Movable property consisting of Bonds, Securities, and other financial instruments standing in the name of the deceased abovenamed and of the present market value is`;
+    } else if(propertyType === 'utensils') {
+        content = `Movable property consisting of Utensils, Crockery, and other household items standing in the name of the deceased abovenamed and of the present market value is`;
+    } else if(propertyType === 'gold-jewellery') {
+        content = `Write Description of each item separately`;
+    } else if(propertyType === 'furniture') {
+        content = `Write Description of each item separately`;
+    } else if(propertyType === 'loan') {
+        content = `Movable property consisting of Loan/Advance given to various parties standing in the name of the deceased abovenamed and of the present market value is`;
+    } else if (propertyType === 'account-option1') {
+        content = `Amount lying in Saving Account No. _______ with ___________ (NAME OF BANK) Bank, having its branch at ______ Branch, __________________ (FULL ADDRESS WITH PINCODE OF BANK), standing in the name of the deceased abovenamed.`;
+    } else if (propertyType === 'account-option2') {
+        content = `Amount lying in Saving Account No. _______ with ___________ (NAME OF BANK) Bank, having its branch at ______ Branch, __________________ (FULL ADDRESS WITH PINCODE OF BANK),
+Standing in the name of deceased abovenamed & ____________`;
+    } else if (propertyType === 'account-option3') {
+        content = `Amount lying in Current Account No. _______ with ___________ (NAME OF BANK) Bank, having its branch at ______ Branch, __________________ (FULL ADDRESS WITH PINCODE OF BANK), standing in the name of the deceased abovenamed.`;
+    } else if (propertyType === 'account-option4') {
+        content = `Amount lying in Current Account No. _______ with ___________ (NAME OF BANK) Bank, having its branch at ______ Branch, __________________ (FULL ADDRESS WITH PINCODE OF BANK),
+Standing in the name of deceased abovenamed & ____________`;
+    } else if (propertyType === 'account-option5') {
+        content = `Amount lying in Fixed Deposit Account No. _______, Receipt No. _______, with ___________ (NAME OF BANK) Bank, having its branch at ______ Branch, __________________ (FULL ADDRESS WITH PINCODE OF BANK), standing in the name of the deceased abovenamed.`;
+    } else if (propertyType === 'account-option6') {
+        content = `Amount lying in Fixed Deposit Account No. _______, Receipt No. _______, with ___________ (NAME OF BANK) Bank, having its branch at ______ Branch, __________________ (FULL ADDRESS WITH PINCODE OF BANK), Standing in the name of deceased abovenamed & ____________`;
+    } else if (propertyType === 'account-option7') {
+        content = `Amount lying in PPF Account No.______________ with ____________ (NAME OF BANK), having its branch at ______________________ (FULL ADDRESS WITH PINCODE OF BANK), standing in the name of the deceased abovenamed.`;
+    } else if (propertyType === 'account-option8') {
+        content = `Shares lying in Demat Account No._________ Client ID No. _________, DP ID No._____________ with ____________ (NAME OF BANK), having its branch at ______________________ (FULL ADDRESS WITH PINCODE OF BANK), standing in the name of the deceased abovenamed.`;
+    } else if (propertyType === 'account-option9') {
+        content = `Shares lying in Demat Account No._________ Client ID No. _________, DP ID No._____________ with ____________ (NAME OF BANK), having its branch at ______________________ (FULL ADDRESS WITH PINCODE OF BANK), Standing in the name of deceased abovenamed & ____________`;
+    } else if (propertyType === 'account-option10') {
+        content = `Units of ________ Scheme of _______ Mutual Fund Ltd, having its office at _____________ (FULL ADDRESS WITH PINCODE OF BANK), bearing Folio No._______, standing in the name of the deceased abovenamed.
+`;
+    } else if (propertyType === 'account-option11') {
+        content = `Units of ________ Scheme of _______ Mutual Fund Ltd, having its office at _____________ (FULL ADDRESS WITH PINCODE OF BANK), bearing Folio No._______, Standing in the name of deceased abovenamed & ____________`;
+    } else if (propertyType === 'account-option12') {
+        content = `Life Insurance Policy of ___________ (NAME OF Policy), bearing Policy No. ________, having its branch at _______________(FULL ADDRESS WITH PINCODE OF BANK), standing in the name of the deceased abovenamed.`;
+    } else if (propertyType === 'account-option13') {
+        content = `____ (NO. OF SHARES) shares of ________ (NAME OF COMPANY) Ltd, having its office at __________________________(FULL ADDRESS WITH PINCODE), bearing Folio No. _____, Certificate No. ______, Dist. Nos. ____ to ____, standing in the name of the deceased abovenamed.`;
+    } else if (propertyType === 'account-option14') {
+        content = `____ (NO. OF SHARES) shares of ________ (NAME OF COMPANY) Ltd, having its office at __________________________(FULL ADDRESS WITH PINCODE), bearing Folio No. _____, Certificate No. ______, Dist. Nos. ____ to ____, standing in the name of the deceased abovenamed & _____________________`;
+    } else if (propertyType === 'saving-account') {
+        content = `Amount lying in Saving Account No. _______ with ___________ (NAME OF BANK) Bank, having its branch at ______ Branch, __________________ (FULL ADDRESS WITH PINCODE OF BANK), standing in the name of the deceased abovenamed.`;
+    } else if (propertyType === 'joint-saving-account') {
+        content = `Amount lying in Saving Account No. _______ with ___________ (NAME OF BANK) Bank, having its branch at ______ Branch, __________________ (FULL ADDRESS WITH PINCODE OF BANK), Standing in the name of deceased abovenamed & ____________`;
+    } else if (propertyType === 'current-account') {
+        content = `Amount lying in Current Account No. _______ with ___________ (NAME OF BANK) Bank, having its branch at ______ Branch, __________________ (FULL ADDRESS WITH PINCODE OF BANK), standing in the name of the deceased abovenamed.`;
+    } else if (propertyType === 'joint-current-account') {
+        content = `Amount lying in Current Account No. _______ with ___________ (NAME OF BANK) Bank, having its branch at ______ Branch, __________________ (FULL ADDRESS WITH PINCODE OF BANK), Standing in the name of deceased abovenamed & ____________`;
+    } else if (propertyType === 'fixed-deposit') {
+        content = `Amount lying in Fixed Deposit Account No. _______, Receipt No. _______, with ___________ (NAME OF BANK) Bank, having its branch at ______ Branch, __________________ (FULL ADDRESS WITH PINCODE OF BANK), standing in the name of the deceased abovenamed.`;
+    } else if (propertyType === 'recurring-deposit') {
+        content = `Amount lying in Recurring Deposit Account No. _______, Receipt No. _______, with ___________ (NAME OF BANK) Bank, having its branch at ______ Branch, __________________ (FULL ADDRESS WITH PINCODE OF BANK), standing in the name of the deceased abovenamed.`;
+    } else if (propertyType === 'ppf-account') {
+        content = `Amount lying in PPF Account No.______________ with ____________ (NAME OF BANK), having its branch at ______________________ (FULL ADDRESS WITH PINCODE OF BANK), standing in the name of the deceased abovenamed.`;
+    } else if (propertyType === 'nsc-account') {
+        content = `Amount lying in NSC Account No.______________ with ____________ (NAME OF BANK), having its branch at ______________________ (FULL ADDRESS WITH PINCODE OF BANK), standing in the name of the deceased abovenamed.`;
+    } else if (propertyType === 'kisan-vikas-patrika') {
+        content = `Amount lying in Kisan Vikas Patrika No.______________ with ____________ (NAME OF BANK), having its branch at ______________________ (FULL ADDRESS WITH PINCODE OF BANK), standing in the name of the deceased abovenamed.`;
+    } else if (propertyType === 'sukanya-samriddhi') {
+        content = `Amount lying in Sukanya Samriddhi Account No.______________ with ____________ (NAME OF BANK), having its branch at ______________________ (FULL ADDRESS WITH PINCODE OF BANK), standing in the name of the deceased abovenamed.`;
+    } else if (propertyType === 'senior-citizen-savings') {
+        content = `Amount lying in Senior Citizen Savings Account No.______________ with ____________ (NAME OF BANK), having its branch at ______________________ (FULL ADDRESS WITH PINCODE OF BANK), standing in the name of the deceased abovenamed.`;
+    } else if (propertyType === 'post-office-savings') {
+        content = `Amount lying in Post Office Savings Account No.______________ with ____________ (NAME OF BANK), having its branch at ______________________ (FULL ADDRESS WITH PINCODE OF BANK), standing in the name of the deceased abovenamed.`;
+    } else if (propertyType === 'mutual-funds') {
+        content = `Units of ________ Scheme of _______ Mutual Fund Ltd, having its office at _____________ (FULL ADDRESS WITH PINCODE OF BANK), bearing Folio No._______, standing in the name of the deceased abovenamed.`;
+    } else if (propertyType === 'shares-stocks') {
+        content = `____ (NO. OF SHARES) shares of ________ (NAME OF COMPANY) Ltd, having its office at __________________________(FULL ADDRESS WITH PINCODE), bearing Folio No. _____, Certificate No. ______, Dist. Nos. ____ to ____, standing in the name of the deceased abovenamed.`;
+    } else if (propertyType === 'joint-fixed-deposit') {
+        content = `Amount lying in Fixed Deposit Account No. _______, Receipt No. _______, with ___________ (NAME OF BANK) Bank, having its branch at ______ Branch, __________________ (FULL ADDRESS WITH PINCODE OF BANK), Standing in the name of deceased abovenamed & ____________`;
+    } else if (propertyType === 'joint-mutual-funds') {
+        content = `Units of ________ Scheme of _______ Mutual Fund Ltd, having its office at _____________ (FULL ADDRESS WITH PINCODE OF BANK), bearing Folio No._______, Standing in the name of deceased abovenamed & ____________`;
+    } else if (propertyType === 'joint-shares-stocks') {
+        content = `____ (NO. OF SHARES) shares of ________ (NAME OF COMPANY) Ltd, having its office at __________________________(FULL ADDRESS WITH PINCODE), bearing Folio No. _____, Certificate No. ______, Dist. Nos. ____ to ____, standing in the name of the deceased abovenamed & _____________________`;
+    } else if (propertyType === 'demat-account') {
+        content = `Shares lying in Demat Account No._________ Client ID No. _________, DP ID No._____________ with ____________ (NAME OF BANK), having its branch at ______________________ (FULL ADDRESS WITH PINCODE OF BANK), standing in the name of the deceased abovenamed.`;
+    } else if (propertyType === 'joint-demat-account') {
+        content = `Shares lying in Demat Account No._________ Client ID No. _________, DP ID No._____________ with ____________ (NAME OF BANK), having its branch at ______________________ (FULL ADDRESS WITH PINCODE OF BANK), Standing in the name of deceased abovenamed & ____________`;
+    } else if (propertyType === 'lic') {
+        content = `Life Insurance Policy of ___________ (NAME OF Policy), bearing Policy No. ________, having its branch at _______________(FULL ADDRESS WITH PINCODE OF BANK), standing in the name of the deceased abovenamed.`;
     }
     
     propertyContentTextarea.value = content;
     propertyContentSection.classList.remove('hidden');
+    
+    // Update position input placeholder
+    updatePositionInput();
 }
 
 /**
@@ -6224,6 +6623,24 @@ function updatePropertyContent(textarea) {
  */
 function updatePropertyAmount(input) {
     console.log('Property amount updated:', input.value);
+    
+    // Hide warning if amount is now filled
+    const warning = input.parentNode.parentNode.querySelector('.text-red-500');
+    if (warning && input.value.trim()) {
+        warning.remove();
+    }
+    
+    // Show warning if amount is empty
+    if (!input.value.trim()) {
+        const existingWarning = input.parentNode.parentNode.querySelector('.text-red-500');
+        if (!existingWarning) {
+            const warningDiv = document.createElement('div');
+            warningDiv.className = 'text-red-500 text-xs mt-1 font-medium';
+            warningDiv.textContent = 'Please fill the price';
+            input.parentNode.parentNode.appendChild(warningDiv);
+        }
+    }
+    
     // Recalculate total when amount is updated
     calculateScheduleITotal();
 }
@@ -6237,6 +6654,12 @@ function removePropertyRow(button) {
         if (row) {
             row.remove();
             console.log('Property row removed');
+            // Renumber all remaining rows
+            const propertyTableBody = document.getElementById('property-table-body');
+            if (propertyTableBody) {
+                renumberTableRows(propertyTableBody);
+                updatePositionInput();
+            }
             // Recalculate total after removal
             calculateScheduleITotal();
         }
@@ -6291,6 +6714,10 @@ function showScheduleIIContent(propertyType) {
     
     textarea.value = content;
     contentSection.classList.remove('hidden');
+    
+    // Update position input
+    updateScheduleIIPositionInput();
+    
     console.log(`Schedule-II content shown for: ${propertyType}`);
 }
 
@@ -6301,6 +6728,7 @@ function addScheduleIIPropertyToTable() {
     const contentTextarea = document.getElementById('schedule-ii-content-textarea');
     const amountInput = document.getElementById('schedule-ii-amount');
     const tableBody = document.getElementById('schedule-ii-table-body');
+    const positionInput = document.getElementById('schedule-ii-row-position-input');
     
     if (!contentTextarea || !amountInput || !tableBody) {
         console.log('Schedule-II required elements not found');
@@ -6310,30 +6738,53 @@ function addScheduleIIPropertyToTable() {
     const content = contentTextarea.value.trim();
     const amount = amountInput.value.trim();
     
-    if (!content || !amount) {
-        alert('Please enter both property details and amount');
+    if (!content) {
+        alert('Please fill in property details');
         return;
+    }
+    
+    // Get position for insertion
+    let insertPosition = tableBody.children.length;
+    if (positionInput && positionInput.value) {
+        const requestedPosition = parseInt(positionInput.value);
+        if (requestedPosition > 0 && requestedPosition <= tableBody.children.length + 1) {
+            insertPosition = requestedPosition - 1;
+        }
     }
     
     const newRow = document.createElement('tr');
     newRow.className = 'border border-white';
     newRow.innerHTML = `
+        <td class="border border-white p-2 text-center">${insertPosition + 1}</td>
         <td class="border border-white p-2">
             <div contenteditable="true" onblur="updateScheduleIIContent(this)" class="min-h-[50px] p-2">${content}</div>
         </td>
         <td class="border border-white p-2">
-            <input type="text" value="${amount}" onblur="updateScheduleIIAmount(this)" class="w-full p-2 border border-gray-300 rounded text-black">
+            <div class="flex items-center">
+                <span class="text-black font-semibold mr-1">Rs</span>
+                <input type="text" value="${amount}" onblur="updateScheduleIIAmount(this)" class="flex-1 p-2 border border-gray-300 rounded text-black">
+            </div>
+            ${!amount ? '<div class="text-red-500 text-xs mt-1 font-medium">Please fill the price</div>' : ''}
         </td>
         <td class="border border-white p-2 text-center">
             <button type="button" onclick="removeScheduleIIPropertyRow(this)" class="bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600">Remove</button>
         </td>
     `;
     
-    tableBody.appendChild(newRow);
+    // Insert at specified position
+    if (insertPosition >= tableBody.children.length) {
+        tableBody.appendChild(newRow);
+    } else {
+        tableBody.insertBefore(newRow, tableBody.children[insertPosition]);
+    }
+    
+    // Renumber all rows
+    renumberTableRows(tableBody);
     
     // Clear the form
     contentTextarea.value = '';
     amountInput.value = '';
+    if (positionInput) positionInput.value = '';
     
     // Hide the content section
     const contentSection = document.getElementById('schedule-ii-content-section');
@@ -6343,6 +6794,9 @@ function addScheduleIIPropertyToTable() {
     
     // Recalculate total after adding new property
     calculateScheduleIITotal();
+    
+    // Update position input
+    updateScheduleIIPositionInput();
     
     console.log('Property added to Schedule-II table');
 }
@@ -6359,6 +6813,24 @@ function updateScheduleIIContent(element) {
  */
 function updateScheduleIIAmount(input) {
     console.log('Schedule-II property amount updated:', input.value);
+    
+    // Hide warning if amount is now filled
+    const warning = input.parentNode.parentNode.querySelector('.text-red-500');
+    if (warning && input.value.trim()) {
+        warning.remove();
+    }
+    
+    // Show warning if amount is empty
+    if (!input.value.trim()) {
+        const existingWarning = input.parentNode.parentNode.querySelector('.text-red-500');
+        if (!existingWarning) {
+            const warningDiv = document.createElement('div');
+            warningDiv.className = 'text-red-500 text-xs mt-1 font-medium';
+            warningDiv.textContent = 'Please fill the price';
+            input.parentNode.parentNode.appendChild(warningDiv);
+        }
+    }
+    
     // Recalculate total when amount is updated
     calculateScheduleIITotal();
 }
@@ -6372,8 +6844,15 @@ function removeScheduleIIPropertyRow(button) {
         if (row) {
             row.remove();
             console.log('Schedule-II property row removed');
+            // Renumber all remaining rows
+            const tableBody = document.getElementById('schedule-ii-table-body');
+            if (tableBody) {
+                renumberTableRows(tableBody);
+            }
             // Recalculate total after removal
             calculateScheduleIITotal();
+            // Update position input
+            updateScheduleIIPositionInput();
         }
     }
 }
@@ -6408,7 +6887,7 @@ function calculateScheduleITotal() {
         const value = input.value.trim();
         if (value) {
             // Remove currency symbols and commas, then parse
-            const numericValue = parseFloat(value.replace(/[₹,]/g, ''));
+            const numericValue = parseFloat(value.replace(/[₹,Rs]/g, ''));
             if (!isNaN(numericValue)) {
                 total += numericValue;
             }
@@ -6418,6 +6897,12 @@ function calculateScheduleITotal() {
     // Format the total with currency symbol
     totalElement.textContent = `₹ ${total.toLocaleString('en-IN')}`;
     console.log('Schedule-I total calculated:', total);
+    
+    // Update net total
+    calculateNetTotal();
+    
+    // Update Schedule-III amount in Schedule-I
+    updateScheduleIIIAmountInScheduleI();
 }
 
 /**
@@ -6439,7 +6924,7 @@ function calculateScheduleIITotal() {
         const value = input.value.trim();
         if (value) {
             // Remove currency symbols and commas, then parse
-            const numericValue = parseFloat(value.replace(/[₹,]/g, ''));
+            const numericValue = parseFloat(value.replace(/[₹,Rs]/g, ''));
             if (!isNaN(numericValue)) {
                 total += numericValue;
             }
@@ -6449,6 +6934,13 @@ function calculateScheduleIITotal() {
     // Format the total with currency symbol
     totalElement.textContent = `₹ ${total.toLocaleString('en-IN')}`;
     console.log('Schedule-II total calculated:', total);
+    
+    // Update Schedule-II less amount and net total
+    updateScheduleIILessRow();
+    calculateNetTotal();
+    
+    // Update Schedule-III amount in Schedule-I
+    updateScheduleIIIAmountInScheduleI();
 }
 
 /**
@@ -6488,7 +6980,12 @@ function showScheduleIIIContent(propertyType) {
     
     switch (propertyType) {
         case 'flat-room':
-            content = `Immovable property consisting of Flat/Room No._____, ____Floor, Bldg. No.____, ____-Wing, ______________(Building or society name), ________Road, Near_________, Andheri, East/West, Mumbai-4000______, admeasuring area about _____ sq. ft., standing in the name of the deceased abovenamed and of the present market value is Self –occupied and fetching no rent. OWNERSHIP OPTION- --The remaining 50% share belongs to ___ --The remaining share belongs to 1) __% of ___ 2) __% of ___ 3) __% of ___ The remaining undivided share belongs to 1) __% of ___ 2) __% of ___ 3) __% of ___ OCCUPATION RIGHT The said Flat/Room is occupied by the tenant and rent receivable is`;
+            content = `Immovable property consisting of Flat/Room No._____, ____Floor, Bldg. No.____, ____-Wing,  ______________(Building or society name), ________Road, Near_________, Andheri, East/West, Mumbai-4000______, admeasuring area about _____ sq. ft., standing in the name of deceased & HUF and of the present market value is 
+The coparceners are (Name of Coparceners)
+_______________ 
+______________
+______________
+`;
             break;
         case 'tenanted-room':
             content = `Transfer of Tenancy Right in respect of Immovable property consisting of Room No._____, ____Floor, Bldg. No.____, ____-Wing, ______________(Building or society name), ________Road, Near_________, Andheri, East/West, Mumbai-4000______, admeasuring area _____ sq. ft., standing in the name of the deceased abovenamed and valued at (monthly Rent Rs.__/- p.m. X 150 times), which comes to Self-occupied & fetching no rent. NO RENT and of the present market value is`;
@@ -6517,6 +7014,33 @@ function showScheduleIIIContent(propertyType) {
         case 'furniture':
             content = `Furniture and fixtures of the deceased including beds, chairs, tables, and other household furniture valued at`;
             break;
+        case 'saving-account':
+            content = `Savings Account of the deceased with bank details and current balance valued at`;
+            break;
+        case 'current-account':
+            content = `Current Account of the deceased with bank details and current balance valued at`;
+            break;
+        case 'fixed-deposit':
+            content = `Fixed Deposit accounts of the deceased with maturity details and current value valued at`;
+            break;
+        case 'ppf-account':
+            content = `Public Provident Fund (PPF) account of the deceased with current balance valued at`;
+            break;
+        case 'lic':
+            content = `Life Insurance Corporation (LIC) policies of the deceased with maturity value valued at`;
+            break;
+        case 'demat-account':
+            content = `Demat Account of the deceased with securities and shares valued at`;
+            break;
+        case 'mutual-funds':
+            content = `Mutual Fund investments of the deceased with current market value valued at`;
+            break;
+        case 'shares-stocks':
+            content = `Shares and stocks of the deceased with current market value valued at`;
+            break;
+        case 'gold-jewellery':
+            content = `Gold and jewellery of the deceased including ornaments, coins, and precious metals valued at`;
+            break;
         case 'loan':
             content = `Outstanding loans and debts of the deceased including personal loans, bank loans, and other financial obligations valued at`;
             break;
@@ -6526,6 +7050,10 @@ function showScheduleIIIContent(propertyType) {
     
     textarea.value = content;
     contentSection.classList.remove('hidden');
+    
+    // Update position input
+    updateScheduleIIIPositionInput();
+    
     console.log(`Schedule-III content shown for: ${propertyType}`);
 }
 
@@ -6536,6 +7064,7 @@ function addScheduleIIIPropertyToTable() {
     const contentTextarea = document.getElementById('schedule-iii-content-textarea');
     const amountInput = document.getElementById('schedule-iii-amount');
     const tableBody = document.getElementById('schedule-iii-table-body');
+    const positionInput = document.getElementById('schedule-iii-row-position-input');
     
     if (!contentTextarea || !amountInput || !tableBody) {
         console.log('Schedule-III required elements not found');
@@ -6545,23 +7074,37 @@ function addScheduleIIIPropertyToTable() {
     const content = contentTextarea.value.trim();
     const amount = amountInput.value.trim();
     
-    if (!content || !amount) {
-        alert('Please enter both property details and amount');
+    if (!content) {
+        alert('Please fill in property details');
         return;
+    }
+    
+    // Get position for insertion
+    let insertPosition = tableBody.children.length;
+    if (positionInput && positionInput.value) {
+        const requestedPosition = parseInt(positionInput.value);
+        if (requestedPosition > 0 && requestedPosition <= tableBody.children.length + 1) {
+            insertPosition = requestedPosition - 1;
+        }
     }
     
     const newRow = document.createElement('tr');
     newRow.className = 'border border-white';
     newRow.innerHTML = `
+        <td class="border border-white p-2 text-center">${insertPosition + 1}</td>
         <td class="border border-white p-3 text-justify">
-            <textarea class="w-full h-32 p-2 border border-gray-300 rounded text-black resize-none" 
+            <textarea class="w-full h-32 p-2 border border-gray-300 rounded text-black input bg-[#334155]"  rows="10"
                       onblur="updateScheduleIIIContent(this)">${content}</textarea>
         </td>
         <td class="border border-white p-3 text-center">
-            <input type="text" value="${amount}" 
-                   class="w-full p-2 border border-gray-300 rounded text-black text-center font-semibold" 
-                   onblur="updateScheduleIIIAmount(this)"
-                   placeholder="Enter amount">
+            <div class="flex items-center justify-center">
+                <span class="text-black font-semibold mr-1">Rs</span>
+                <input type="text" value="${amount}" 
+                       class="flex-1 p-2 border border-gray-300 rounded text-black text-center font-semibold" 
+                       onblur="updateScheduleIIIAmount(this)"
+                       placeholder="Enter amount">
+            </div>
+            ${!amount ? '<div class="text-red-500 text-xs mt-1 font-medium">Please fill the price</div>' : ''}
         </td>
         <td class="border border-white p-3 text-center">
             <button type="button" class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded text-sm font-medium transition-colors" 
@@ -6571,11 +7114,20 @@ function addScheduleIIIPropertyToTable() {
         </td>
     `;
     
-    tableBody.appendChild(newRow);
+    // Insert at specified position
+    if (insertPosition >= tableBody.children.length) {
+        tableBody.appendChild(newRow);
+    } else {
+        tableBody.insertBefore(newRow, tableBody.children[insertPosition]);
+    }
+    
+    // Renumber all rows
+    renumberTableRows(tableBody);
     
     // Clear the form
     contentTextarea.value = '';
     amountInput.value = '';
+    if (positionInput) positionInput.value = '';
     
     // Hide the content section
     const contentSection = document.getElementById('schedule-iii-content-section');
@@ -6585,6 +7137,12 @@ function addScheduleIIIPropertyToTable() {
     
     // Recalculate total after adding new property
     calculateScheduleIIITotal();
+    
+    // Update position input
+    updateScheduleIIIPositionInput();
+    
+    // Update Schedule-III amount in Schedule-I
+    updateScheduleIIIAmountInScheduleI();
     
     console.log('Property added to Schedule-III table');
 }
@@ -6601,8 +7159,29 @@ function updateScheduleIIIContent(element) {
  */
 function updateScheduleIIIAmount(input) {
     console.log('Schedule-III property amount updated:', input.value);
+    
+    // Hide warning if amount is now filled
+    const warning = input.parentNode.parentNode.querySelector('.text-red-500');
+    if (warning && input.value.trim()) {
+        warning.remove();
+    }
+    
+    // Show warning if amount is empty
+    if (!input.value.trim()) {
+        const existingWarning = input.parentNode.parentNode.querySelector('.text-red-500');
+        if (!existingWarning) {
+            const warningDiv = document.createElement('div');
+            warningDiv.className = 'text-red-500 text-xs mt-1 font-medium';
+            warningDiv.textContent = 'Please fill the price';
+            input.parentNode.parentNode.appendChild(warningDiv);
+        }
+    }
+    
     // Recalculate total when amount is updated
     calculateScheduleIIITotal();
+    
+    // Update Schedule-III amount in Schedule-I
+    updateScheduleIIIAmountInScheduleI();
 }
 
 /**
@@ -6614,8 +7193,18 @@ function removeScheduleIIIPropertyRow(button) {
         if (row) {
             row.remove();
             console.log('Schedule-III property row removed');
+            // Renumber all remaining rows
+            const tableBody = document.getElementById('schedule-iii-table-body');
+            if (tableBody) {
+                renumberTableRows(tableBody);
+            }
             // Recalculate total after removal
             calculateScheduleIIITotal();
+            // Update position input
+            updateScheduleIIIPositionInput();
+            
+            // Update Schedule-III amount in Schedule-I
+            updateScheduleIIIAmountInScheduleI();
         }
     }
 }
@@ -6639,7 +7228,7 @@ function calculateScheduleIIITotal() {
         const value = input.value.trim();
         if (value) {
             // Remove currency symbols and commas, then parse
-            const numericValue = parseFloat(value.replace(/[₹,]/g, ''));
+            const numericValue = parseFloat(value.replace(/[₹,Rs]/g, ''));
             if (!isNaN(numericValue)) {
                 total += numericValue;
             }
@@ -6649,6 +7238,952 @@ function calculateScheduleIIITotal() {
     // Format the total with currency symbol
     totalElement.textContent = `₹ ${total.toLocaleString('en-IN')}`;
     console.log('Schedule-III total calculated:', total);
+}
+
+/**
+ * Sets up state change functionality for all schedules
+ */
+function setupStateChangeFunctionality() {
+    console.log('Setting up state change functionality');
+    
+    // Schedule-I state change
+    const changeStateBtn = document.getElementById('change-state-btn');
+    if (changeStateBtn) {
+        changeStateBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('Schedule-I change state button clicked');
+            showStateSelectionModal('schedule-i');
+        });
+    }
+    
+    // Schedule-II state change
+    const changeScheduleIIStateBtn = document.getElementById('change-schedule-ii-state-btn');
+    if (changeScheduleIIStateBtn) {
+        changeScheduleIIStateBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('Schedule-II change state button clicked');
+            showStateSelectionModal('schedule-ii');
+        });
+    }
+    
+    // Schedule-III state change
+    const changeScheduleIIIStateBtn = document.getElementById('change-schedule-iii-state-btn');
+    if (changeScheduleIIIStateBtn) {
+        changeScheduleIIIStateBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('Schedule-III change state button clicked');
+            showStateSelectionModal('schedule-iii');
+        });
+    }
+    
+    // Modal event listeners
+    const modal = document.getElementById('state-selection-modal');
+    const cancelBtn = document.getElementById('cancel-state-selection');
+    const confirmBtn = document.getElementById('confirm-state-selection');
+    
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('State selection cancelled');
+            hideStateSelectionModal();
+        });
+    }
+    
+    if (confirmBtn) {
+        confirmBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('State selection confirmed');
+            confirmStateSelection();
+        });
+    }
+    
+    // Close modal when clicking outside
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                hideStateSelectionModal();
+            }
+        });
+    }
+}
+
+/**
+ * Shows the state selection modal
+ */
+function showStateSelectionModal(scheduleType) {
+    console.log('Showing state selection modal for:', scheduleType);
+    const modal = document.getElementById('state-selection-modal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        // Store the schedule type for later use
+        modal.dataset.scheduleType = scheduleType;
+    }
+}
+
+/**
+ * Hides the state selection modal
+ */
+function hideStateSelectionModal() {
+    console.log('Hiding state selection modal');
+    const modal = document.getElementById('state-selection-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+        // Reset the dropdown
+        const dropdown = document.getElementById('state-selection-dropdown');
+        if (dropdown) {
+            dropdown.value = '';
+        }
+    }
+}
+
+/**
+ * Confirms state selection and adds new state row
+ */
+function confirmStateSelection() {
+    const modal = document.getElementById('state-selection-modal');
+    const dropdown = document.getElementById('state-selection-dropdown');
+    const scheduleType = modal.dataset.scheduleType;
+    
+    if (!dropdown || !scheduleType) {
+        console.log('Missing dropdown or schedule type');
+        return;
+    }
+    
+    const selectedState = dropdown.value;
+    if (!selectedState) {
+        alert('Please select a state');
+        return;
+    }
+    
+    console.log('Adding new state row for:', selectedState, 'in', scheduleType);
+    
+    // Add the new state row based on schedule type
+    if (scheduleType === 'schedule-i') {
+        addStateRowToScheduleI(selectedState);
+    } else if (scheduleType === 'schedule-ii') {
+        addStateRowToScheduleII(selectedState);
+    } else if (scheduleType === 'schedule-iii') {
+        addStateRowToScheduleIII(selectedState);
+    }
+    
+    hideStateSelectionModal();
+}
+
+/**
+ * Adds a new state row to Schedule-I
+ */
+function addStateRowToScheduleI(stateName) {
+    
+    const tableBody = document.getElementById('property-table-body');
+    if (!tableBody) {
+        console.log('Schedule-I table body not found');
+        return;
+    }
+    
+    const newRow = document.createElement('tr');
+    newRow.innerHTML = `
+        <td class="border border-white p-3 text-center">-</td>
+        <td class="border border-white capitalize p-3 text-center font-bold" colspan="3">IN THE  ${stateName}</td>
+    `;
+    
+    tableBody.appendChild(newRow);
+    console.log('Added state row to Schedule-I:', stateName);
+}
+
+/**
+ * Adds a new state row to Schedule-II
+ */
+function addStateRowToScheduleII(stateName) {
+    const tableBody = document.getElementById('schedule-ii-table-body');
+    if (!tableBody) {
+        console.log('Schedule-II table body not found');
+        return;
+    }
+    
+    const newRow = document.createElement('tr');
+    newRow.innerHTML = `
+        <td class="border border-white p-3 text-center font-bold" colspan="3">State of ${stateName}</td>
+    `;
+    
+    tableBody.appendChild(newRow);
+    console.log('Added state row to Schedule-II:', stateName);
+}
+
+/**
+ * Adds a new state row to Schedule-III
+ */
+function addStateRowToScheduleIII(stateName) {
+
+    const tableBody = document.getElementById('schedule-iii-table-body');
+    if (!tableBody) {
+        console.log('Schedule-III table body not found');
+        return;
+    }
+    
+    const newRow = document.createElement('tr');
+    newRow.innerHTML = `
+        <td class="border border-white p-3 text-center font-bold" colspan="3">State of ${stateName}</td>
+    `;
+    
+    tableBody.appendChild(newRow);
+    console.log('Added state row to Schedule-III:', stateName);
+}
+
+/**
+ * Sets up tenanted room options functionality
+ */
+function setupTenantedRoomOptions() {
+    console.log('Setting up tenanted room options functionality');
+    
+    // Tenanted room with rent button
+    const tenantedRoomWithRentBtn = document.getElementById('tenanted-room-with-rent');
+    if (tenantedRoomWithRentBtn) {
+        tenantedRoomWithRentBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('Tenanted room with rent selected');
+            showPropertyContent('tenanted-room-with-rent');
+            hideTenantedRoomOptionsModal();
+        });
+    }
+    
+    // Tenanted room without rent button
+    const tenantedRoomWithoutRentBtn = document.getElementById('tenanted-room-without-rent');
+    if (tenantedRoomWithoutRentBtn) {
+        tenantedRoomWithoutRentBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('Tenanted room without rent selected');
+            showPropertyContent('tenanted-room-without-rent');
+            hideTenantedRoomOptionsModal();
+        });
+    }
+    
+    // Cancel button
+    const cancelTenantedRoomBtn = document.getElementById('cancel-tenanted-room-options');
+    if (cancelTenantedRoomBtn) {
+        cancelTenantedRoomBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('Tenanted room options cancelled');
+            hideTenantedRoomOptionsModal();
+        });
+    }
+    
+    // Close modal when clicking outside
+    const modal = document.getElementById('tenanted-room-options-modal');
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                hideTenantedRoomOptionsModal();
+            }
+        });
+    }
+}
+
+/**
+ * Shows the tenanted room options modal
+ */
+function showTenantedRoomOptions() {
+    console.log('Showing tenanted room options modal');
+    const modal = document.getElementById('tenanted-room-options-modal');
+    if (modal) {
+        modal.classList.remove('hidden');
+    }
+}
+
+/**
+ * Hides the tenanted room options modal
+ */
+function hideTenantedRoomOptionsModal() {
+    console.log('Hiding tenanted room options modal');
+    const modal = document.getElementById('tenanted-room-options-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+    }
+}
+
+/**
+ * Sets up plot of land options functionality
+ */
+function setupPlotOfLandOptions() {
+    console.log('Setting up plot of land options functionality');
+    
+    // Plot of land option 1 button
+    const plotOfLandOption1Btn = document.getElementById('plot-of-land-option1');
+    if (plotOfLandOption1Btn) {
+        plotOfLandOption1Btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('Plot of land option 1 selected');
+            showPropertyContent('plot-of-land-option1');
+            hidePlotOfLandOptionsModal();
+        });
+    }
+    
+    // Plot of land option 2 button
+    const plotOfLandOption2Btn = document.getElementById('plot-of-land-option2');
+    if (plotOfLandOption2Btn) {
+        plotOfLandOption2Btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('Plot of land option 2 selected');
+            showPropertyContent('plot-of-land-option2');
+            hidePlotOfLandOptionsModal();
+        });
+    }
+    
+    // Cancel button
+    const cancelPlotOfLandBtn = document.getElementById('cancel-plot-of-land-options');
+    if (cancelPlotOfLandBtn) {
+        cancelPlotOfLandBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('Plot of land options cancelled');
+            hidePlotOfLandOptionsModal();
+        });
+    }
+    
+    // Close modal when clicking outside
+    const modal = document.getElementById('plot-of-land-options-modal');
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                hidePlotOfLandOptionsModal();
+            }
+        });
+    }
+}
+
+/**
+ * Shows the plot of land options modal
+ */
+function showPlotOfLandOptions() {
+    console.log('Showing plot of land options modal');
+    const modal = document.getElementById('plot-of-land-options-modal');
+    if (modal) {
+        modal.classList.remove('hidden');
+    }
+}
+
+/**
+ * Hides the plot of land options modal
+ */
+function hidePlotOfLandOptionsModal() {
+    console.log('Hiding plot of land options modal');
+    const modal = document.getElementById('plot-of-land-options-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+    }
+}
+
+
+/**
+ * Sets up account options modals functionality
+ */
+function setupAccountOptionsModals() {
+    console.log('Setting up account options modals functionality');
+    
+    // Saving Account Modal
+    const individualSavingAccount = document.getElementById('individual-saving-account');
+    const jointSavingAccount = document.getElementById('joint-saving-account');
+    const cancelSavingAccount = document.getElementById('cancel-saving-account-options');
+    
+    if (individualSavingAccount) {
+        individualSavingAccount.addEventListener('click', (e) => {
+            e.preventDefault();
+            showPropertyContent('saving-account');
+            hideSavingAccountOptionsModal();
+        });
+    }
+    
+    if (jointSavingAccount) {
+        jointSavingAccount.addEventListener('click', (e) => {
+            e.preventDefault();
+            showPropertyContent('joint-saving-account');
+            hideSavingAccountOptionsModal();
+        });
+    }
+    
+    if (cancelSavingAccount) {
+        cancelSavingAccount.addEventListener('click', (e) => {
+            e.preventDefault();
+            hideSavingAccountOptionsModal();
+        });
+    }
+    
+    // Current Account Modal
+    const individualCurrentAccount = document.getElementById('individual-current-account');
+    const jointCurrentAccount = document.getElementById('joint-current-account');
+    const cancelCurrentAccount = document.getElementById('cancel-current-account-options');
+    
+    if (individualCurrentAccount) {
+        individualCurrentAccount.addEventListener('click', (e) => {
+            e.preventDefault();
+            showPropertyContent('current-account');
+            hideCurrentAccountOptionsModal();
+        });
+    }
+    
+    if (jointCurrentAccount) {
+        jointCurrentAccount.addEventListener('click', (e) => {
+            e.preventDefault();
+            showPropertyContent('joint-current-account');
+            hideCurrentAccountOptionsModal();
+        });
+    }
+    
+    if (cancelCurrentAccount) {
+        cancelCurrentAccount.addEventListener('click', (e) => {
+            e.preventDefault();
+            hideCurrentAccountOptionsModal();
+        });
+    }
+    
+    // Fixed Deposit Modal
+    const individualFixedDeposit = document.getElementById('individual-fixed-deposit');
+    const jointFixedDeposit = document.getElementById('joint-fixed-deposit');
+    const cancelFixedDeposit = document.getElementById('cancel-fixed-deposit-options');
+    
+    if (individualFixedDeposit) {
+        individualFixedDeposit.addEventListener('click', (e) => {
+            e.preventDefault();
+            showPropertyContent('fixed-deposit');
+            hideFixedDepositOptionsModal();
+        });
+    }
+    
+    if (jointFixedDeposit) {
+        jointFixedDeposit.addEventListener('click', (e) => {
+            e.preventDefault();
+            showPropertyContent('joint-fixed-deposit');
+            hideFixedDepositOptionsModal();
+        });
+    }
+    
+    if (cancelFixedDeposit) {
+        cancelFixedDeposit.addEventListener('click', (e) => {
+            e.preventDefault();
+            hideFixedDepositOptionsModal();
+        });
+    }
+    
+    // Mutual Funds Modal
+    const individualMutualFunds = document.getElementById('individual-mutual-funds');
+    const jointMutualFunds = document.getElementById('joint-mutual-funds');
+    const cancelMutualFunds = document.getElementById('cancel-mutual-funds-options');
+    
+    if (individualMutualFunds) {
+        individualMutualFunds.addEventListener('click', (e) => {
+            e.preventDefault();
+            showPropertyContent('mutual-funds');
+            hideMutualFundsOptionsModal();
+        });
+    }
+    
+    if (jointMutualFunds) {
+        jointMutualFunds.addEventListener('click', (e) => {
+            e.preventDefault();
+            showPropertyContent('joint-mutual-funds');
+            hideMutualFundsOptionsModal();
+        });
+    }
+    
+    if (cancelMutualFunds) {
+        cancelMutualFunds.addEventListener('click', (e) => {
+            e.preventDefault();
+            hideMutualFundsOptionsModal();
+        });
+    }
+    
+    // Shares/Stocks Modal
+    const individualSharesStocks = document.getElementById('individual-shares-stocks');
+    const jointSharesStocks = document.getElementById('joint-shares-stocks');
+    const cancelSharesStocks = document.getElementById('cancel-shares-stocks-options');
+    
+    if (individualSharesStocks) {
+        individualSharesStocks.addEventListener('click', (e) => {
+            e.preventDefault();
+            showPropertyContent('shares-stocks');
+            hideSharesStocksOptionsModal();
+        });
+    }
+    
+    if (jointSharesStocks) {
+        jointSharesStocks.addEventListener('click', (e) => {
+            e.preventDefault();
+            showPropertyContent('joint-shares-stocks');
+            hideSharesStocksOptionsModal();
+        });
+    }
+    
+    if (cancelSharesStocks) {
+        cancelSharesStocks.addEventListener('click', (e) => {
+            e.preventDefault();
+            hideSharesStocksOptionsModal();
+        });
+    }
+    
+    // Demat Account Modal
+    const individualDematAccount = document.getElementById('individual-demat-account');
+    const jointDematAccount = document.getElementById('joint-demat-account');
+    const cancelDematAccount = document.getElementById('cancel-demat-account-options');
+    
+    if (individualDematAccount) {
+        individualDematAccount.addEventListener('click', (e) => {
+            e.preventDefault();
+            showPropertyContent('demat-account');
+            hideDematAccountOptionsModal();
+        });
+    }
+    
+    if (jointDematAccount) {
+        jointDematAccount.addEventListener('click', (e) => {
+            e.preventDefault();
+            showPropertyContent('joint-demat-account');
+            hideDematAccountOptionsModal();
+        });
+    }
+    
+    if (cancelDematAccount) {
+        cancelDematAccount.addEventListener('click', (e) => {
+            e.preventDefault();
+            hideDematAccountOptionsModal();
+        });
+    }
+    
+    // Close modals when clicking outside
+    const modals = [
+        'saving-account-options-modal',
+        'current-account-options-modal', 
+        'fixed-deposit-options-modal',
+        'mutual-funds-options-modal',
+        'shares-stocks-options-modal',
+        'demat-account-options-modal'
+    ];
+    
+    modals.forEach(modalId => {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                }
+            });
+        }
+    });
+}
+
+/**
+ * Shows the saving account options modal
+ */
+function showSavingAccountOptions() {
+    console.log('Showing saving account options modal');
+    const modal = document.getElementById('saving-account-options-modal');
+    if (modal) {
+        modal.classList.remove('hidden');
+    }
+}
+
+/**
+ * Hides the saving account options modal
+ */
+function hideSavingAccountOptionsModal() {
+    console.log('Hiding saving account options modal');
+    const modal = document.getElementById('saving-account-options-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+    }
+}
+
+/**
+ * Shows the current account options modal
+ */
+function showCurrentAccountOptions() {
+    console.log('Showing current account options modal');
+    const modal = document.getElementById('current-account-options-modal');
+    if (modal) {
+        modal.classList.remove('hidden');
+    }
+}
+
+/**
+ * Hides the current account options modal
+ */
+function hideCurrentAccountOptionsModal() {
+    console.log('Hiding current account options modal');
+    const modal = document.getElementById('current-account-options-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+    }
+}
+
+/**
+ * Shows the fixed deposit options modal
+ */
+function showFixedDepositOptions() {
+    console.log('Showing fixed deposit options modal');
+    const modal = document.getElementById('fixed-deposit-options-modal');
+    if (modal) {
+        modal.classList.remove('hidden');
+    }
+}
+
+/**
+ * Hides the fixed deposit options modal
+ */
+function hideFixedDepositOptionsModal() {
+    console.log('Hiding fixed deposit options modal');
+    const modal = document.getElementById('fixed-deposit-options-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+    }
+}
+
+/**
+ * Shows the mutual funds options modal
+ */
+function showMutualFundsOptions() {
+    console.log('Showing mutual funds options modal');
+    const modal = document.getElementById('mutual-funds-options-modal');
+    if (modal) {
+        modal.classList.remove('hidden');
+    }
+}
+
+/**
+ * Hides the mutual funds options modal
+ */
+function hideMutualFundsOptionsModal() {
+    console.log('Hiding mutual funds options modal');
+    const modal = document.getElementById('mutual-funds-options-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+    }
+}
+
+/**
+ * Shows the shares/stocks options modal
+ */
+function showSharesStocksOptions() {
+    console.log('Showing shares/stocks options modal');
+    const modal = document.getElementById('shares-stocks-options-modal');
+    if (modal) {
+        modal.classList.remove('hidden');
+    }
+}
+
+/**
+ * Hides the shares/stocks options modal
+ */
+function hideSharesStocksOptionsModal() {
+    console.log('Hiding shares/stocks options modal');
+    const modal = document.getElementById('shares-stocks-options-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+    }
+}
+
+/**
+ * Shows the demat account options modal
+ */
+function showDematAccountOptions() {
+    console.log('Showing demat account options modal');
+    const modal = document.getElementById('demat-account-options-modal');
+    if (modal) {
+        modal.classList.remove('hidden');
+    }
+}
+
+/**
+ * Hides the demat account options modal
+ */
+function hideDematAccountOptionsModal() {
+    console.log('Hiding demat account options modal');
+    const modal = document.getElementById('demat-account-options-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+    }
+}
+
+/**
+ * Sets up amount warning functionality
+ */
+function setupAmountWarningFunctionality() {
+    console.log('Setting up amount warning functionality');
+    
+    // Add event listeners to amount inputs to hide warnings when user starts typing
+    const amountInputs = [
+        'property-amount',
+        'schedule-ii-amount', 
+        'schedule-iii-amount'
+    ];
+    
+    amountInputs.forEach(inputId => {
+        const input = document.getElementById(inputId);
+        if (input) {
+            input.addEventListener('input', function() {
+                hideAmountWarning(this);
+            });
+            
+            input.addEventListener('focus', function() {
+                hideAmountWarning(this);
+            });
+        }
+    });
+}
+
+/**
+ * Sets up Schedule-II less toggle functionality
+ */
+function setupScheduleIILessToggle() {
+    console.log('Setting up Schedule-II less toggle functionality');
+    
+    const toggle = document.getElementById('schedule-ii-less-toggle');
+    if (toggle) {
+        toggle.addEventListener('change', function() {
+            console.log('Schedule-II less toggle changed:', this.checked);
+            updateScheduleIILessRow();
+            calculateNetTotal();
+        });
+    }
+}
+
+/**
+ * Updates the Schedule-II less row visibility and amount
+ */
+function updateScheduleIILessRow() {
+    const toggle = document.getElementById('schedule-ii-less-toggle');
+    const lessRow = document.getElementById('schedule-ii-less-row');
+    const lessAmount = document.getElementById('schedule-ii-less-amount');
+    
+    if (!toggle || !lessRow || !lessAmount) return;
+    
+    // Always show the row since checkbox is now in the row
+    lessRow.classList.remove('hidden');
+    
+    // Get Schedule-II total and update amount
+    const scheduleIITotal = getScheduleIITotal();
+    lessAmount.textContent = `₹ ${scheduleIITotal.toLocaleString('en-IN')}`;
+}
+
+/**
+ * Gets the current Schedule-II total
+ */
+function getScheduleIITotal() {
+    const tableBody = document.getElementById('schedule-ii-table-body');
+    if (!tableBody) return 0;
+    
+    let total = 0;
+    const amountInputs = tableBody.querySelectorAll('input[type="text"]');
+    
+    amountInputs.forEach(input => {
+        const value = input.value.trim();
+        if (value) {
+            const numericValue = parseFloat(value.replace(/[₹,Rs]/g, ''));
+            if (!isNaN(numericValue)) {
+                total += numericValue;
+            }
+        }
+    });
+    
+    return total;
+}
+
+/**
+ * Calculates and updates the net total
+ */
+function calculateNetTotal() {
+    const scheduleITotal = getScheduleITotalAmount();
+    const scheduleIITotal = getScheduleIITotal();
+    const netTotalElement = document.getElementById('net-total');
+    
+    if (!netTotalElement) return;
+    
+    const toggle = document.getElementById('schedule-ii-less-toggle');
+    let netTotal = scheduleITotal;
+    
+    if (toggle && toggle.checked) {
+        netTotal = scheduleITotal - scheduleIITotal;
+    }
+    
+    netTotalElement.textContent = `₹ ${netTotal.toLocaleString('en-IN')}`;
+}
+
+/**
+ * Gets the current Schedule-I total amount
+ */
+function getScheduleITotalAmount() {
+    const tableBody = document.getElementById('property-table-body');
+    if (!tableBody) return 0;
+    
+    let total = 0;
+    const amountInputs = tableBody.querySelectorAll('input[type="text"]');
+    
+    amountInputs.forEach(input => {
+        const value = input.value.trim();
+        if (value) {
+            const numericValue = parseFloat(value.replace(/[₹,Rs]/g, ''));
+            if (!isNaN(numericValue)) {
+                total += numericValue;
+            }
+        }
+    });
+    
+    return total;
+}
+
+/**
+ * Sets up Schedule-II state selection functionality
+ */
+function setupScheduleIIStateSelection() {
+    console.log('Setting up Schedule-II state selection functionality');
+    
+    const stateSelect = document.getElementById('schedule-ii-state-of-maharashtra');
+    if (stateSelect) {
+        stateSelect.addEventListener('change', function() {
+            console.log('Schedule-II state changed to:', this.value);
+            // Update any state-related functionality for Schedule-II
+        });
+    }
+}
+
+/**
+ * Sets up Schedule-III state selection functionality
+ */
+function setupScheduleIIIStateSelection() {
+    console.log('Setting up Schedule-III state selection functionality');
+    
+    const stateSelect = document.getElementById('schedule-iii-state-of-maharashtra');
+    if (stateSelect) {
+        stateSelect.addEventListener('change', function() {
+            console.log('Schedule-III state changed to:', this.value);
+            // Update any state-related functionality for Schedule-III
+        });
+    }
+}
+
+/**
+ * Updates the Schedule-III amount displayed in Schedule-I
+ */
+function updateScheduleIIIAmountInScheduleI() {
+    // Update HUF Property row
+    updateScheduleIIIHUFPropertyRow();
+    
+    // Update Schedule-I total to include Schedule-III
+    updateScheduleITotalWithScheduleIII();
+}
+
+/**
+ * Gets the current Schedule-III total
+ */
+function getScheduleIIITotal() {
+    const tableBody = document.getElementById('schedule-iii-table-body');
+    if (!tableBody) return 0;
+    
+    let total = 0;
+    const amountInputs = tableBody.querySelectorAll('input[type="text"]');
+    
+    amountInputs.forEach(input => {
+        const value = input.value.trim();
+        if (value) {
+            const numericValue = parseFloat(value.replace(/[₹,Rs]/g, ''));
+            if (!isNaN(numericValue)) {
+                total += numericValue;
+            }
+        }
+    });
+    
+    return total;
+}
+
+/**
+ * Updates Schedule-I total to include Schedule-III amount
+ */
+function updateScheduleITotalWithScheduleIII() {
+    const scheduleIAmount = getScheduleITotalAmount();
+    const scheduleIIIAmount = getScheduleIIITotal();
+    const totalElement = document.getElementById('schedule-i-total');
+    const toggle = document.getElementById('schedule-iii-huf-toggle');
+    
+    if (totalElement) {
+        let combinedTotal = scheduleIAmount;
+        
+        // Only add Schedule-III amount if toggle is checked
+        if (toggle && toggle.checked) {
+            combinedTotal += scheduleIIIAmount;
+        }
+        
+        totalElement.textContent = `₹ ${combinedTotal.toLocaleString('en-IN')}`;
+        console.log('Schedule-I total with Schedule-III:', combinedTotal);
+    }
+}
+
+/**
+ * Sets up Schedule-III HUF Property toggle functionality
+ */
+function setupScheduleIIIHUFPropertyToggle() {
+    console.log('Setting up Schedule-III HUF Property toggle functionality');
+    
+    const toggle = document.getElementById('schedule-iii-huf-toggle');
+    if (toggle) {
+        toggle.addEventListener('change', function() {
+            console.log('Schedule-III HUF Property toggle changed:', this.checked);
+            updateScheduleIIIHUFPropertyRow();
+            updateScheduleITotalWithScheduleIII();
+            calculateNetTotal();
+        });
+    }
+}
+
+/**
+ * Updates the Schedule-III HUF Property row visibility and amount
+ */
+function updateScheduleIIIHUFPropertyRow() {
+    const toggle = document.getElementById('schedule-iii-huf-toggle');
+    const hufRow = document.getElementById('schedule-iii-huf-row');
+    const hufAmount = document.getElementById('schedule-iii-amount-in-schedule-i');
+    
+    if (!toggle || !hufRow || !hufAmount) return;
+    
+    // Always show the row since checkbox is now in the row
+    hufRow.classList.remove('hidden');
+    
+    // Get Schedule-III total and update amount
+    const scheduleIIITotal = getScheduleIIITotal();
+    hufAmount.textContent = `₹ ${scheduleIIITotal.toLocaleString('en-IN')}`;
+}
+
+/**
+ * Shows a red warning message above the amount input
+ */
+function showAmountWarning(amountInput, message) {
+    // Remove any existing warning
+    hideAmountWarning(amountInput);
+    
+    // Create warning element
+    const warning = document.createElement('div');
+    warning.className = 'text-red-500 text-sm font-medium mb-1';
+    warning.textContent = message;
+    warning.id = 'amount-warning-' + amountInput.id;
+    
+    // Insert warning above the amount input
+    amountInput.parentNode.insertBefore(warning, amountInput);
+    
+    // Add red border to the input
+    amountInput.classList.add('border-red-500');
+    
+    // Auto-hide warning after 3 seconds
+    setTimeout(() => {
+        hideAmountWarning(amountInput);
+    }, 3000);
+}
+
+/**
+ * Hides the warning message for the amount input
+ */
+function hideAmountWarning(amountInput) {
+    const warning = document.getElementById('amount-warning-' + amountInput.id);
+    if (warning) {
+        warning.remove();
+    }
+    
+    // Remove red border from the input
+    amountInput.classList.remove('border-red-500');
 }
 
 // Make calculation functions globally accessible
