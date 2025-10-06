@@ -5952,8 +5952,7 @@ function setupPage9Events() {
     
     if (flatRoomBtn && propertyContentSection) {
         flatRoomBtn.addEventListener('click', function() {
-           
-            showPropertyContent('flat-room');
+            showFlatRoomOptions();
         });
     }
     
@@ -6030,6 +6029,38 @@ function setupPage9Events() {
     if (loanBtn && propertyContentSection) {
         loanBtn.addEventListener('click', function() {
             showPropertyContent('loan');
+        });
+    }
+    
+    // Vehicle button
+    const vehicleBtn = document.getElementById('vehicle-btn');
+    if (vehicleBtn && propertyContentSection) {
+        vehicleBtn.addEventListener('click', function() {
+            showPropertyContent('vehicle');
+        });
+    }
+    
+    // Cash button
+    const cashBtn = document.getElementById('cash-btn');
+    if (cashBtn && propertyContentSection) {
+        cashBtn.addEventListener('click', function() {
+            showPropertyContent('cash');
+        });
+    }
+    
+    // Other Assets button
+    const otherAssetsBtn = document.getElementById('other-assets-btn');
+    if (otherAssetsBtn && propertyContentSection) {
+        otherAssetsBtn.addEventListener('click', function() {
+            showPropertyContent('other-assets');
+        });
+    }
+    
+    // Cancel Property button
+    const cancelPropertyBtn = document.getElementById('cancel-property-btn');
+    if (cancelPropertyBtn && propertyContentSection) {
+        cancelPropertyBtn.addEventListener('click', function() {
+            hidePropertyContent();
         });
     }
     
@@ -6151,7 +6182,7 @@ function setupPage9Events() {
     const scheduleIIILoanBtn = document.getElementById('schedule-iii-loan-btn');
     
     if (scheduleIIIFlatRoomBtn) {
-        scheduleIIIFlatRoomBtn.addEventListener('click', () => showScheduleIIIContent('flat-room'));
+        scheduleIIIFlatRoomBtn.addEventListener('click', () => showFlatRoomOptions());
     }
     
     if (scheduleIIITenantedRoomBtn) {
@@ -6230,6 +6261,24 @@ function setupPage9Events() {
         scheduleIIILoanBtn.addEventListener('click', () => showScheduleIIIContent('loan'));
     }
     
+    // Schedule-III Vehicle button
+    const scheduleIIIVehicleBtn = document.getElementById('schedule-iii-vehicle-btn');
+    if (scheduleIIIVehicleBtn) {
+        scheduleIIIVehicleBtn.addEventListener('click', () => showScheduleIIIContent('vehicle'));
+    }
+    
+    // Schedule-III Cash button
+    const scheduleIIICashBtn = document.getElementById('schedule-iii-cash-btn');
+    if (scheduleIIICashBtn) {
+        scheduleIIICashBtn.addEventListener('click', () => showScheduleIIIContent('cash'));
+    }
+    
+    // Schedule-III Other Assets button
+    const scheduleIIIOtherAssetsBtn = document.getElementById('schedule-iii-other-assets-btn');
+    if (scheduleIIIOtherAssetsBtn) {
+        scheduleIIIOtherAssetsBtn.addEventListener('click', () => showScheduleIIIContent('other-assets'));
+    }
+    
     // Add property button for Schedule-III
     const addScheduleIIIPropertyBtn = document.getElementById('add-schedule-iii-property-btn');
     if (addScheduleIIIPropertyBtn) {
@@ -6260,6 +6309,12 @@ function setupPage9Events() {
     
     // Setup Schedule-III HUF Property toggle functionality
     setupScheduleIIIHUFPropertyToggle();
+    
+    // Setup unique property input functionality
+    setupUniquePropertyInput();
+    
+    // Setup Flat/Room options functionality
+    setupFlatRoomOptions();
 }
 
 /**
@@ -6469,12 +6524,19 @@ function showPropertyContent(propertyType) {
     
     let content = '';
     
-    if (propertyType === 'flat-room') {
+    if (propertyType === 'flat-room-single-owner') {
         content = `Immovable property consisting of Flat/Room No._____, ____Floor, Bldg. No.____, ____-Wing,  ______________(Building or society name), ________Road, Near_________, Andheri, East/West, Mumbai-4000______, admeasuring area about _____ sq. ft., standing in the name of the deceased abovenamed and of the present market value is  
 
 OCCUPATION RIGHT
 Self –occupied and fetching no rent.
-The said Flat/Room is occupied by the tenant and rent receivable is  `;
+The said Flat/Room is occupied by the tenant and rent receivable is`;
+    } else if (propertyType === 'flat-room-percentage-owner') {
+        content = `50% Share in Immovable property consisting of Flat/Room No._____, ____Floor, Bldg. No.____, ____-Wing,  ______________(Building or society name), ________Road, Near_________, Andheri, East/West, Mumbai-4000______, admeasuring area about _____ sq. ft.,  and __________________ and of the present market value is  
+The remaining ___% share belongs to ___
+
+OCCUPATION RIGHT
+Self –occupied and fetching no rent.
+The said Flat/Room is occupied by the tenant and rent receivable is`;
     } else if (propertyType === 'tenanted-room-with-rent') {
         content = `Transfer of Tenancy Right in respect of Immovable property consisting of Room No._____, ____Floor, Bldg. No.____, ____-Wing,  ______________ (Building or society name), ________Road,  Near_________, Andheri, East/West, Mumbai-4000______, admeasuring area _____ sq. ft.,  standing in the name of the deceased abovenamed.
 (monthly Rent Rs.__/- p.m. X 150 times), which comes to & valued at
@@ -6486,28 +6548,25 @@ Self-occupied & fetching no rent.`;
     else if(propertyType === 'plot-of-land-option1') {
         content = `Immovable property consisting of Plot of Land bearing Plot No. ____________, C.T.S. No. ______, Hissa No.____, admeasuring area _____ sq. mtrs., standing in the name of the deceased abovenamed and of the present market value is  
 Self-occupied & fetching no rent.
-OWNERSHIP OPTION- 
---The remaining 50% share belongs to ___
---The remaining share belongs to 
-1) __% of ___
-2) __% of ___
-3) __% of ___
-The remaining undivided share belongs to 
-1) __% of ___
-2) __% of ___
-3) __% of ___
-OCCUPATION RIGHT`;
+ OCCUPATION RIGHT
+Self –occupied and fetching no rent.
+The said property is occupied by the tenant and rent receivable is`;
+    }else if(propertyType === 'vehicle') {
+        content = `(Vehicle) Four / Two Wheeler Motor 	
+Name of Vehicle- ______
+Colour of Vehicle - _____
+Registration No._______
+Chassis No. ___________
+Engine No. ______________`;
+    
     } else if(propertyType === 'plot-of-land-option2') {
-        content = `Immovable property consisting of Plot of Land bearing Survey No. ____________, Hissa No.____, situated at ________________________, admeasuring area _____ sq. ft. and of the present market value is 
-Self-occupied & Fetching no rent.
-OWNERSHIP DETAILS:
---Plot is jointly owned with ___
---Plot is solely owned by deceased
---Plot has multiple owners: 1) ___ 2) ___ 3) ___
-VALUATION METHOD:
---Based on market rate of Rs.__/- per sq. ft.
---Based on government valuation of Rs.__/- per sq. ft.
---Based on recent sale in area of Rs.__/- per sq. ft.`;
+        content = `50% share in Immovable property consisting of Plot of Land bearing Plot No. ____________, C.T.S. No. ______, Hissa No.____, admeasuring area _____ sq. mtrs., standing in the name of the deceased abovenamed and of the present market value is  
+The remaining 50% share belongs to
+___
+Self-occupied & fetching no rent.
+ OCCUPATION RIGHT
+Self –occupied and fetching no rent.
+The said property is occupied by the tenant and rent receivable is`;
     } else if(propertyType === 'partnership-property') {
         content = `Partnership Property bearing ______ No. ______, ____ Floor, ________________________, admeasuring area _____ sq. ft. and of the present market value is 
 The other partners are
@@ -6557,6 +6616,8 @@ Standing in the name of deceased abovenamed & ____________`;
         content = `Units of ________ Scheme of _______ Mutual Fund Ltd, having its office at _____________ (FULL ADDRESS WITH PINCODE OF BANK), bearing Folio No._______, Standing in the name of deceased abovenamed & ____________`;
     } else if (propertyType === 'account-option12') {
         content = `Life Insurance Policy of ___________ (NAME OF Policy), bearing Policy No. ________, having its branch at _______________(FULL ADDRESS WITH PINCODE OF BANK), standing in the name of the deceased abovenamed.`;
+      }  else if(propertyType === 'cash') {
+        content = `Cash in hand`;
     } else if (propertyType === 'account-option13') {
         content = `____ (NO. OF SHARES) shares of ________ (NAME OF COMPANY) Ltd, having its office at __________________________(FULL ADDRESS WITH PINCODE), bearing Folio No. _____, Certificate No. ______, Dist. Nos. ____ to ____, standing in the name of the deceased abovenamed.`;
     } else if (propertyType === 'account-option14') {
@@ -6587,6 +6648,9 @@ Standing in the name of deceased abovenamed & ____________`;
         content = `Amount lying in Post Office Savings Account No.______________ with ____________ (NAME OF BANK), having its branch at ______________________ (FULL ADDRESS WITH PINCODE OF BANK), standing in the name of the deceased abovenamed.`;
     } else if (propertyType === 'mutual-funds') {
         content = `Units of ________ Scheme of _______ Mutual Fund Ltd, having its office at _____________ (FULL ADDRESS WITH PINCODE OF BANK), bearing Folio No._______, standing in the name of the deceased abovenamed.`;
+     } else if (propertyType === 'other-assets') {
+            content = ``;
+        
     } else if (propertyType === 'shares-stocks') {
         content = `____ (NO. OF SHARES) shares of ________ (NAME OF COMPANY) Ltd, having its office at __________________________(FULL ADDRESS WITH PINCODE), bearing Folio No. _____, Certificate No. ______, Dist. Nos. ____ to ____, standing in the name of the deceased abovenamed.`;
     } else if (propertyType === 'joint-fixed-deposit') {
@@ -6608,6 +6672,18 @@ Standing in the name of deceased abovenamed & ____________`;
     
     // Update position input placeholder
     updatePositionInput();
+}
+
+/**
+ * Hides the property content section
+ */
+function hidePropertyContent() {
+    const propertyContentSection = document.getElementById('property-content-section');
+    
+    if (propertyContentSection) {
+        propertyContentSection.classList.add('hidden');
+        console.log('Property content section hidden');
+    }
 }
 
 /**
@@ -6708,6 +6784,8 @@ function showScheduleIIContent(propertyType) {
         case 'loan':
             content = `Loan to be repaid of ___________(Name of Person), having his/her address at __________________________ (FULL ADDRESS WITH PINCODE).`;
             break;
+       
+       
         default:
             content = 'Enter property details here...';
     }
@@ -6756,10 +6834,10 @@ function addScheduleIIPropertyToTable() {
     newRow.className = 'border border-white';
     newRow.innerHTML = `
         <td class="border border-white p-2 text-center">${insertPosition + 1}</td>
-        <td class="border border-white p-2">
-            <div contenteditable="true" onblur="updateScheduleIIContent(this)" class="min-h-[50px] p-2">${content}</div>
+        <td class="border border-white p-2 ">
+            <div contenteditable="true" onblur="updateScheduleIIContent(this)" class="min-h-[50px] bg-[#334155] text-white p-2">${content}</div>
         </td>
-        <td class="border border-white p-2">
+        <td class="border border-white p-2 ">
             <div class="flex items-center">
                 <span class="text-black font-semibold mr-1">Rs</span>
                 <input type="text" value="${amount}" onblur="updateScheduleIIAmount(this)" class="flex-1 p-2 border border-gray-300 rounded text-black">
@@ -6979,34 +7057,67 @@ function showScheduleIIIContent(propertyType) {
     let content = '';
     
     switch (propertyType) {
-        case 'flat-room':
-            content = `Immovable property consisting of Flat/Room No._____, ____Floor, Bldg. No.____, ____-Wing,  ______________(Building or society name), ________Road, Near_________, Andheri, East/West, Mumbai-4000______, admeasuring area about _____ sq. ft., standing in the name of deceased & HUF and of the present market value is 
+        case 'flat-room-single-owner':
+            content = `Immovable property consisting of Flat/Room No._____, ____Floor, Bldg. No.____, ____-Wing,  ______________(Building or society name), ________Road, Near_________, Andheri, East/West, Mumbai-4000______, admeasuring area about _____ sq. ft., standing in the name of the deceased abovenamed and of the present market value is  
+
+OCCUPATION RIGHT
+Self –occupied and fetching no rent.
+The said Flat/Room is occupied by the tenant and rent receivable is`;
+            break;
+        case 'flat-room-percentage-owner':
+            content = `50% Share in Immovable property consisting of Flat/Room No._____, ____Floor, Bldg. No.____, ____-Wing,  ______________(Building or society name), ________Road, Near_________, Andheri, East/West, Mumbai-4000______, admeasuring area about _____ sq. ft.,  and __________________ and of the present market value is  
+The remaining ___% share belongs to ___
+
+OCCUPATION RIGHT
+Self –occupied and fetching no rent.
+The said Flat/Room is occupied by the tenant and rent receivable is`;
+            break;
+        case 'tenanted-room':
+            content = `Transfer of Tenancy Right in respect of Immovable property consisting of Room No._____, ____Floor, Bldg. No.____, ____-Wing, ______________(Building or society name), ________Road, Near_________, Andheri, East/West, Mumbai-4000______, admeasuring area _____ sq. ft., standing in the name of the deceased abovenamed and valued at (monthly Rent Rs.__/- p.m. X 150 times), which comes to Self-occupied & fetching no rent. NO RENT and of the present market value is`;
+            break;
+        case 'plot-of-land':
+            content = `Immovable property consisting of Plot of Land bearing Plot No. ____________, C.T.S. No. ______, Hissa No.____, admeasuring area _____ sq. mtrs., standing in the name of deceased & HUF and of the present market value is 
+The coparceners are (Name of Coparceners)
+_______________ 
+_____________
+__________`;
+            break;
+        case 'partnership-property':
+            content = `Partnership Property bearing ______ No. ______, ____ Floor, ________________________, admeasuring area _____ sq. ft. and of the present market value is 
+The other partners are
+1)
+2)
+Self-occupied & Fetching no rent.`;
+            break;
+        case 'partnership-business':
+            content = `Partnership Business known as __________________, situated at ___________________ (FULL ADDRESS WITH PINCODE), alongwith stock in trade, Goodwill etc., standing in the name of deceased & HUF and of the present market value is 
 The coparceners are (Name of Coparceners)
 _______________ 
 ______________
 ______________
 `;
             break;
-        case 'tenanted-room':
-            content = `Transfer of Tenancy Right in respect of Immovable property consisting of Room No._____, ____Floor, Bldg. No.____, ____-Wing, ______________(Building or society name), ________Road, Near_________, Andheri, East/West, Mumbai-4000______, admeasuring area _____ sq. ft., standing in the name of the deceased abovenamed and valued at (monthly Rent Rs.__/- p.m. X 150 times), which comes to Self-occupied & fetching no rent. NO RENT and of the present market value is`;
-            break;
-        case 'plot-of-land':
-            content = `Plot of Land bearing Survey No._____, Hissa No._____, situated at ________________________, admeasuring area _____ sq. ft. and of the present market value is Self-occupied & Fetching no rent.`;
-            break;
-        case 'partnership-property':
-            content = `Partnership Property bearing ______ No. ______, ____ Floor, ________________________, admeasuring area _____ sq. ft. and of the present market value is The other partners are 1) 2) Self-occupied & Fetching no rent.`;
-            break;
-        case 'partnership-business':
-            content = `Partnership Business known as __________________, situated at ___________________ (FULL ADDRESS WITH PINCODE), alongwith stock in trade, Goodwill etc., and valued at`;
-            break;
         case 'shop-gala':
-            content = `Shop/Gala bearing No._____, situated at ________________________, admeasuring area _____ sq. ft. and of the present market value is Self-occupied & Fetching no rent.`;
+            content = `Immovable property consisting of Shop/Gala No. ______, ____ Floor, ________________________ (FULL ADDRESS WITH PINCODE), admeasuring area _____ sq. ft., standing in the name of deceased & HUF and of the present market value is 
+The coparceners are (Name of Coparceners)
+_______________ 
+______________
+______________`;
             break;
         case 'bungalow':
-            content = `Bungalow bearing No._____, situated at ________________________, admeasuring area _____ sq. ft. and of the present market value is Self-occupied & Fetching no rent.`;
+            content = `Immovable property consisting of Bunglow No. ______, ____ Floor, ________________________, admeasuring area _____ sq. ft. standing in the name of deceased & HUF and of the present market value is 
+The coparceners are (Name of Coparceners)
+_______________ 
+______________
+______________
+`;
             break;
         case 'bonds':
-            content = `Bonds and Securities of the deceased including Government Bonds, Corporate Bonds, and other investment securities valued at`;
+            content = `____ Bonds of ________ Scheme of ___ Mutual Fund Ltd, having its office at ____________________(FULL ADDRESS WITH PINCODE), bearing Folio ____, standing in name of deceased & HUF.
+The coparceners are (Name of Coparceners)
+_________
+________
+__________`;
             break;
         case 'utensils':
             content = `Household utensils and kitchenware of the deceased including cookware, cutlery, and other domestic items valued at`;
@@ -7015,34 +7126,75 @@ ______________
             content = `Furniture and fixtures of the deceased including beds, chairs, tables, and other household furniture valued at`;
             break;
         case 'saving-account':
-            content = `Savings Account of the deceased with bank details and current balance valued at`;
+            content = `Amount lying in Saving Account No. _______ with ___________ (NAME OF BANK) Bank, having its branch at ______ Branch, __________________ (FULL ADDRESS WITH PINCODE OF BANK), standing in name of __________  HUF.
+The coparceners are (Name of Coparceners)
+_________
+__________________`;
             break;
         case 'current-account':
-            content = `Current Account of the deceased with bank details and current balance valued at`;
+            content = `Amount lying in Current Account No. _______ with ___________ (NAME OF BANK) Bank, having its branch at ______ Branch, __________________ (FULL ADDRESS WITH PINCODE OF BANK), standing in name of __________  HUF.
+The coparceners are (Name of Coparceners)
+_________
+________
+__________`;
             break;
         case 'fixed-deposit':
             content = `Fixed Deposit accounts of the deceased with maturity details and current value valued at`;
             break;
         case 'ppf-account':
-            content = `Public Provident Fund (PPF) account of the deceased with current balance valued at`;
+            content = `Amount lying in PPF Account No.______________ with ____________ (NAME OF BANK), having its branch at ______________________ (FULL ADDRESS WITH PINCODE OF BANK), standing in name of _______________HUF.
+The coparceners are (Name of Coparceners)
+_________
+________
+__________`;
             break;
         case 'lic':
-            content = `Life Insurance Corporation (LIC) policies of the deceased with maturity value valued at`;
+            content = `Life Insurance Policy of ___________ (NAME OF Policy), bearing Policy No. ________, having its branch at _______________(FULL ADDRESS WITH PINCODE OF BANK), standing in name of deceased & HUF.
+The coparceners are (Name of Coparceners)
+_________
+________
+__________`;
             break;
         case 'demat-account':
-            content = `Demat Account of the deceased with securities and shares valued at`;
+            content = `Shares lying in Demat Account No._________ Client ID No. _________, DP ID No._____________ with ____________ (NAME OF BANK), having its branch at ______________________ (FULL ADDRESS WITH PINCODE OF BANK), standing in name of ______________HUF.
+The coparceners are (Name of Coparceners)
+_________
+________
+__________`;
             break;
         case 'mutual-funds':
-            content = `Mutual Fund investments of the deceased with current market value valued at`;
+            content = `Units of ________ Scheme of _______ Mutual Fund Ltd, having its office at _____________ (FULL ADDRESS WITH PINCODE OF BANK), bearing Folio No._______, standing in name of deceased & HUF.
+The coparceners are (Name of Coparceners)
+_________
+________
+__________`;
             break;
         case 'shares-stocks':
-            content = `Shares and stocks of the deceased with current market value valued at`;
+            content = `____ (NO. OF SHARES) shares of ________ (NAME OF COMPANY) Ltd, having its office at __________________________(FULL ADDRESS WITH PINCODE), bearing Folio No. _____, Certificate No. ______, Dist. Nos. ____ to ____, standing in name of deceased & HUF.
+The coparceners are (Name of Coparceners)
+_________
+________
+__________`;
             break;
         case 'gold-jewellery':
             content = `Gold and jewellery of the deceased including ornaments, coins, and precious metals valued at`;
             break;
         case 'loan':
             content = `Outstanding loans and debts of the deceased including personal loans, bank loans, and other financial obligations valued at`;
+            break;
+        case 'vehicle':
+            content = `(Vehicle) Four / Two Wheeler Motor Car	
+Name of Vehicle- ______
+Colour of Vehicle - _____
+Registration No._______
+Chassis No. ___________
+Engine No. ______________, standing in the name of the deceased abovenamed.`;
+            break;
+        case 'cash':
+            content = `Cash in hand`;
+            break;
+        case 'other-assets':
+            content = ``;
             break;
         default:
             content = 'Enter property details here...';
@@ -7091,16 +7243,16 @@ function addScheduleIIIPropertyToTable() {
     const newRow = document.createElement('tr');
     newRow.className = 'border border-white';
     newRow.innerHTML = `
-        <td class="border border-white p-2 text-center">${insertPosition + 1}</td>
+        <td class="border border-white p-2 bg-[#334155] text-white text-center">${insertPosition + 1}</td>
         <td class="border border-white p-3 text-justify">
-            <textarea class="w-full h-32 p-2 border border-gray-300 rounded text-black input bg-[#334155]"  rows="10"
+            <textarea class="w-full h-32 p-2 border border-gray-300 rounded text-white input bg-[#334155]"  rows="10"
                       onblur="updateScheduleIIIContent(this)">${content}</textarea>
         </td>
         <td class="border border-white p-3 text-center">
             <div class="flex items-center justify-center">
-                <span class="text-black font-semibold mr-1">Rs</span>
+                <span class="text-black font-semibold mr-1 text-white">Rs</span>
                 <input type="text" value="${amount}" 
-                       class="flex-1 p-2 border border-gray-300 rounded text-black text-center font-semibold" 
+                       class="flex-1 p-2 border border-gray-300 rounded  text-center text-white font-semibold input bg-[#334155] text-white" 
                        onblur="updateScheduleIIIAmount(this)"
                        placeholder="Enter amount">
             </div>
@@ -7144,6 +7296,9 @@ function addScheduleIIIPropertyToTable() {
     // Update Schedule-III amount in Schedule-I
     updateScheduleIIIAmountInScheduleI();
     
+    // Update HUF Property row with new calculation
+    updateScheduleIIIHUFPropertyRow();
+    
     console.log('Property added to Schedule-III table');
 }
 
@@ -7182,6 +7337,9 @@ function updateScheduleIIIAmount(input) {
     
     // Update Schedule-III amount in Schedule-I
     updateScheduleIIIAmountInScheduleI();
+    
+    // Update HUF Property row with new calculation
+    updateScheduleIIIHUFPropertyRow();
 }
 
 /**
@@ -7205,6 +7363,9 @@ function removeScheduleIIIPropertyRow(button) {
             
             // Update Schedule-III amount in Schedule-I
             updateScheduleIIIAmountInScheduleI();
+            
+            // Update HUF Property row with new calculation
+            updateScheduleIIIHUFPropertyRow();
         }
     }
 }
@@ -7238,6 +7399,18 @@ function calculateScheduleIIITotal() {
     // Format the total with currency symbol
     totalElement.textContent = `₹ ${total.toLocaleString('en-IN')}`;
     console.log('Schedule-III total calculated:', total);
+    
+    // Update Schedule-III amount in Schedule-I
+    updateScheduleIIIAmountInScheduleI();
+    
+    // Update HUF Property row with share calculation
+    updateScheduleIIIHUFPropertyRow();
+    
+    // Update Schedule-I total with Schedule-III
+    updateScheduleITotalWithScheduleIII();
+    
+    // Update net total
+    calculateNetTotal();
 }
 
 /**
@@ -7988,20 +8161,39 @@ function getScheduleIITotal() {
  * Calculates and updates the net total
  */
 function calculateNetTotal() {
-    const scheduleITotal = getScheduleITotalAmount();
+    console.log('Calculating net total');
     const scheduleIITotal = getScheduleIITotal();
     const netTotalElement = document.getElementById('net-total');
     
-    if (!netTotalElement) return;
+    console.log('Net total element found:', !!netTotalElement);
+    if (!netTotalElement) {
+        console.log('Net total element not found!');
+        return;
+    }
+    
+    // Get the current Schedule-I total (which already includes Schedule-III if enabled)
+    const scheduleITotalElement = document.getElementById('schedule-i-total');
+    let scheduleITotal = 0;
+    
+    if (scheduleITotalElement) {
+        const totalText = scheduleITotalElement.textContent;
+        scheduleITotal = parseFloat(totalText.replace(/[₹,]/g, '')) || 0;
+        console.log('Schedule-I total from element:', scheduleITotal);
+    }
     
     const toggle = document.getElementById('schedule-ii-less-toggle');
     let netTotal = scheduleITotal;
     
     if (toggle && toggle.checked) {
         netTotal = scheduleITotal - scheduleIITotal;
+        console.log('Net total calculated with Schedule-II less:', netTotal, 'Schedule-I:', scheduleITotal, 'Schedule-II:', scheduleIITotal);
+    } else {
+        console.log('Net total calculated without Schedule-II less:', netTotal);
     }
     
-    netTotalElement.textContent = `₹ ${netTotal.toLocaleString('en-IN')}`;
+    const formattedTotal = `₹ ${netTotal.toLocaleString('en-IN')}`;
+    netTotalElement.textContent = formattedTotal;
+    console.log('Net total set to:', formattedTotal);
 }
 
 /**
@@ -8099,13 +8291,43 @@ function updateScheduleITotalWithScheduleIII() {
     const scheduleIIIAmount = getScheduleIIITotal();
     const totalElement = document.getElementById('schedule-i-total');
     const toggle = document.getElementById('schedule-iii-huf-toggle');
+    const shareDropdown = document.getElementById('share-3');
     
     if (totalElement) {
         let combinedTotal = scheduleIAmount;
         
         // Only add Schedule-III amount if toggle is checked
         if (toggle && toggle.checked) {
-            combinedTotal += scheduleIIIAmount;
+            console.log('Toggle is checked, processing Schedule-III amount');
+            // Get the share value and calculate the portion
+            const shareValue = shareDropdown ? shareDropdown.value : '';
+            console.log('Share value:', shareValue);
+            console.log('Share dropdown options:', shareDropdown ? Array.from(shareDropdown.options).map(opt => opt.value) : 'N/A');
+            let scheduleIIIPortion = 0;
+            
+            if (shareValue && shareValue !== '') {
+                if (shareValue === 'Full' || shareValue === '') {
+                    // Full share - use complete amount
+                    scheduleIIIPortion = scheduleIIIAmount;
+                    console.log('Full share selected, using complete amount:', scheduleIIIPortion);
+                } else if (shareValue.includes('/')) {
+                    // Parse the fraction (e.g., "1/2" = 0.5, "1/3" = 0.333, etc.
+                    const [numerator, denominator] = shareValue.split('/');
+                    const fraction = parseFloat(numerator) / parseFloat(denominator);
+                    scheduleIIIPortion = scheduleIIIAmount * fraction;
+                    console.log('Schedule-III portion calculated:', scheduleIIIPortion, 'from total:', scheduleIIIAmount, 'with fraction:', fraction);
+                }
+            } else {
+                console.log('No share value, using 0');
+                // If no share is selected, use full amount as default
+                scheduleIIIPortion = scheduleIIIAmount;
+                console.log('Using full amount as default:', scheduleIIIPortion);
+            }
+            
+            combinedTotal += scheduleIIIPortion;
+            console.log('Combined total after adding Schedule-III portion:', combinedTotal);
+        } else {
+            console.log('Toggle is not checked, not adding Schedule-III amount');
         }
         
         totalElement.textContent = `₹ ${combinedTotal.toLocaleString('en-IN')}`;
@@ -8120,6 +8342,11 @@ function setupScheduleIIIHUFPropertyToggle() {
     console.log('Setting up Schedule-III HUF Property toggle functionality');
     
     const toggle = document.getElementById('schedule-iii-huf-toggle');
+    const shareDropdown = document.getElementById('share-3');
+    
+    console.log('Toggle element found:', !!toggle);
+    console.log('Share dropdown found:', !!shareDropdown);
+    
     if (toggle) {
         toggle.addEventListener('change', function() {
             console.log('Schedule-III HUF Property toggle changed:', this.checked);
@@ -8127,6 +8354,27 @@ function setupScheduleIIIHUFPropertyToggle() {
             updateScheduleITotalWithScheduleIII();
             calculateNetTotal();
         });
+    } else {
+        console.log('Toggle element not found');
+    }
+    
+    if (shareDropdown) {
+        console.log('Setting up share dropdown event listener');
+        shareDropdown.addEventListener('change', function() {
+            console.log('Share dropdown changed to:', this.value);
+            console.log('Triggering recalculation...');
+            updateScheduleITotalWithScheduleIII();
+            calculateNetTotal();
+        });
+        
+        // Also add input event for immediate response
+        shareDropdown.addEventListener('input', function() {
+            console.log('Share dropdown input event:', this.value);
+            updateScheduleITotalWithScheduleIII();
+            calculateNetTotal();
+        });
+    } else {
+        console.log('Share dropdown not found');
     }
 }
 
@@ -8134,18 +8382,174 @@ function setupScheduleIIIHUFPropertyToggle() {
  * Updates the Schedule-III HUF Property row visibility and amount
  */
 function updateScheduleIIIHUFPropertyRow() {
+    console.log('Updating HUF Property row...');
     const toggle = document.getElementById('schedule-iii-huf-toggle');
     const hufRow = document.getElementById('schedule-iii-huf-row');
     const hufAmount = document.getElementById('schedule-iii-amount-in-schedule-i');
+    const shareDropdown = document.getElementById('share-3');
     
-    if (!toggle || !hufRow || !hufAmount) return;
+    console.log('HUF elements found:', {
+        toggle: !!toggle,
+        hufRow: !!hufRow,
+        hufAmount: !!hufAmount,
+        shareDropdown: !!shareDropdown
+    });
+    
+    if (!toggle || !hufRow || !hufAmount) {
+        console.log('Missing HUF elements, cannot update');
+        return;
+    }
     
     // Always show the row since checkbox is now in the row
     hufRow.classList.remove('hidden');
     
-    // Get Schedule-III total and update amount
+    // Get Schedule-III total and calculate portion based on share
     const scheduleIIITotal = getScheduleIIITotal();
-    hufAmount.textContent = `₹ ${scheduleIIITotal.toLocaleString('en-IN')}`;
+    const shareValue = shareDropdown ? shareDropdown.value : '';
+    let displayAmount = scheduleIIITotal; // Default to full amount
+    
+    console.log('Schedule-III total:', scheduleIIITotal, 'Share value:', shareValue);
+    
+    if (shareValue && shareValue !== '') {
+        if (shareValue === 'Full' || shareValue === '') {
+            // Full share - use complete amount
+            displayAmount = scheduleIIITotal;
+            console.log('Full share selected');
+        } else if (shareValue.includes('/')) {
+            // Parse the fraction (e.g., "1/2" = 0.5, "1/3" = 0.333, etc.)
+            const [numerator, denominator] = shareValue.split('/');
+            const fraction = parseFloat(numerator) / parseFloat(denominator);
+            displayAmount = scheduleIIITotal * fraction;
+            console.log('Fraction calculation:', numerator, '/', denominator, '=', fraction, 'Result:', displayAmount);
+        }
+    } else {
+        console.log('No share selected, using full amount');
+    }
+    
+    hufAmount.textContent = `₹ ${displayAmount.toLocaleString('en-IN')}`;
+    console.log('HUF Property amount updated to:', displayAmount);
+}
+
+/**
+ * Sets up unique property input functionality
+ */
+function setupUniquePropertyInput() {
+    
+    
+    const valuationSelect = document.getElementById('valuation-of-property');
+    const uniqueInputContainer = document.getElementById('unique-input-container');
+    const uniqueInput = document.getElementById('unique-property-input');
+    
+    if (valuationSelect && uniqueInputContainer && uniqueInput) {
+        valuationSelect.addEventListener('change', function() {
+            console.log('Valuation property changed to:', this.value);
+            
+            if (this.value === 'UNIQUE') {
+                // Show the unique input field
+                uniqueInputContainer.classList.remove('hidden');
+                uniqueInput.focus(); // Focus on the input for better UX
+            } else {
+                // Hide the unique input field and clear its value
+                uniqueInputContainer.classList.add('hidden');
+                uniqueInput.value = '';
+            }
+        });
+    }
+    
+    // Setup unique state input functionality for all schedules
+    setupUniqueStateInput('state-of-maharashtra', 'unique-state-input-container', 'unique-state-input');
+    setupUniqueStateInput('schedule-ii-state-of-maharashtra', 'schedule-ii-unique-state-input-container', 'schedule-ii-unique-state-input');
+    setupUniqueStateInput('schedule-iii-state-of-maharashtra', 'schedule-iii-unique-state-input-container', 'schedule-iii-unique-state-input');
+}
+
+/**
+ * Sets up unique state input functionality for a specific schedule
+ */
+function setupUniqueStateInput(selectId, containerId, inputId) {
+    const stateSelect = document.getElementById(selectId);
+    const uniqueInputContainer = document.getElementById(containerId);
+    const uniqueInput = document.getElementById(inputId);
+    
+    if (stateSelect && uniqueInputContainer && uniqueInput) {
+        stateSelect.addEventListener('change', function() {
+            console.log(`State select ${selectId} changed to:`, this.value);
+            
+            if (this.value === 'UNIQUE') {
+                // Show the unique state input field
+                uniqueInputContainer.classList.remove('hidden');
+                uniqueInput.focus(); // Focus on the input for better UX
+            } else {
+                // Hide the unique state input field and clear its value
+                uniqueInputContainer.classList.add('hidden');
+                uniqueInput.value = '';
+            }
+        });
+    }
+}
+
+/**
+ * Sets up Flat/Room options functionality
+ */
+function setupFlatRoomOptions() {
+    console.log('Setting up Flat/Room options functionality');
+    
+    const singleOwnerBtn = document.getElementById('flat-room-single-owner-btn');
+    const percentageOwnerBtn = document.getElementById('flat-room-percentage-owner-btn');
+    const cancelBtn = document.getElementById('cancel-flat-room-options');
+    
+    if (singleOwnerBtn) {
+        singleOwnerBtn.addEventListener('click', function() {
+            hideFlatRoomOptionsModal();
+            // Check if we're in Schedule-III context
+            const scheduleIIISection = document.getElementById('schedule-iii-section');
+            if (scheduleIIISection && !scheduleIIISection.classList.contains('hidden')) {
+                showScheduleIIIContent('flat-room-single-owner');
+            } else {
+                showPropertyContent('flat-room-single-owner');
+            }
+        });
+    }
+    
+    if (percentageOwnerBtn) {
+        percentageOwnerBtn.addEventListener('click', function() {
+            hideFlatRoomOptionsModal();
+            // Check if we're in Schedule-III context
+            const scheduleIIISection = document.getElementById('schedule-iii-section');
+            if (scheduleIIISection && !scheduleIIISection.classList.contains('hidden')) {
+                showScheduleIIIContent('flat-room-percentage-owner');
+            } else {
+                showPropertyContent('flat-room-percentage-owner');
+            }
+        });
+    }
+    
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', function() {
+            hideFlatRoomOptionsModal();
+        });
+    }
+}
+
+/**
+ * Shows the Flat/Room options modal
+ */
+function showFlatRoomOptions() {
+    const modal = document.getElementById('flat-room-options-modal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        console.log('Flat/Room options modal shown');
+    }
+}
+
+/**
+ * Hides the Flat/Room options modal
+ */
+function hideFlatRoomOptionsModal() {
+    const modal = document.getElementById('flat-room-options-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+        console.log('Flat/Room options modal hidden');
+    }
 }
 
 /**
@@ -8196,3 +8600,90 @@ window.addScheduleIIIPropertyToTable = addScheduleIIIPropertyToTable;
 window.updateScheduleIIIContent = updateScheduleIIIContent;
 window.updateScheduleIIIAmount = updateScheduleIIIAmount;
 window.removeScheduleIIIPropertyRow = removeScheduleIIIPropertyRow;
+
+// Test function for debugging
+window.testShareCalculation = function() {
+    console.log('Testing share calculation...');
+    const toggle = document.getElementById('schedule-iii-huf-toggle');
+    const shareDropdown = document.getElementById('share-3');
+    const scheduleIIITotal = getScheduleIIITotal();
+    
+    console.log('Toggle found:', !!toggle);
+    console.log('Toggle checked:', toggle ? toggle.checked : 'N/A');
+    console.log('Share dropdown found:', !!shareDropdown);
+    console.log('Share value:', shareDropdown ? shareDropdown.value : 'N/A');
+    console.log('Schedule-III total:', scheduleIIITotal);
+    
+    if (toggle && toggle.checked && shareDropdown && shareDropdown.value) {
+        updateScheduleITotalWithScheduleIII();
+        calculateNetTotal();
+        console.log('Manual calculation triggered');
+    } else {
+        console.log('Cannot trigger calculation - missing elements or toggle not checked');
+    }
+};
+
+// Manual trigger for testing
+window.manualShareTest = function() {
+    console.log('Manual share test triggered');
+    updateScheduleITotalWithScheduleIII();
+    calculateNetTotal();
+};
+
+// Test function to manually set share value
+window.testShareValue = function(value) {
+    const shareDropdown = document.getElementById('share-3');
+    if (shareDropdown) {
+        shareDropdown.value = value;
+        console.log('Share value set to:', value);
+        updateScheduleITotalWithScheduleIII();
+        calculateNetTotal();
+    } else {
+        console.log('Share dropdown not found');
+    }
+};
+
+// Force recalculation function
+window.forceRecalculation = function() {
+    console.log('Forcing recalculation...');
+    const shareDropdown = document.getElementById('share-3');
+    const toggle = document.getElementById('schedule-iii-huf-toggle');
+    
+    console.log('Current share value:', shareDropdown ? shareDropdown.value : 'N/A');
+    console.log('Toggle checked:', toggle ? toggle.checked : 'N/A');
+    
+    updateScheduleITotalWithScheduleIII();
+    calculateNetTotal();
+};
+
+// Test share calculation directly
+window.testShareCalculationDirect = function() {
+    const scheduleIIITotal = getScheduleIIITotal();
+    const shareDropdown = document.getElementById('share-3');
+    const shareValue = shareDropdown ? shareDropdown.value : '';
+    
+    console.log('=== DIRECT SHARE CALCULATION TEST ===');
+    console.log('Schedule-III Total:', scheduleIIITotal);
+    console.log('Share Value:', shareValue);
+    
+    if (shareValue && shareValue !== '') {
+        if (shareValue === 'Full' || shareValue === '') {
+            console.log('Full share - using complete amount:', scheduleIIITotal);
+        } else if (shareValue.includes('/')) {
+            const [numerator, denominator] = shareValue.split('/');
+            const fraction = parseFloat(numerator) / parseFloat(denominator);
+            const calculatedAmount = scheduleIIITotal * fraction;
+            console.log('Fraction calculation:', numerator, '/', denominator, '=', fraction);
+            console.log('Calculated amount:', calculatedAmount);
+        }
+    } else {
+        console.log('No share selected - using full amount:', scheduleIIITotal);
+    }
+    console.log('=== END TEST ===');
+};
+
+// Manual HUF Property row update
+window.updateHUFPropertyRow = function() {
+    console.log('Manually updating HUF Property row...');
+    updateScheduleIIIHUFPropertyRow();
+};

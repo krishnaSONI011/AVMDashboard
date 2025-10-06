@@ -4,33 +4,48 @@
             <div>
                 <h1 class="text-center text-2xl">SCHEDULE-I</h1>
             <h2 class="text-center text-xl mt-3">SCHEDULE OF ASSETS</h2>
-            <h3 class="text-center text-lg mt-3">VALUATION OF 
-                <select id="valuation-of-property" class="input my-2 bg-[#334155] p-2 rounded">
-                    <option value="" >Select Valuation of Property</option>
-                    <option value="MOVABLE">MOVABLE</option>
-                    <option value="IMMOVABLE">IMMOVABLE</option>
-                    <option value="MOVABLE AND IMMOVABLE">MOVABLE AND IMMOVABLE</option>
-                </select>
+                <h3 class="text-center text-lg mt-3">VALUATION OF 
+                    <select id="valuation-of-property" class="input my-2 bg-[#334155] p-2 rounded">
+                        <option value="" >SELECT-MOVABLE OR IMMOVABLE OR BOTH</option>
+                        <option value="MOVABLE">MOVABLE</option>
+                        <option value="IMMOVABLE">IMMOVABLE</option>
+                        <option value="MOVABLE AND IMMOVABLE">MOVABLE AND IMMOVABLE</option>
+                        
+                    </select>
+                    <div id="unique-input-container" class="hidden mt-2">
+                        <input type="text" id="unique-property-input" 
+                               placeholder="Enter unique property description" 
+                               class="input w-full bg-[#334155] p-2 rounded text-white">
+                    </div>
 
             </select>  PROPERTY OF THE DECEASED
             </h3>
             </div>
             
             <table class="w-full border-2 border-white">
-                <h1 class="text-center text-lg mt-3 bg-[#012f66] py-2 uppercase">IN THE STATE OF 
-                    <select id="state-of-maharashtra" class="input my-2 bg-[#334155] p-2 rounded">
-                        <option value="" > MAHARASHTRA</option>
-                        <option value="State of Maharashtra">GUJARAT</option>
-                        <option value="State of Maharashtra and elsewhere in India.">KARNATAKA</option>
-                        <option value="State of Maharashtra and elsewhere in India.">GOA</option>
-                        <option value="State of Maharashtra and elsewhere in India.">DELHI</option>
-                    </select>
+                <div class="flex items-center justify-center w-full">
+                    <h1 class="text-center text-lg mt-3 bg-[#012f66] py-2 uppercase w-full flex items-center justify-center gap-5">IN THE STATE OF 
+                        <select id="state-of-maharashtra" class="input my-2 bg-[#334155] p-2 rounded">
+                            <option value="" > MAHARASHTRA</option>
+                            <option value="State of Maharashtra">GUJARAT</option>
+                            <option value="State of Maharashtra and elsewhere in India.">KARNATAKA</option>
+                            <option value="State of Maharashtra and elsewhere in India.">GOA</option>
+                            <option value="State of Maharashtra and elsewhere in India.">DELHI</option>
+                            <option value="UNIQUE">UNIQUE</option>
+                        </select>
+                        <div id="unique-state-input-container" class="hidden mt-2">
+                            <input type="text" id="unique-state-input" 
+                                   placeholder="Enter unique state name" 
+                                   class="input w-full bg-[#334155] p-2 rounded text-white">
+                        </div>
+                </div>
+               
 
                 </select></h1>
                 <thead>
                     <tr class="bg-[#012f66] text-white">
                         <th class="border border-white p-3 text-center w-[10%] uppercase">Sr. No.</th>
-                        <th class="border border-white p-3 text-center w-[50%] uppercase">Perticulars</th>
+                        <th class="border border-white p-3 text-center w-[50%] uppercase">PARTICULARS</th>
                         <th class="border border-white p-3 text-center w-[25%] uppercase">Amount</th>
                         <th class="border border-white p-3 text-center w-[15%] uppercase">Action</th>
                     </tr>
@@ -44,9 +59,19 @@
                         <td class="border border-white p-3 text-right">
                             <label class="flex items-center justify-end gap-2">
                                 <input type="checkbox" id="schedule-iii-huf-toggle" class="w-4 h-4">
-                                <span>share in HUF Property</span>
+                                <span><select id="share-3" class=" border border-gray-300 input rounded p-2 mb-4" data-unique="true">
+                                    <option value="">Full </option>
+                                    <option value="1/2">half</option>
+                                    <option value="1/3">1/3<sup>rd</sup></option>
+                                    <option value="1/4">1/4<sup>th</sup></option>
+                                    <option value="1/5">1/5<sup>th</sup></option>
+                                    <option value="1/6">1/6<sup>th</sup></option>
+                                    <option value="1/7">1/7<sup>th</sup></option>
+                                    <option value="1/8">1/8<sup>th</sup></option>
+                                   
+                                  </select> Share in HUF Property</span>
                             </label>
-                        </td>
+                        </td>  
                         <td class="border border-white p-3 text-center" id="schedule-iii-amount-in-schedule-i">₹ 0</td>
                         <td class="border border-white p-3 text-center">-</td>
                     </tr>
@@ -84,48 +109,67 @@
                     </div>
                     <div class="flex flex-col gap-3 w-64">
                         <input type="text" id="property-amount" placeholder="Enter Amount (Rs)" class="border p-2 border-white rounded text-black w-full">
-                        <div class="flex gap-2">
+                        <div class="flex gap-2 w-full">
                             
-                            <button type="button" id="add-property-btn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">Add to Table</button>
+                            <button type="button" id="add-property-btn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 w-full rounded">Add to Table</button>
                         </div>
                         <button type="button" id="change-state-btn" class="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded">Change State</button>
                          <div>
-                             <input type="number" id="row-position-input" placeholder="Position (or leave empty for end)" class="border p-2 border-white rounded text-black flex-1" min="1">
+                             <input type="number" id="row-position-input" placeholder="Position (or leave empty for end)" class="w-full border p-2 border-white rounded text-black flex-1"  min="1">
                              <div id="position-info" class="text-xs text-gray-400 mt-1"></div>
                          </div>
+                         <button type="button" id="cancel-property-btn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">Cancel</button>
                     </div>
                     
                 </div>
             </div>
-
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-4">
+            <div class="my-5 mx-5 font-extrabold text-2xl text-center">
+                SELECT FOLLOWING ASSETS AS APPLICALE TO CASE :-
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-4 p-2">
+                
                 <button type="button" id="flat-room-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm uppercase font-medium transition-colors">FLAT/ROOM</button>
-                <button type="button" id="tenanted-room-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Tenanted Room</button>
-                <button type="button" id="plot-of-land-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Plot of land</button>
-                <button type="button" id="partnership-property-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Partnership Property</button>
-                <button type="button" id="partnership-business-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Partnership Business</button>
-                <button type="button" id="shop-gala-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Shop / GALA</button>
                 <button type="button" id="saving-account-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Saving Account</button>
-                <button type="button" id="current-account-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Current Account</button>
+                <button type="button" id="shares-stocks-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Shares</button>
+                <button type="button" id="tenanted-room-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Tenanted Room</button>
                 <button type="button" id="fixed-deposit-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Fixed Deposit</button>
-                <!-- <button type="button" id="recurring-deposit-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Recurring Deposit</button> -->
-                <button type="button" id="ppf-account-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">PPF Account</button>
-                <button type="button" id="lic-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">LIC</button>
-                
-                
-                
-                
-                
                 <button type="button" id="demat-account-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Demat Account</button>
+                <button type="button" id="ppf-account-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">PPF Account</button>
+                
                 <button type="button" id="mutual-funds-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Mutual Funds</button>
-                <button type="button" id="shares-stocks-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Shares/Stocks</button>
-                <button type="button" id="bungalow-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">BUNGALOW</button>
                 <button type="button" id="bonds-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">BONDS</button>
+                <button type="button" id="plot-of-land-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Plot of land</button>
+                <button type="button" id="shop-gala-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Shop / GALA</button>
+                <button type="button" id="gold-jewellery-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium transition-colors">Gold / Jewellery</button>
+                <button type="button" id="lic-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors"> LIC/INSURANCE</button>
+                <button type="button" id="bungalow-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">BUNGALOW</button>
+                <button type="button" id="current-account-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Current Account</button>
+                <button type="button" id="partnership-business-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Partnership Business</button>
+                <button type="button" id="partnership-property-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Partnership Property</button>
+                <button type="button" id="vehicle-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">VEHICLE</button>
+                <button type="button" id="loan-btn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">LOAN & ADVANCES</button>
+                <button type="button" id="cash-btn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">CASH</button>
+                
+                
+                <!-- <button type="button" id="recurring-deposit-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Recurring Deposit</button> -->
+                
+                
+                
+                
+                
+                
+                
+                
+               
+                
+                
+                <button type="button" id="furniture-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium transition-colors">FURNITURE </button>
                
                 <button type="button" id="utensils-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium transition-colors">UTENSILS</button>
-                <button type="button" id="gold-jewellery-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium transition-colors">Gold / Jewellery</button>
-                <button type="button" id="furniture-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium transition-colors">FURNITURE & FIXTURES</button>
-                 <button type="button" id="loan-btn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">LOAN</button>
+                <button type="button" id="other-assets-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium transition-colors">OTHER ASSETS</button>
+                
+                
+                 
                    
                 
             </div>
@@ -133,7 +177,7 @@
 
 
         <!-- SCHEDULE-II -->
-        <div id="schedule-ii-section" class="border-2 border-white my-3 hidden">
+        <div id="schedule-ii-section" class="mt-52 border-2 border-white my-3 hidden">
             <div>
                 <h1 class="text-center text-2xl">SCHEDULE-II</h1>
             <h2 class="text-center text-xl mt-3">SCHEDULE OF LIABILITY</h2>
@@ -148,7 +192,13 @@
                         <option value="State of Maharashtra and elsewhere in India.">KARNATAKA</option>
                         <option value="State of Maharashtra and elsewhere in India.">GOA</option>
                         <option value="State of Maharashtra and elsewhere in India.">DELHI</option>
+                        <option value="UNIQUE">UNIQUE</option>
                     </select>
+                    <div id="schedule-ii-unique-state-input-container" class="hidden mt-2">
+                        <input type="text" id="schedule-ii-unique-state-input" 
+                               placeholder="Enter unique state name" 
+                               class="input w-full bg-[#334155] p-2 rounded text-white">
+                    </div>
 
                 </select></h1>
                 <thead>
@@ -180,19 +230,22 @@
                     </div>
                     <div class="flex flex-col gap-3 w-64">
                         <input type="text" id="schedule-ii-amount" placeholder="Enter Amount (Rs)" class="border p-2 border-white rounded text-black w-full">
-                        <div class="flex gap-2">
-                            <button type="button" id="add-schedule-ii-property-btn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">Add to Table</button>
+                        <div class="flex gap-2 w-full">
+                            <button type="button" id="add-schedule-ii-property-btn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full">Add to Table</button>
                         </div>
                         <button type="button" id="change-schedule-ii-state-btn" class="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded">Change State</button>
                         <div>
-                            <input type="number" id="schedule-ii-row-position-input" placeholder="Position (or leave empty for end)" class="border p-2 border-white rounded text-black flex-1" min="1">
+                            <input type="number" id="schedule-ii-row-position-input" placeholder="Position (or leave empty for end)" class="w-full border p-2 border-white rounded text-black flex-1" min="1">
                             <div id="schedule-ii-position-info" class="text-xs text-gray-400 mt-1"></div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="my-5 mx-5 font-extrabold text-2xl text-center">
+                SELECT FOLLOWING ASSETS AS APPLICALE TO CASE :-
+            </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-4">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-4 p-2">
                 <button type="button" id="schedule-ii-funeral-expenses-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm uppercase font-medium transition-colors">FUNERAL EXPENSES</button>
                 <button type="button" id="schedule-ii-loan-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Loan</button>
                 
@@ -201,10 +254,18 @@
         </div>
 
         <!-- SCHEDULE-III -->
-        <div id="schedule-iii-section" class="border-2 border-white my-3 hidden">
+        <div id="schedule-iii-section" class="mt-52 border-2 border-white my-3 hidden">
             <div>
-                <h1 class="text-center text-2xl">SCHEDULE-III</h1>
-            <h2 class="text-center text-xl mt-3">VALUATION OF MOVABLE AND IMMOVABLE H.U.F.PROPERTY OF THE DECEASED</h2>
+                <h1 class="text-center font-bold text-3xl mt-2">SCHEDULE-III</h1>
+            <h2 class="text-center text-xl mt-3">VALUATION Of
+                <select id="valuation-of-property" class="input my-2 bg-[#334155] p-2 rounded">
+                    <option value="" >SELECT-MOVABLE OR IMMOVABLE OR BOTH</option>
+                    <option value="MOVABLE">MOVABLE</option>
+                    <option value="IMMOVABLE">IMMOVABLE</option>
+                    <option value="MOVABLE AND IMMOVABLE">MOVABLE AND IMMOVABLE</option>
+                    
+                </select>
+                 H.U.F.PROPERTY OF THE DECEASED</h2>
             
             </div>
             
@@ -216,7 +277,13 @@
                         <option value="State of Maharashtra and elsewhere in India.">KARNATAKA</option>
                         <option value="State of Maharashtra and elsewhere in India.">GOA</option>
                         <option value="State of Maharashtra and elsewhere in India.">DELHI</option>
+                        <option value="UNIQUE">UNIQUE</option>
                     </select>
+                    <div id="schedule-iii-unique-state-input-container" class="hidden mt-2">
+                        <input type="text" id="schedule-iii-unique-state-input" 
+                               placeholder="Enter unique state name" 
+                               class="input w-full bg-[#334155] p-2 rounded text-white">
+                    </div>
 
                 </select></h1>
                 <thead>
@@ -248,39 +315,44 @@
                     </div>
                     <div class="flex flex-col gap-3 w-64">
                         <input type="text" id="schedule-iii-amount" placeholder="Enter Amount (Rs)" class="border p-2 border-white rounded text-black w-full">
-                        <div class="flex gap-2">
-                            <button type="button" id="add-schedule-iii-property-btn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">Add to Table</button>
+                        <div class="flex gap-2 w-full">
+                            <button type="button" id="add-schedule-iii-property-btn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full">Add to Table</button>
                         </div>
                         <button type="button" id="change-schedule-iii-state-btn" class="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded">Change State</button>
                         <div>
-                            <input type="number" id="schedule-iii-row-position-input" placeholder="Position (or leave empty for end)" class="border p-2 border-white rounded text-black flex-1" min="1">
+                            <input type="number" id="schedule-iii-row-position-input" placeholder="Position (or leave empty for end)" class="w-full border p-2 border-white rounded text-black flex-1" min="1">
                             <div id="schedule-iii-position-info" class="text-xs text-gray-400 mt-1"></div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-4">
+            <div class="my-5 mx-5 font-extrabold text-2xl text-center">
+                SELECT FOLLOWING ASSETS AS APPLICALE TO CASE :-
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-4 p-2">
                 <button type="button" id="schedule-iii-flat-room-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm uppercase font-medium transition-colors">FLAT/ROOM</button>
-                <button type="button" id="schedule-iii-tenanted-room-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Tenanted Room</button>
-                <button type="button" id="schedule-iii-plot-of-land-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Plot of land</button>
-                <button type="button" id="schedule-iii-partnership-property-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Partnership Property</button>
-                <button type="button" id="schedule-iii-partnership-business-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Partnership Business</button>
-                <button type="button" id="schedule-iii-shop-gala-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Shop / GALA</button>
                 <button type="button" id="schedule-iii-saving-account-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Saving Account</button>
-                <button type="button" id="schedule-iii-current-account-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Current Account</button>
+                <button type="button" id="schedule-iii-shares-stocks-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Shares</button>
+                <button type="button" id="schedule-iii-tenanted-room-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Tenanted Room</button>
                 <button type="button" id="schedule-iii-fixed-deposit-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Fixed Deposit</button>
-                <button type="button" id="schedule-iii-ppf-account-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">PPF Account</button>
-                <button type="button" id="schedule-iii-lic-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">LIC</button>
                 <button type="button" id="schedule-iii-demat-account-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Demat Account</button>
+                <button type="button" id="schedule-iii-ppf-account-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">PPF Account</button>
                 <button type="button" id="schedule-iii-mutual-funds-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Mutual Funds</button>
-                <button type="button" id="schedule-iii-shares-stocks-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Shares/Stocks</button>
-                <button type="button" id="schedule-iii-bungalow-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">BUNGALOW</button>
                 <button type="button" id="schedule-iii-bonds-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">BONDS</button>
-                <button type="button" id="schedule-iii-utensils-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium transition-colors">UTENSILS</button>
+                <button type="button" id="schedule-iii-plot-of-land-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Plot of land</button>
+                <button type="button" id="schedule-iii-shop-gala-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Shop / GALA</button>
                 <button type="button" id="schedule-iii-gold-jewellery-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium transition-colors">Gold / Jewellery</button>
-                <button type="button" id="schedule-iii-furniture-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium transition-colors">FURNITURE & FIXTURES</button>
-                <button type="button" id="schedule-iii-loan-btn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">LOAN</button>
+                <button type="button" id="schedule-iii-lic-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">LIC/INSURANCE</button>
+                <button type="button" id="schedule-iii-bungalow-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">BUNGALOW</button>
+                <button type="button" id="schedule-iii-current-account-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Current Account</button>
+                <button type="button" id="schedule-iii-partnership-business-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Partnership Business</button>
+                <button type="button" id="schedule-iii-partnership-property-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">Partnership Property</button>
+                <button type="button" id="schedule-iii-vehicle-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium uppercase transition-colors">VEHICLE</button>
+                <button type="button" id="schedule-iii-loan-btn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">LOAN & ADVANCES</button>
+                <button type="button" id="schedule-iii-cash-btn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">CASH</button>
+                <button type="button" id="schedule-iii-furniture-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium transition-colors">FURNITURE</button>
+                <button type="button" id="schedule-iii-utensils-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium transition-colors">UTENSILS</button>
+                <button type="button" id="schedule-iii-other-assets-btn" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-sm font-medium transition-colors">OTHER ASSETS</button>
             </div>
         </div>
     </div>
@@ -325,10 +397,10 @@
                 <button type="button" id="tenanted-room-with-rent" class="w-full bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-center">
                     Single  Standing
                 </button>
-                <button type="button" id="tenanted-room-without-rent" class="w-full bg-green-600 hover:bg-green-700 text-white p-3 rounded text-center">
+                <button type="button" id="tenanted-room-without-rent" class="w-full bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-center">
                     Joint Standing
                 </button>
-                <button type="button" id="tenanted-room-without-rent" class="w-full bg-green-600 hover:bg-green-700 text-white p-3 rounded text-center">
+                <button type="button" id="tenanted-room-without-rent" class="w-full bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-center">
                     % In Share Standing
                 </button>
             </div>
@@ -348,12 +420,32 @@
                 <button type="button" id="plot-of-land-option1" class="w-full bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-center">
                     PLOT OF LAND
                 </button>
-                <button type="button" id="plot-of-land-option2" class="w-full bg-green-600 hover:bg-green-700 text-white p-3 rounded text-center">
-                    SHARE IN PLOT OF LAND
+                <button type="button" id="plot-of-land-option2" class="w-full bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-center">
+                    IN % OWNER
                 </button>
             </div>
             <div class="flex justify-end mt-4">
                 <button type="button" id="cancel-plot-of-land-options" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Flat/Room Options Modal -->
+<div id="flat-room-options-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <div class="flex items-center justify-center min-h-screen">
+        <div class="bg-white rounded-lg p-6 w-96">
+            <h3 class="text-lg font-semibold mb-4">Select Flat/Room Ownership Type</h3>
+            <div class="space-y-3">
+                <button type="button" id="flat-room-single-owner-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-center">
+                    SINGLE-OWNER
+                </button>
+                <button type="button" id="flat-room-percentage-owner-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white p-3 rounded text-center">
+                    IN % OWNER
+                </button>
+            </div>
+            <div class="flex justify-end mt-4">
+                <button type="button" id="cancel-flat-room-options" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">Cancel</button>
             </div>
         </div>
     </div>
