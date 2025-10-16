@@ -1,3 +1,82 @@
+// Global year variable
+const currentYear = new Date().getFullYear();
+
+/**
+ * Initialize year inputs - auto-populate with current year
+ */
+function initializeYearInputs() {
+    const yearInputs = document.querySelectorAll('.year');
+    yearInputs.forEach(input => {
+        if (input.value === '' || input.value === null) {
+            input.value = currentYear;
+        }
+    });
+}
+
+/**
+ * Setup year input functionality for dynamically added elements
+ */
+function setupYearInputs() {
+    // Initialize existing year inputs
+    initializeYearInputs();
+    
+    // Watch for new year inputs added dynamically
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            mutation.addedNodes.forEach((node) => {
+                if (node.nodeType === 1) { // Element node
+                    // Check if the added node has year class
+                    if (node.classList && node.classList.contains('year')) {
+                        if (node.value === '' || node.value === null) {
+                            node.value = currentYear;
+                        }
+                    }
+                    // Check for year inputs within the added node
+                    const yearInputs = node.querySelectorAll ? node.querySelectorAll('.year') : [];
+                    yearInputs.forEach(input => {
+                        if (input.value === '' || input.value === null) {
+                            input.value = currentYear;
+                        }
+                    });
+                }
+            });
+        });
+    });
+    
+    // Start observing
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+}
+
+/**
+ * Create a year input element with auto-populated current year
+ * @param {string} id - ID for the input element
+ * @param {string} placeholder - Placeholder text
+ * @param {string} additionalClasses - Additional CSS classes
+ * @returns {HTMLInputElement} - The created input element
+ */
+function createYearInput(id = '', placeholder = 'Year', additionalClasses = '') {
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = `year ${additionalClasses}`;
+    input.placeholder = placeholder;
+    input.value = currentYear;
+    
+    if (id) {
+        input.id = id;
+    }
+    
+    return input;
+}
+
+// Make functions globally available
+window.currentYear = currentYear;
+window.initializeYearInputs = initializeYearInputs;
+window.setupYearInputs = setupYearInputs;
+window.createYearInput = createYearInput;
+
 // Initialize page elements
 const page_1 = document.getElementById('page1');
 const page_2 = document.getElementById('page2');
@@ -8,6 +87,11 @@ const page_6 = document.getElementById('page6');
 const page_7 = document.getElementById('page7');
 const page_8 = document.getElementById('page8')
 const page_9 = document.getElementById('page9')
+const page_10 = document.getElementById('page10')
+const page_11 = document.getElementById('page11')
+const page_12 = document.getElementById('page12')
+const page_13 = document.getElementById('page13')
+const page_14 = document.getElementById('page14')
 async function getThePage() {
     const res = await fetch('./page1.html');
     const res1 = await fetch('./page2.html')
@@ -18,7 +102,11 @@ async function getThePage() {
     const res6 = await fetch('./page7.html')
      const res7 = await fetch('./page8.html')
      const res8 = await fetch('./page9.html')
-    
+     const res9 = await fetch('./page10.html')
+     const res10 = await fetch('./page11.html')
+     const res11 = await fetch('./page12.html')
+     const res12 = await fetch('./page13.html')
+     const res14 = await fetch('./page14.html')
     const html = await res.text();
     const html1 = await res1.text();
     const html2 = await res2.text();
@@ -28,8 +116,13 @@ async function getThePage() {
     const html6 = await res6.text();
      const html7 = await res7.text();
      const html8 = await res8.text();
+     const html9 = await res9.text();
+     const html10 = await res10.text();
+     const html11 = await res11.text();
+     const html12 = await res12.text();
+     const html14 = await res14.text();
     page_1.innerHTML = html;
-    
+    page_13.innerHTML = html12;
     
     
     page_2.innerHTML = html1
@@ -43,6 +136,11 @@ async function getThePage() {
     page_7.innerHTML = html6
     page_8.innerHTML = html7
     page_9.innerHTML = html8
+    page_10.innerHTML = html9
+    page_11.innerHTML = html10
+    page_12.innerHTML = html11
+    page_14.innerHTML = html14
+    
     // Buttons are now directly in the HTML, no need to add them dynamically
     
     setupPage1Events();
@@ -54,6 +152,9 @@ async function getThePage() {
     // Set up page8 events after all other pages are set up
     setupPage8Events();
     setupPage9Events();
+    
+    // Setup year inputs functionality
+    setupYearInputs();
    
     setupDrawnByMeModal(); // Setup immediately
 
@@ -5946,6 +6047,7 @@ function setupPage9Events() {
     const plotOfLandBtn = document.getElementById('plot-of-land-btn');
     const partnershipPropertyBtn = document.getElementById('partnership-property-btn');
     const partnershipBusinessBtn = document.getElementById('partnership-business-btn');
+    const postOfficeAccountBtn = document.getElementById('post-office-account-btn');
     const propertyContentSection = document.getElementById('property-content-section');
     const addPropertyBtn = document.getElementById('add-property-btn');
     const propertyTableBody = document.getElementById('property-table-body');
@@ -5977,6 +6079,12 @@ function setupPage9Events() {
     if (partnershipBusinessBtn && propertyContentSection) {
         partnershipBusinessBtn.addEventListener('click', function() {
             showPropertyContent('partnership-business');
+        });
+    }
+    
+    if (postOfficeAccountBtn && propertyContentSection) {
+        postOfficeAccountBtn.addEventListener('click', function() {
+            showPropertyContent('post-office-account');
         });
     }
     
@@ -6661,6 +6769,8 @@ Standing in the name of deceased abovenamed & ____________`;
         content = `____ (NO. OF SHARES) shares of ________ (NAME OF COMPANY) Ltd, having its office at __________________________(FULL ADDRESS WITH PINCODE), bearing Folio No. _____, Certificate No. ______, Dist. Nos. ____ to ____, standing in the name of the deceased abovenamed & _____________________`;
     } else if (propertyType === 'demat-account') {
         content = `Shares lying in Demat Account No._________ Client ID No. _________, DP ID No._____________ with ____________ (NAME OF BANK), having its branch at ______________________ (FULL ADDRESS WITH PINCODE OF BANK), standing in the name of the deceased abovenamed.`;
+    } else if (propertyType === 'post-office-account') {
+        content = `Amount lying in _______ Account No. ___ with Post Master, ___ Post Office, _______________(FULL ADDRESS WITH PINCODE OF POST OFFICE), standing in the name of the deceased abovenamed.`;
     } else if (propertyType === 'joint-demat-account') {
         content = `Shares lying in Demat Account No._________ Client ID No. _________, DP ID No._____________ with ____________ (NAME OF BANK), having its branch at ______________________ (FULL ADDRESS WITH PINCODE OF BANK), Standing in the name of deceased abovenamed & ____________`;
     } else if (propertyType === 'lic') {
@@ -7195,6 +7305,9 @@ Engine No. ______________, standing in the name of the deceased abovenamed.`;
             break;
         case 'other-assets':
             content = ``;
+            break;
+        case 'post-office-account':
+            content = `Amount lying in _______ Account No. ___ with Post Master, ___ Post Office, _______________(FULL ADDRESS WITH PINCODE OF POST OFFICE), standing in the name of the deceased abovenamed.`;
             break;
         default:
             content = 'Enter property details here...';
